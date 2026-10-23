@@ -50,6 +50,36 @@ function updateProgress() {
   document.getElementById('progressText').textContent = `${completed} / ${modules.length} modulov`;
   document.getElementById('progressPercent').textContent = `${percent} %`;
   document.getElementById('progressBar').style.width = `${percent}%`;
+  updateHubStage();
+}
+
+function updateHubStage() {
+  const stage = document.getElementById('hubStage');
+  if (!stage) return;
+
+  stage.className = `hub-stage progress-${completed}`;
+
+  const percent = Math.round((completed / modules.length) * 100);
+  document.getElementById('repairPercent').textContent = `${percent} %`;
+  document.getElementById('repairBar').style.width = `${percent}%`;
+
+  const texts = [
+    'RAVI čaka na prvi aktivni modul.',
+    'Napajanje stabilizirano. Jedro prejema energijo.',
+    'Procesi so zagnani. Oči in nadzorni sistem se prebujajo.',
+    'Vmesnik je obnovljen. RAVI dobiva nadzor nad sistemom.',
+    'Podatkovni sistem je aktiven. Pomnilnik se polni.',
+    'Omrežje vzpostavljeno. RAVI je povezan.',
+    'Varnostni ščit je aktiven.',
+    'Vizualni sistem je obnovljen. RAVI skoraj pripravljen.',
+    'Vsi sistemi delujejo. RAVI je popolnoma aktiven.'
+  ];
+  document.getElementById('repairText').textContent = texts[completed];
+
+  const power = document.getElementById('labPower');
+  const network = document.getElementById('labNetwork');
+  if (power) power.textContent = completed >= 1 ? 'ONLINE' : 'OFFLINE';
+  if (network) network.textContent = completed >= 5 ? 'CONNECTED' : 'OFFLINE';
 }
 
 function renderModules() {
