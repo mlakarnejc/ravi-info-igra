@@ -1555,7 +1555,9 @@ function chooseTopologyNode(targetId) {
     feedback5.className = 'feedback success';
 
     if (targetId === 'router') {
-      ravi5.textContent = '»Dobro. Usmerjevalnik ve, kam poslati promet naprej.«';
+      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer, ampak pot še ni končana.«';
+    } else if (targetId === 'server') {
+      ravi5.textContent = '»Pravilno. Paket je prišel do vmesnega strežnika. Kam naprej?«';
     } else if (targetId === 'internet') {
       ravi5.textContent = '»Zdaj je paket v internetu. Do mene manjka še zadnji korak.«';
     }
@@ -1571,7 +1573,9 @@ function applyTopologyHint() {
     if (topologyStage === 0) {
       ravi5.textContent = '»Katera naprava odloča, kam naj omrežni promet potuje naprej?«';
     } else if (topologyStage === 1) {
-      ravi5.textContent = '»Zdaj mora paket iz lokalnega omrežja naprej v širši svet.«';
+      ravi5.textContent = '»Ni še čas za internet. Poglej, katera vmesna naprava je povezana naprej.«';
+    } else if (topologyStage === 2) {
+      ravi5.textContent = '»Zdaj poišči izhod iz lokalnega omrežja.«';
     } else {
       ravi5.textContent = '»Paket je že v internetu. Cilj je precej očiten.«';
     }
