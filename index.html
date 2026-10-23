@@ -322,14 +322,48 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask4Text">»V podatkih imam štiri zapise. Iščem enega pravega. Če izberem napačnega, bom samozavestno povedal napačen podatek. To mi je že skoraj uspelo.«</p>
+            <p id="raviTask4Text">»V bazi je preveč zapisov. Ne klikaj na slepo — filtriraj podatke, da ostane samo pravi rezultat.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 4</div>
-          <h2>Poišči pravi zapis</h2>
-          <p>RAVI išče učenca, ki je v programu <strong>Računalništvo</strong> in obiskuje <strong>3. letnik</strong>. Klikni pravi zapis.</p>
+          <h2>Filtriraj podatke</h2>
+          <p>Poišči dijaka iz programa <strong>Računalništvo</strong>, ki obiskuje <strong>3. letnik</strong>. Nastavi oba filtra in nato potrdi rezultat.</p>
+
+          <div class="data-filter-panel">
+            <div class="data-filter">
+              <label for="filterProgram">PROGRAM</label>
+              <select id="filterProgram">
+                <option value="">Vsi programi</option>
+                <option value="Računalništvo">Računalništvo</option>
+                <option value="Elektrotehnika">Elektrotehnika</option>
+                <option value="Strojništvo">Strojništvo</option>
+                <option value="Mehatronika">Mehatronika</option>
+              </select>
+            </div>
+
+            <div class="data-filter">
+              <label for="filterLetnik">LETNIK</label>
+              <select id="filterLetnik">
+                <option value="">Vsi letniki</option>
+                <option value="1.">1. letnik</option>
+                <option value="2.">2. letnik</option>
+                <option value="3.">3. letnik</option>
+                <option value="4.">4. letnik</option>
+              </select>
+            </div>
+
+            <div class="data-result-count">
+              <span>REZULTATI</span>
+              <strong id="dataResultCount">8</strong>
+            </div>
+          </div>
+
+          <div class="data-query-line">
+            <span>POIZVEDBA</span>
+            <code id="dataQueryText">PRIKAŽI VSE ZAPISE</code>
+          </div>
 
           <div class="data-table-wrap">
             <table class="data-table">
@@ -338,6 +372,7 @@
                   <th>Ime</th>
                   <th>Program</th>
                   <th>Letnik</th>
+                  <th>Točke</th>
                 </tr>
               </thead>
               <tbody id="dataRows"></tbody>
@@ -345,8 +380,8 @@
           </div>
 
           <div class="task-actions">
-            <button id="checkTask4" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask4" class="ghost-btn" type="button">POČISTI IZBOR</button>
+            <button id="checkTask4" class="primary-btn" type="button">POTRDI REZULTAT</button>
+            <button id="resetTask4" class="ghost-btn" type="button">POČISTI FILTRE</button>
             <button id="backHub4" class="ghost-btn" type="button">NAZAJ</button>
           </div>
           <div id="task4Feedback" class="feedback" aria-live="polite"></div>
