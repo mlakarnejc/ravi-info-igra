@@ -119,8 +119,9 @@ function openModule(index) {
   }
 
   if (index === 1) {
-    renderProgramOrder();
+    if (modules[1].status !== 'complete') resetProgramGame();
     showScreen('screenTask2');
+    setTimeout(() => document.getElementById('programBoard').focus(), 50);
     return;
   }
 
@@ -478,8 +479,237 @@ function handleCatchKeyUp(event) {
   if (event.key === 'ArrowRight') catchKeys.right = false;
 }
 
+
+const programGridSize = 5;
+const programStart = { x: 0, y: 4, dir: 0 };
+const programGoal = { x: 3, y: 1 };
+const programObstacles = new Set(['0,2', '3,3', '4,2', '1,0']);
+const programSolution = ['F','R','F','F','L','F','F','R','F'];
+const programMaxCommands = 10;
+
+let programCommands = [];
+let programRobot = { ...programStart };
+let programRunning = false;
+let programAttempts = 0;
+
+function renderProgramBoard() {
+  const board = document.getElementById('programBoard');
+  if (!board) return;
+  board.innerHTML = '';
+
+  for (let y = 0; y < programGridSize; y += 1) {
+    for (let x = 0; x < programGridSize; x += 1) {
+      const cell = document.createElement('div');
+      cell.className = 'program-cell';
+      if (programObstacles.has(`${x},${y}`)) cell.classList.add('obstacle');
+      if (x === programGoal.x && y === programGoal.y) cell.classList.add('goal');
+
+      if (x === programRobot.x && y === programRobot.y) {
+        const ravi = document.createElement('div');
+        ravi.className = `program-ravi dir-${programRobot.dir}`;
+        ravi.id = 'programRobot';
+        cell.appendChild(ravi);
+      }
+
+      board.appendChild(cell);
+    }
+  }
+}
+
+function renderProgramSequence(activeIndex = -1) {
+  const container = document.getElementById('programSequence');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const labels = { F: '↑', L: '←', R: '→' };
+  programCommands.forEach((command, index) => {
+    const item = document.createElement('span');
+    item.className = 'program-command';
+    if (index === activeIndex) item.classList.add('running');
+    item.textContent = labels[command];
+    container.appendChild(item);
+  });
+
+  document.getElementById('programCount').textContent = `${programCommands.length} / ${programMaxCommands}`;
+}
+
+function resetProgramGame() {
+  programRunning = false;
+  programCommands = [];
+  programRobot = { ...programStart };
+  renderProgramBoard();
+  renderProgramSequence();
+
+  const feedback2 = document.getElementById('task2Feedback');
+  if (feedback2) {
+    feedback2.textContent = 'Sestavi program s puščicami. RAVI se bo premaknil šele, ko ga zaženeš.';
+    feedback2.className = 'feedback';
+  }
+}
+
+function clearProgramGame() {
+  if (programRunning || modules[1].status === 'complete') return;
+  programCommands = [];
+  programRobot = { ...programStart };
+  renderProgramBoard();
+  renderProgramSequence();
+  document.getElementById('task2Feedback').textContent = 'Program je počiščen.';
+  document.getElementById('task2Feedback').className = 'feedback';
+  document.getElementById('programBoard').focus();
+}
+
+function addProgramCommand(command) {
+  if (programRunning || modules[1].status === 'complete') return;
+  if (programCommands.length >= programMaxCommands) {
+    const feedback2 = document.getElementById('task2Feedback');
+    feedback2.textContent = 'Program ima lahko največ 10 ukazov. Poskusi s krajšim zaporedjem.';
+    feedback2.className = 'feedback error';
+    return;
+  }
+
+  programCommands.push(command);
+  renderProgramSequence();
+}
+
+function handleProgramKey(event) {
+  const screen = document.getElementById('screenTask2');
+  if (!screen || !screen.classList.contains('active')) return;
+  if (programRunning || modules[1].status === 'complete') return;
+
+  if (['ArrowUp','ArrowLeft','ArrowRight','Enter','Backspace'].includes(event.key)) {
+    event.preventDefault();
+  }
+
+  if (event.key === 'ArrowUp') addProgramCommand('F');
+  if (event.key === 'ArrowLeft') addProgramCommand('L');
+  if (event.key === 'ArrowRight') addProgramCommand('R');
+  if (event.key === 'Backspace') {
+    programCommands.pop();
+    renderProgramSequence();
+  }
+  if (event.key === 'Enter') runProgramGame();
+}
+
+function nextProgramPosition(robot, command) {
+  const next = { ...robot };
+
+  if (command === 'L') {
+    next.dir = (next.dir + 3) % 4;
+    return { robot: next, valid: true };
+  }
+
+  if (command === 'R') {
+    next.dir = (next.dir + 1) % 4;
+    return { robot: next, valid: true };
+  }
+
+  const vectors = [
+    { x: 0, y: -1 },
+    { x: 1, y: 0 },
+    { x: 0, y: 1 },
+    { x: -1, y: 0 }
+  ];
+  const v = vectors[next.dir];
+  const tx = next.x + v.x;
+  const ty = next.y + v.y;
+  const blocked =
+    tx < 0 || ty < 0 || tx >= programGridSize || ty >= programGridSize ||
+    programObstacles.has(`${tx},${ty}`);
+
+  if (blocked) return { robot: next, valid: false };
+
+  next.x = tx;
+  next.y = ty;
+  return { robot: next, valid: true };
+}
+
+function sleepProgram(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function runProgramGame() {
+  if (programRunning || modules[1].status === 'complete') return;
+
+  const feedback2 = document.getElementById('task2Feedback');
+  const ravi2 = document.getElementById('raviTask2Text');
+
+  if (programCommands.length === 0) {
+    feedback2.textContent = 'Najprej sestavi vsaj en ukaz.';
+    feedback2.className = 'feedback error';
+    return;
+  }
+
+  programRunning = true;
+  programRobot = { ...programStart };
+  renderProgramBoard();
+
+  let crashed = false;
+
+  for (let i = 0; i < programCommands.length; i += 1) {
+    renderProgramSequence(i);
+    const result = nextProgramPosition(programRobot, programCommands[i]);
+
+    if (!result.valid) {
+      crashed = true;
+      const robotEl = document.getElementById('programRobot');
+      if (robotEl) robotEl.classList.add('bump');
+      await sleepProgram(320);
+      break;
+    }
+
+    programRobot = result.robot;
+    renderProgramBoard();
+    await sleepProgram(360);
+  }
+
+  renderProgramSequence();
+
+  const reachedGoal = programRobot.x === programGoal.x && programRobot.y === programGoal.y;
+
+  if (reachedGoal) {
+    modules[1].status = 'complete';
+    modules[2].status = 'ready';
+    completed = Math.max(completed, 2);
+
+    feedback2.textContent = 'MODUL 2 AKTIVIRAN ✓ Program je RAVI-ja uspešno pripeljal do cilja.';
+    feedback2.className = 'feedback success';
+    ravi2.textContent = '»Program izveden. Prišel sem do cilja in niti enkrat nisem improviziral. Skoraj.«';
+    document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
+
+    updateProgress();
+    renderModules();
+    programRunning = false;
+    setTimeout(() => showScreen('screenHub'), 1900);
+    return;
+  }
+
+  programAttempts += 1;
+  programRunning = false;
+  programRobot = { ...programStart };
+  renderProgramBoard();
+
+  feedback2.className = 'feedback error';
+
+  if (crashed && programAttempts === 1) {
+    feedback2.textContent = 'RAVI je trčil v oviro. Obrat spremeni smer, ukaz ↑ pa ga premakne naprej.';
+    ravi2.textContent = '»Stena potrjena. Zelo trdna. Poskusi me obrniti malo prej.«';
+  } else if (programAttempts === 1) {
+    feedback2.textContent = 'Program se je izvedel, vendar RAVI ni prišel do cilja. Popravi zaporedje.';
+    ravi2.textContent = '»Program sem ubogal do zadnjega ukaza. Cilj pa je očitno imel druge načrte.«';
+  } else if (programAttempts === 2) {
+    feedback2.textContent = 'Namig: začni z ↑, nato →. Potem se premakni dvakrat naprej.';
+    ravi2.textContent = '»Začetek je: naprej, desno, naprej, naprej. Od tam pa poišči pot do strele.«';
+  } else {
+    programCommands = [...programSolution];
+    renderProgramSequence();
+    feedback2.textContent = 'RAVI pomoč: pravilen program sem pripravil. Pritisni ENTER in ga zaženi.';
+    ravi2.textContent = '»Program je pripravljen. Zdaj samo še pritisni ENTER, da preveriva, ali sem ga prav prebral.«';
+  }
+}
+
 function renderProgramOrder() {
   const container = document.getElementById('codeOrder');
+  if (!container) return;
   container.innerHTML = '';
 
   currentProgramOrder.forEach((stepId, index) => {
@@ -1126,9 +1356,13 @@ document.getElementById('backHub1').addEventListener('click', () => {
 });
 document.addEventListener('keydown', handleCatchKeyDown);
 document.addEventListener('keyup', handleCatchKeyUp);
-document.getElementById('checkTask2').addEventListener('click', checkTask2);
-document.getElementById('resetTask2').addEventListener('click', resetTask2);
-document.getElementById('backHub2').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('runProgramGame').addEventListener('click', runProgramGame);
+document.getElementById('clearProgramGame').addEventListener('click', clearProgramGame);
+document.getElementById('backHub2').addEventListener('click', () => {
+  programRunning = false;
+  showScreen('screenHub');
+});
+document.addEventListener('keydown', handleProgramKey);
 document.getElementById('checkTask3').addEventListener('click', checkTask3);
 document.getElementById('resetTask3').addEventListener('click', resetTask3);
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
