@@ -948,6 +948,7 @@ function selectHtmlTag(tagButton) {
   if (tagButton.classList.contains('used') || modules[2].status === 'complete') return;
 
   document.querySelectorAll('.html-tag').forEach((tag) => tag.classList.remove('selected'));
+  htmlDraggedTag = null;
   htmlSelectedTag = tagButton.dataset.tag;
   tagButton.classList.add('selected');
 
@@ -978,7 +979,17 @@ function tryHtmlRepair(tag, zone) {
     if (tag === 'img') {
       const imageBox = zone.querySelector('.repair-image-placeholder');
       if (imageBox) {
-        imageBox.innerHTML = `<img alt="RAVI robot" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 220'%3E%3Crect width='320' height='220' rx='28' fill='%23111a28'/%3E%3Ccircle cx='160' cy='112' r='78' fill='%23283852'/%3E%3Crect x='95' y='48' width='130' height='82' rx='28' fill='%23c7d0dd' stroke='%2353637b' stroke-width='8'/%3E%3Ccircle cx='133' cy='88' r='10' fill='%23ef3340'/%3E%3Ccircle cx='187' cy='88' r='10' fill='%23ef3340'/%3E%3Cpath d='M132 111 Q160 128 188 111' fill='none' stroke='%23313b4b' stroke-width='6' stroke-linecap='round'/%3E%3Crect x='108' y='140' width='104' height='58' rx='20' fill='%23213045' stroke='%2353637b' stroke-width='8'/%3E%3Ccircle cx='160' cy='169' r='20' fill='%23ef3340'/%3E%3Ctext x='160' y='177' text-anchor='middle' font-family='Arial' font-weight='700' font-size='22' fill='white'%3ER%3C/text%3E%3C/svg%3E">`;
+        imageBox.innerHTML = `
+          <div class="repair-ravi-image" aria-label="RAVI robot">
+            <div class="repair-ravi-antenna"></div>
+            <div class="repair-ravi-head">
+              <span class="repair-ravi-eye"></span>
+              <span class="repair-ravi-eye"></span>
+              <span class="repair-ravi-mouth"></span>
+            </div>
+            <div class="repair-ravi-body"><strong>R</strong></div>
+          </div>
+        `;
       }
     }
 
@@ -1065,6 +1076,8 @@ function initHtmlRepairGame() {
         event.preventDefault();
         return;
       }
+      document.querySelectorAll('.html-tag').forEach((tag) => tag.classList.remove('selected'));
+      htmlSelectedTag = null;
       htmlDraggedTag = tagButton.dataset.tag;
       tagButton.classList.add('dragging');
       if (event.dataTransfer) {
