@@ -113,6 +113,7 @@ function renderModules() {
 
 function openModule(index) {
   if (index === 0) {
+    if (modules[0].status !== 'complete') resetCatchGame();
     showScreen('screenTask1');
     return;
   }
@@ -160,6 +161,7 @@ function openModule(index) {
 }
 
 function renderComponents() {
+  if (!componentGrid) return;
   componentGrid.innerHTML = '';
 
   components.forEach((component) => {
@@ -247,6 +249,211 @@ function checkTask1() {
   }, 700);
 }
 
+
+
+const catchItems = [
+  { label: 'CPU', icon: '🧠', good: true },
+  { label: 'RAM', icon: '▥', good: true },
+  { label: 'SSD', icon: '💾', good: true },
+  { label: 'OPEKAČ', icon: '🍞', good: false },
+  { label: 'COPAT', icon: '👟', good: false },
+  { label: 'LONČNICA', icon: '🪴', good: false },
+  { label: 'BATERIJA', icon: '🔋', good: false },
+  { label: 'MIKROVALOVKA', icon: '🍲', good: false }
+];
+
+let catchRunning = false;
+let catchAnimationFrame = null;
+let catchLastTime = 0;
+let catchSpawnTimer = 0;
+let catchPlayerX = 50;
+let catchKeys = { left: false, right: false };
+let catchObjects = [];
+let catchScoreValue = 0;
+let catchMistakeValue = 0;
+
+function resetCatchGame() {
+  stopCatchGame();
+  catchObjects.forEach((obj) => obj.el.remove());
+  catchObjects = [];
+  catchScoreValue = 0;
+  catchMistakeValue = 0;
+  catchPlayerX = 50;
+  catchSpawnTimer = 0;
+  catchLastTime = 0;
+
+  const game = document.getElementById('catchGame');
+  const player = document.getElementById('catchPlayer');
+  const overlay = document.getElementById('catchStartOverlay');
+  if (!game || !player || !overlay) return;
+
+  game.classList.remove('win', 'hit');
+  player.style.left = '50%';
+  overlay.classList.remove('hidden');
+  document.getElementById('catchScore').textContent = '0 / 3';
+  document.getElementById('catchMistakes').textContent = '0';
+
+  const f = document.getElementById('taskFeedback');
+  f.textContent = 'Ujemi CPU, RAM in SSD. Napačen predmet te ne izloči – samo RAVI malo protestira.';
+  f.className = 'feedback';
+}
+
+function startCatchGame() {
+  if (modules[0].status === 'complete') return;
+
+  resetCatchGame();
+  document.getElementById('catchStartOverlay').classList.add('hidden');
+  document.getElementById('catchGame').focus();
+
+  catchRunning = true;
+  catchLastTime = performance.now();
+  catchAnimationFrame = requestAnimationFrame(catchGameLoop);
+}
+
+function stopCatchGame() {
+  catchRunning = false;
+  if (catchAnimationFrame) cancelAnimationFrame(catchAnimationFrame);
+  catchAnimationFrame = null;
+  catchKeys.left = false;
+  catchKeys.right = false;
+}
+
+function spawnCatchItem() {
+  const game = document.getElementById('catchGame');
+  if (!game) return;
+
+  const item = catchItems[Math.floor(Math.random() * catchItems.length)];
+  const el = document.createElement('div');
+  el.className = `falling-item ${item.good ? 'good' : 'bad'}`;
+  el.innerHTML = `<span class="fall-icon">${item.icon}</span><span class="fall-label">${item.label}</span>`;
+
+  const maxX = Math.max(20, game.clientWidth - 94);
+  const x = 10 + Math.random() * maxX;
+  el.style.left = `${x}px`;
+  el.style.top = '-70px';
+  game.appendChild(el);
+
+  catchObjects.push({
+    el,
+    x,
+    y: -70,
+    speed: 150 + Math.random() * 65,
+    good: item.good,
+    label: item.label,
+    hit: false
+  });
+}
+
+function catchGameLoop(now) {
+  if (!catchRunning) return;
+
+  const game = document.getElementById('catchGame');
+  const player = document.getElementById('catchPlayer');
+  if (!game || !player) return;
+
+  const dt = Math.min((now - catchLastTime) / 1000, .035);
+  catchLastTime = now;
+
+  const moveSpeed = 55;
+  if (catchKeys.left) catchPlayerX -= moveSpeed * dt;
+  if (catchKeys.right) catchPlayerX += moveSpeed * dt;
+  catchPlayerX = Math.max(7, Math.min(93, catchPlayerX));
+  player.style.left = `${catchPlayerX}%`;
+
+  catchSpawnTimer += dt;
+  if (catchSpawnTimer >= .72) {
+    catchSpawnTimer = 0;
+    spawnCatchItem();
+  }
+
+  const gameRect = game.getBoundingClientRect();
+  const playerRect = player.getBoundingClientRect();
+
+  catchObjects.forEach((obj) => {
+    if (obj.hit) return;
+    obj.y += obj.speed * dt;
+    obj.el.style.top = `${obj.y}px`;
+
+    const rect = obj.el.getBoundingClientRect();
+    const overlaps =
+      rect.right > playerRect.left &&
+      rect.left < playerRect.right &&
+      rect.bottom > playerRect.top &&
+      rect.top < playerRect.bottom;
+
+    if (overlaps) {
+      obj.hit = true;
+      if (obj.good) {
+        obj.el.classList.add('caught-good');
+        catchScoreValue += 1;
+        document.getElementById('catchScore').textContent = `${catchScoreValue} / 3`;
+        document.getElementById('taskFeedback').textContent = `Ujeto: ${obj.label}. Še ${Math.max(0, 3 - catchScoreValue)}.`;
+        document.getElementById('taskFeedback').className = 'feedback success';
+
+        if (catchScoreValue >= 3) {
+          finishCatchGame();
+        }
+      } else {
+        obj.el.classList.add('caught-bad');
+        catchMistakeValue += 1;
+        document.getElementById('catchMistakes').textContent = String(catchMistakeValue);
+        game.classList.remove('hit');
+        void game.offsetWidth;
+        game.classList.add('hit');
+        document.getElementById('taskFeedback').textContent = `${obj.label}? RAVI tega res ne potrebuje. Nadaljuj!`;
+        document.getElementById('taskFeedback').className = 'feedback error';
+        document.getElementById('raviTaskText').textContent =
+          catchMistakeValue === 1
+            ? '»To ni komponenta. Ampak cenim ustvarjalnost.«'
+            : '»Osredotoči se na dele računalnika. Kuhinjski aparati imajo prost dan.«';
+      }
+
+      setTimeout(() => obj.el.remove(), 280);
+    }
+
+    if (obj.y > gameRect.height + 80) {
+      obj.hit = true;
+      obj.el.remove();
+    }
+  });
+
+  catchObjects = catchObjects.filter((obj) => !obj.hit);
+
+  if (catchRunning) catchAnimationFrame = requestAnimationFrame(catchGameLoop);
+}
+
+function finishCatchGame() {
+  if (modules[0].status === 'complete') return;
+
+  stopCatchGame();
+  modules[0].status = 'complete';
+  modules[1].status = 'ready';
+  completed = Math.max(completed, 1);
+
+  const game = document.getElementById('catchGame');
+  game.classList.add('win');
+
+  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Procesor, RAM in SSD so varno dostavljeni.';
+  document.getElementById('taskFeedback').className = 'feedback success';
+  document.getElementById('raviTaskText').textContent = '»Odlično. Jedro ima vse, kar potrebuje. In niti enega opekača.«';
+  document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
+
+  updateProgress();
+  renderModules();
+  setTimeout(() => showScreen('screenHub'), 1900);
+}
+
+function handleCatchKeyDown(event) {
+  if (!catchRunning) return;
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') event.preventDefault();
+  if (event.key === 'ArrowLeft') catchKeys.left = true;
+  if (event.key === 'ArrowRight') catchKeys.right = true;
+}
+
+function handleCatchKeyUp(event) {
+  if (event.key === 'ArrowLeft') catchKeys.left = false;
+  if (event.key === 'ArrowRight') catchKeys.right = false;
+}
 
 function renderProgramOrder() {
   const container = document.getElementById('codeOrder');
@@ -888,8 +1095,14 @@ function resetTask8() {
 }
 
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
-document.getElementById('checkTask1').addEventListener('click', checkTask1);
-document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
+document.getElementById('restartCatchGame').addEventListener('click', resetCatchGame);
+document.getElementById('backHub1').addEventListener('click', () => {
+  stopCatchGame();
+  showScreen('screenHub');
+});
+document.addEventListener('keydown', handleCatchKeyDown);
+document.addEventListener('keyup', handleCatchKeyUp);
 document.getElementById('checkTask2').addEventListener('click', checkTask2);
 document.getElementById('resetTask2').addEventListener('click', resetTask2);
 document.getElementById('backHub2').addEventListener('click', () => showScreen('screenHub'));
