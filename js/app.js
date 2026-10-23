@@ -93,6 +93,11 @@ function openModule(index) {
     return;
   }
 
+  if (index === 2) {
+    showScreen('screenTask3');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -294,12 +299,87 @@ function checkTask2() {
   }
 }
 
+
+let task3Attempts = 0;
+
+function checkTask3() {
+  if (modules[2].status === 'complete') return;
+
+  const selects = [...document.querySelectorAll('.html-select')];
+  const feedback3 = document.getElementById('task3Feedback');
+  const ravi3 = document.getElementById('raviTask3Text');
+
+  if (selects.some((select) => select.value === '')) {
+    feedback3.textContent = 'Najprej izberi oznako pri vseh štirih elementih.';
+    feedback3.className = 'feedback error';
+    return;
+  }
+
+  task3Attempts += 1;
+  let correctCount = 0;
+
+  selects.forEach((select) => {
+    select.classList.remove('correct', 'wrong');
+    if (select.value === select.dataset.answer) {
+      select.classList.add('correct');
+      correctCount += 1;
+    } else {
+      select.classList.add('wrong');
+    }
+  });
+
+  if (correctCount === selects.length) {
+    modules[2].status = 'complete';
+    modules[3].status = 'ready';
+    completed = Math.max(completed, 3);
+
+    feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Spletna stran je spet pravilno sestavljena.';
+    feedback3.className = 'feedback success';
+    ravi3.textContent = '»Stran spet deluje. Internet je lahko miren.«';
+    document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  feedback3.className = 'feedback error';
+
+  if (task3Attempts === 1) {
+    feedback3.textContent = `Pravilno: ${correctCount}/4. Poglej elemente še enkrat.`;
+    ravi3.textContent = '»Skoraj. Če tole pustiva tako, bo moja slika postala naslov. Kar je samozavestno, ampak napačno.«';
+  } else if (task3Attempts === 2) {
+    feedback3.textContent = 'Namig: <img> je slika, <h1> pa glavni naslov.';
+    ravi3.textContent = '»Začni pri očitnem: slika potrebuje <img>, velik naslov pa <h1>.«';
+  } else {
+    feedback3.textContent = 'Močan namig: naslov = <h1>, slika = <img>, besedilo = <p>, gumb = <button>.';
+    ravi3.textContent = '»V redu, HTML rešitev je praktično pred tabo. Samo še poveži.«';
+  }
+}
+
+function resetTask3() {
+  if (modules[2].status === 'complete') return;
+
+  document.querySelectorAll('.html-select').forEach((select) => {
+    select.value = '';
+    select.classList.remove('correct', 'wrong');
+  });
+
+  const feedback3 = document.getElementById('task3Feedback');
+  feedback3.textContent = '';
+  feedback3.className = 'feedback';
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask2').addEventListener('click', checkTask2);
 document.getElementById('resetTask2').addEventListener('click', resetTask2);
 document.getElementById('backHub2').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('checkTask3').addEventListener('click', checkTask3);
+document.getElementById('resetTask3').addEventListener('click', resetTask3);
+document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
