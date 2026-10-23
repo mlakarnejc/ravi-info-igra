@@ -160,6 +160,7 @@ function openModule(index) {
 
   if (index === 7) {
     showScreen('screenTask8');
+    if (modules[7].status !== 'complete') resetTask8();
     return;
   }
 
@@ -2165,80 +2166,163 @@ function finishRunnerGame() {
 }
 
 
-let selectedAIChoice = null;
-let task8Attempts = 0;
+const aiScenarios = [
+  {
+    scene:'scene-0',
+    label:'RAČUNALNIŠKI ZASLON',
+    confidence:96,
+    title:'Računalniški zaslon',
+    text:'Na sliki je računalniški zaslon.',
+    correct:'accept',
+    explanation:'PRAVILNO ✓ Prizor je jasen, rezultat je smiseln in model ima dovolj vizualnih dokazov.',
+    ravi:'»Dobro. AI je tukaj naredil točno to, kar pričakujemo.«'
+  },
+  {
+    scene:'scene-1',
+    label:'OSEBA?',
+    confidence:58,
+    title:'Oseba v prostoru',
+    text:'Model meni, da je v temnem delu slike oseba.',
+    correct:'verify',
+    explanation:'PRAVILNO ✓ 58 % ni dovolj za zanesljiv sklep. Senca ali predmet lahko model hitro zavede.',
+    ravi:'»Točno. Ko je signal nejasen, samozavesten klik ni isto kot dober odgovor.«'
+  },
+  {
+    scene:'scene-2',
+    label:'PYTHON OS',
+    confidence:99,
+    title:'Operacijski sistem: Python',
+    text:'AI trdi: Python je operacijski sistem, podoben Windowsu ali Linuxu.',
+    correct:'verify',
+    explanation:'PRAVILNO ✓ Visoka samozavest ne pomeni resnice. Python je programski jezik, zato mora človek znati rezultat preveriti.',
+    ravi:'»99 % samozavesti. 100 % napačno. Zato potrebujem nekoga, ki zna razmišljati.«'
+  }
+];
 
-function selectAIChoice(choice) {
-  if (modules[7].status === 'complete') return;
+let aiScenarioIndex = 0;
+let aiDecisionLocked = false;
+let aiMistakes = 0;
 
-  selectedAIChoice = choice;
-  document.querySelectorAll('.ai-btn').forEach((button) => {
-    button.classList.toggle('selected', button.dataset.choice === choice);
-    button.classList.remove('wrong');
+function renderAIScenario() {
+  const scenario = aiScenarios[aiScenarioIndex];
+  if (!scenario) return;
+
+  aiDecisionLocked = false;
+
+  const scene = document.getElementById('aiScene');
+  scene.className = `ai-scene ${scenario.scene} scanning`;
+  document.getElementById('aiScenarioCount').textContent = `${aiScenarioIndex + 1} / ${aiScenarios.length}`;
+  document.getElementById('aiDetectionLabel').textContent = scenario.label;
+  document.getElementById('aiDetectionConfidence').textContent = `${scenario.confidence} %`;
+  document.getElementById('aiConfidenceSide').textContent = `${scenario.confidence} %`;
+  document.getElementById('aiConfidenceText').textContent = `${scenario.confidence} %`;
+  document.getElementById('aiConfidenceBar').style.width = '0%';
+  document.getElementById('aiResultTitle').textContent = scenario.title;
+  document.getElementById('aiResultText').textContent = scenario.text;
+
+  const result = document.getElementById('aiDecisionResult');
+  result.className = 'ai-decision-result hidden';
+  result.textContent = '';
+
+  document.querySelectorAll('.ai-progress-dots span').forEach((dot,index) => {
+    dot.classList.toggle('active', index === aiScenarioIndex);
+    dot.classList.toggle('done', index < aiScenarioIndex);
   });
 
-  const feedback8 = document.getElementById('task8Feedback');
-  feedback8.textContent = choice === 'true' ? 'Izbrano: drži.' : 'Izbrano: ne drži.';
-  feedback8.className = 'feedback';
+  document.getElementById('aiAcceptBtn').disabled = true;
+  document.getElementById('aiVerifyBtn').disabled = true;
+
+  if (aiScenarioIndex === 0) {
+    document.getElementById('raviTask8Text').textContent = '»Začenjam analizo. Tokrat preverjaš mene, ne obratno.«';
+  } else if (aiScenarioIndex === 1) {
+    document.getElementById('raviTask8Text').textContent = '»Drugi prizor je manj jasen. Poglej tudi stopnjo zaupanja.«';
+  } else {
+    document.getElementById('raviTask8Text').textContent = '»Zadnja analiza. Tokrat sem skoraj povsem prepričan.«';
+  }
+
+  setTimeout(() => {
+    document.getElementById('aiConfidenceBar').style.width = `${scenario.confidence}%`;
+  }, 120);
+
+  setTimeout(() => {
+    scene.classList.remove('scanning');
+    document.getElementById('aiAcceptBtn').disabled = false;
+    document.getElementById('aiVerifyBtn').disabled = false;
+  }, 1150);
 }
 
-function checkTask8() {
-  if (modules[7].status === 'complete') return;
+function chooseAIDecision(choice) {
+  if (modules[7].status === 'complete' || aiDecisionLocked) return;
 
-  const feedback8 = document.getElementById('task8Feedback');
-  const ravi8 = document.getElementById('raviTask8Text');
+  const scenario = aiScenarios[aiScenarioIndex];
+  const correct = choice === scenario.correct;
+  const result = document.getElementById('aiDecisionResult');
 
-  if (!selectedAIChoice) {
-    feedback8.textContent = 'Najprej izberi eno možnost.';
-    feedback8.className = 'feedback error';
+  aiDecisionLocked = true;
+  document.getElementById('aiAcceptBtn').disabled = true;
+  document.getElementById('aiVerifyBtn').disabled = true;
+
+  if (!correct) {
+    aiMistakes += 1;
+    result.innerHTML = '<strong>PREHITRO ✕</strong><span>Ne glej samo odstotka. Ali ima AI res dovolj podatkov za tak sklep?</span>';
+    result.className = 'ai-decision-result wrong';
+    document.getElementById('raviTask8Text').textContent =
+      aiScenarioIndex === 0
+        ? '»Tukaj ni treba dvomiti v vse. Pomembno je vedeti, kdaj so dokazi dovolj jasni.«'
+        : '»Zaupanje modela je podatek, ne dokaz. Poskusi še enkrat.«';
+
+    setTimeout(() => {
+      aiDecisionLocked = false;
+      document.getElementById('aiAcceptBtn').disabled = false;
+      document.getElementById('aiVerifyBtn').disabled = false;
+    }, 1500);
     return;
   }
 
-  task8Attempts += 1;
-  const selectedButton = document.querySelector(`.ai-btn[data-choice="${selectedAIChoice}"]`);
+  result.innerHTML = `<strong>${scenario.explanation.split('✓')[0]}✓</strong><span>${scenario.explanation.split('✓')[1]}</span>`;
+  result.className = 'ai-decision-result correct';
+  document.getElementById('raviTask8Text').textContent = scenario.ravi;
 
-  if (selectedAIChoice === 'false') {
-    selectedButton.classList.add('correct');
-    modules[7].status = 'complete';
-    completed = 8;
+  setTimeout(() => {
+    aiScenarioIndex += 1;
 
-    feedback8.textContent = 'MODUL 8 AKTIVIRAN ✓ Prav imaš: Python je programski jezik, ne operacijski sistem.';
-    feedback8.className = 'feedback success';
-    ravi8.textContent = '»Ujet. Bil sem zelo samozavesten in vseeno napačen. Zato je pomembno, da človek zna preveriti odgovor.«';
-    document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
+    if (aiScenarioIndex >= aiScenarios.length) {
+      finishAIModule();
+      return;
+    }
 
-    updateProgress();
-    renderModules();
-    setTimeout(() => showScreen('screenFinal'), 2100);
-    return;
-  }
+    renderAIScenario();
+  }, 2300);
+}
 
-  selectedButton.classList.add('wrong');
-  feedback8.className = 'feedback error';
+function finishAIModule() {
+  const shell = document.querySelector('.ai-control-shell');
+  shell?.classList.add('ai-complete');
 
-  if (task8Attempts === 1) {
-    feedback8.textContent = 'Preveri trditev še enkrat. Ali je Python res nekaj podobnega Windowsu?';
-    ravi8.textContent = '»Zvenim prepričljivo, vem. Ampak prepričljiv ton še ni dokaz.«';
-  } else if (task8Attempts === 2) {
-    feedback8.textContent = 'Namig: Python uporabljamo za pisanje programov.';
-    ravi8.textContent = '»Če v Pythonu pišemo programe, potem verjetno ni operacijski sistem.«';
-  } else {
-    feedback8.textContent = 'Močan namig: trditev NE DRŽI.';
-    ravi8.textContent = '»Priznam. Python je programski jezik. Klikni NE DRŽI in rešiva še zadnji modul.«';
-  }
+  const result = document.getElementById('aiDecisionResult');
+  result.innerHTML = '<strong>AI CORE VERIFIED ✓</strong><span>Človek je preveril vse tri odločitve. Sistem je pripravljen.</span>';
+  result.className = 'ai-decision-result correct final';
+
+  document.getElementById('raviTask8Text').textContent = '»To je bistvo. AI je močno orodje — ampak nekdo mora vedeti, kdaj mu zaupati in kdaj ga preveriti.«';
+
+  modules[7].status = 'complete';
+  completed = 8;
+  document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
+  updateProgress();
+  renderModules();
+
+  setTimeout(() => {
+    showScreen('screenFinal');
+    shell?.classList.remove('ai-complete');
+  }, 3200);
 }
 
 function resetTask8() {
   if (modules[7].status === 'complete') return;
-
-  selectedAIChoice = null;
-  document.querySelectorAll('.ai-btn').forEach((button) => {
-    button.classList.remove('selected', 'wrong', 'correct');
-  });
-
-  const feedback8 = document.getElementById('task8Feedback');
-  feedback8.textContent = '';
-  feedback8.className = 'feedback';
+  aiScenarioIndex = 0;
+  aiDecisionLocked = false;
+  aiMistakes = 0;
+  renderAIScenario();
 }
 
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
@@ -2277,10 +2361,8 @@ document.getElementById('backHub7').addEventListener('click', () => {
 });
 document.addEventListener('keydown', handleRunnerKeyDown);
 document.addEventListener('keyup', handleRunnerKeyUp);
-document.querySelectorAll('.ai-btn').forEach((button) => {
-  button.addEventListener('click', () => selectAIChoice(button.dataset.choice));
-});
-document.getElementById('checkTask8').addEventListener('click', checkTask8);
+document.getElementById('aiAcceptBtn').addEventListener('click', () => chooseAIDecision('accept'));
+document.getElementById('aiVerifyBtn').addEventListener('click', () => chooseAIDecision('verify'));
 document.getElementById('resetTask8').addEventListener('click', resetTask8);
 document.getElementById('backHub8').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
