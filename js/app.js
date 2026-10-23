@@ -142,8 +142,8 @@ function openModule(index) {
   }
 
   if (index === 4) {
-    renderNetworkOrder();
     showScreen('screenTask5');
+    if (modules[4].status !== 'complete') resetNetworkGame();
     return;
   }
 
@@ -1377,116 +1377,223 @@ function initDataFilterGame() {
 }
 
 
-const networkDevices = [
-  { id: 'pc', name: 'RAČUNALNIK', icon: '💻' },
-  { id: 'router', name: 'USMERJEVALNIK', icon: '📡' },
-  { id: 'internet', name: 'INTERNET', icon: '🌐' },
-  { id: 'ravi', name: 'RAVI', icon: '🤖' }
-];
-const correctNetworkOrder = ['pc', 'router', 'internet', 'ravi'];
-let currentNetworkOrder = ['ravi', 'pc', 'internet', 'router'];
-let task5Attempts = 0;
+const networkGrid = {
+  cols: 7,
+  rows: 5,
+  start: { x: 0, y: 4 },
+  router: { x: 2, y: 4 },
+  internet: { x: 4, y: 2 },
+  ravi: { x: 6, y: 0 }
+};
 
-function renderNetworkOrder() {
-  const container = document.getElementById('networkOrder');
-  container.innerHTML = '';
+const networkWalls = new Set([
+  '0,2','1,2',
+  '3,4','4,4','5,4','6,4',
+  '0,1','1,1','3,1','4,1','6,1',
+  '0,0','1,0','2,0','3,0'
+]);
 
-  currentNetworkOrder.forEach((deviceId, index) => {
-    const device = networkDevices.find((item) => item.id === deviceId);
-    const node = document.createElement('div');
-    node.className = 'network-node';
+const networkHintPath = new Set([
+  '0,4','1,4','2,4',
+  '2,3','2,2','3,2','4,2',
+  '5,2','5,1','5,0','6,0'
+]);
 
-    node.innerHTML = `
-      <span class="network-icon">${device.icon}</span>
-      <span class="network-name">${device.name}</span>
-      <span class="network-controls">
-        <button class="move-btn network-left" type="button" aria-label="Premakni napravo levo" ${index === 0 ? 'disabled' : ''}>←</button>
-        <button class="move-btn network-right" type="button" aria-label="Premakni napravo desno" ${index === currentNetworkOrder.length - 1 ? 'disabled' : ''}>→</button>
-      </span>
-    `;
+let networkPacket = { x: 0, y: 4 };
+let networkStage = 0;
+let networkSteps = 0;
+let networkBumps = 0;
 
-    node.querySelector('.network-left').addEventListener('click', () => moveNetworkDevice(index, -1));
-    node.querySelector('.network-right').addEventListener('click', () => moveNetworkDevice(index, 1));
-    container.appendChild(node);
+function resetNetworkGame() {
+  if (modules[4].status === 'complete') return;
+
+  networkPacket = { ...networkGrid.start };
+  networkStage = 0;
+  networkSteps = 0;
+  networkBumps = 0;
+
+  const feedback5 = document.getElementById('task5Feedback');
+  const ravi5 = document.getElementById('raviTask5Text');
+  if (feedback5) {
+    feedback5.textContent = 'Uporabi puščice in pošlji paket po pravilni poti.';
+    feedback5.className = 'feedback';
+  }
+  if (ravi5) {
+    ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Na poti mora skozi usmerjevalnik in internet — drugače paket nima pojma, kam gre.«';
+  }
+
+  renderNetworkMaze();
+  setTimeout(() => document.getElementById('networkMaze')?.focus(), 40);
+}
+
+function renderNetworkMaze() {
+  const maze = document.getElementById('networkMaze');
+  if (!maze) return;
+
+  maze.innerHTML = '';
+
+  for (let y = 0; y < networkGrid.rows; y += 1) {
+    for (let x = 0; x < networkGrid.cols; x += 1) {
+      const key = `${x},${y}`;
+      const cell = document.createElement('div');
+      cell.className = 'network-cell';
+
+      if (networkWalls.has(key)) {
+        cell.classList.add('wall');
+      }
+
+      if (networkBumps >= 5 && networkHintPath.has(key)) {
+        cell.classList.add('hint-path');
+      }
+
+      let node = null;
+      if (x === networkGrid.start.x && y === networkGrid.start.y) {
+        node = { icon: '💻', label: 'RAČUNALNIK' };
+      } else if (x === networkGrid.router.x && y === networkGrid.router.y) {
+        node = { icon: '📡', label: 'USMERJEVALNIK' };
+      } else if (x === networkGrid.internet.x && y === networkGrid.internet.y) {
+        node = { icon: '🌐', label: 'INTERNET' };
+      } else if (x === networkGrid.ravi.x && y === networkGrid.ravi.y) {
+        node = { icon: '🤖', label: 'RAVI' };
+      }
+
+      if (node) {
+        cell.classList.add('node');
+        cell.innerHTML = `<span class="node-icon">${node.icon}</span><span class="node-label">${node.label}</span>`;
+      }
+
+      if (x === networkPacket.x && y === networkPacket.y) {
+        cell.classList.add('packet-here');
+        const packet = document.createElement('div');
+        packet.className = 'network-packet';
+        cell.appendChild(packet);
+      }
+
+      maze.appendChild(cell);
+    }
+  }
+
+  document.getElementById('networkSteps').textContent = String(networkSteps);
+
+  const labels = ['RAČUNALNIK', 'USMERJEVALNIK', 'INTERNET', 'RAVI'];
+  document.getElementById('networkPacketStatus').textContent = labels[networkStage];
+
+  document.querySelectorAll('.route-check').forEach((item, index) => {
+    item.classList.remove('active', 'done');
+    if (index < networkStage) item.classList.add('done');
+    if (index === networkStage) item.classList.add('active');
   });
 }
 
-function moveNetworkDevice(index, direction) {
+function moveNetworkPacket(dx, dy) {
   if (modules[4].status === 'complete') return;
 
-  const target = index + direction;
-  if (target < 0 || target >= currentNetworkOrder.length) return;
-
-  const temp = currentNetworkOrder[index];
-  currentNetworkOrder[index] = currentNetworkOrder[target];
-  currentNetworkOrder[target] = temp;
-
-  const feedback5 = document.getElementById('task5Feedback');
-  feedback5.textContent = '';
-  feedback5.className = 'feedback';
-  renderNetworkOrder();
-}
-
-function resetTask5() {
-  if (modules[4].status === 'complete') return;
-
-  const variants = [
-    ['ravi', 'pc', 'internet', 'router'],
-    ['internet', 'ravi', 'router', 'pc'],
-    ['router', 'ravi', 'pc', 'internet']
-  ];
-  const currentIndex = variants.findIndex((order) => order.join('|') === currentNetworkOrder.join('|'));
-  currentNetworkOrder = [...variants[(currentIndex + 1) % variants.length]];
-  renderNetworkOrder();
-
-  const feedback5 = document.getElementById('task5Feedback');
-  feedback5.textContent = 'Naprave so ponovno premešane.';
-  feedback5.className = 'feedback';
-}
-
-function checkTask5() {
-  if (modules[4].status === 'complete') return;
-
-  task5Attempts += 1;
+  const nx = networkPacket.x + dx;
+  const ny = networkPacket.y + dy;
+  const maze = document.getElementById('networkMaze');
   const feedback5 = document.getElementById('task5Feedback');
   const ravi5 = document.getElementById('raviTask5Text');
-  const isCorrect = currentNetworkOrder.every(
-    (deviceId, index) => deviceId === correctNetworkOrder[index]
-  );
 
-  if (isCorrect) {
-    document.querySelectorAll('#networkOrder .network-node').forEach((node) => node.classList.add('correct'));
-    modules[4].status = 'complete';
-    modules[5].status = 'ready';
-    completed = Math.max(completed, 5);
+  if (
+    nx < 0 || nx >= networkGrid.cols ||
+    ny < 0 || ny >= networkGrid.rows ||
+    networkWalls.has(`${nx},${ny}`)
+  ) {
+    networkBumps += 1;
+    if (maze) {
+      maze.classList.remove('bump');
+      void maze.offsetWidth;
+      maze.classList.add('bump');
+      setTimeout(() => maze.classList.remove('bump'), 240);
+    }
 
-    feedback5.textContent = 'MODUL 5 AKTIVIRAN ✓ Povezava je vzpostavljena.';
-    feedback5.className = 'feedback success';
-    ravi5.textContent = '»Povezava vzpostavljena. Spet sem na spletu. Digitalna samota preklicana.«';
-    document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnost in zaščita sta odklenjeni.';
-
-    updateProgress();
-    renderModules();
-    setTimeout(() => showScreen('screenHub'), 1700);
+    if (networkBumps === 1) {
+      feedback5.textContent = 'Ta povezava je zaprta. Poišči drugo pot.';
+      ravi5.textContent = '»Paket je treščil v zaprto povezavo. Brez skrbi, paketi nimajo čustev.«';
+    } else if (networkBumps === 3) {
+      feedback5.textContent = 'Namig: najprej poišči USMERJEVALNIK, nato INTERNET.';
+      ravi5.textContent = '»Najprej usmerjevalnik. Potem internet. Šele nato lahko prideš do mene.«';
+    } else if (networkBumps >= 5) {
+      feedback5.textContent = 'Močan namig: prava pot je označena z rumenim robom.';
+      ravi5.textContent = '»Označil sem ti varno traso. Zdaj bi moral paket preživeti.«';
+    }
+    renderNetworkMaze();
     return;
   }
 
-  feedback5.className = 'feedback error';
+  networkPacket = { x: nx, y: ny };
+  networkSteps += 1;
 
-  if (task5Attempts === 1) {
-    feedback5.textContent = 'Povezava še ni pravilna. Pomisli, skozi katero napravo gre računalnik na internet.';
-    ravi5.textContent = '»Ta povezava vodi nekam, ampak žal ne tja, kamor bi morala.«';
-  } else if (task5Attempts === 2) {
-    feedback5.textContent = 'Namig: računalnik se najprej poveže z usmerjevalnikom.';
-    ravi5.textContent = '»Začni z računalnikom in usmerjevalnikom. Od tam naprej bo lažje.«';
+  if (
+    networkStage === 0 &&
+    nx === networkGrid.router.x &&
+    ny === networkGrid.router.y
+  ) {
+    networkStage = 1;
+    feedback5.textContent = 'USMERJEVALNIK dosežen ✓ Paket zdaj ve, kam naprej.';
+    feedback5.className = 'feedback success';
+  } else if (
+    networkStage === 1 &&
+    nx === networkGrid.internet.x &&
+    ny === networkGrid.internet.y
+  ) {
+    networkStage = 2;
+    feedback5.textContent = 'INTERNET dosežen ✓ Zdaj poišči RAVI-ja.';
+    feedback5.className = 'feedback success';
+  } else if (
+    nx === networkGrid.ravi.x &&
+    ny === networkGrid.ravi.y
+  ) {
+    if (networkStage === 2) {
+      networkStage = 3;
+      renderNetworkMaze();
+      finishNetworkGame();
+      return;
+    }
+
+    feedback5.textContent = 'Do RAVI-ja si prišel prehitro. Paket mora prej skozi usmerjevalnik in internet.';
+    feedback5.className = 'feedback error';
+    ravi5.textContent = '»Cilj je pravi, pot pa ne. Omrežja so malo občutljiva na vrstni red.«';
   } else {
-    feedback5.textContent = 'Močan namig: RAČUNALNIK → USMERJEVALNIK → INTERNET → RAVI.';
-    ravi5.textContent = '»V redu, kabelska skrivnost je razkrita. Samo še pravilno razporedi.«';
-
-    document.querySelectorAll('#networkOrder .network-node').forEach((node, index) => {
-      if (currentNetworkOrder[index] === correctNetworkOrder[index]) node.classList.add('hint');
-    });
+    feedback5.textContent = 'Paket potuje...';
+    feedback5.className = 'feedback';
   }
+
+  renderNetworkMaze();
+}
+
+function finishNetworkGame() {
+  modules[4].status = 'complete';
+  modules[5].status = 'ready';
+  completed = Math.max(completed, 5);
+
+  const feedback5 = document.getElementById('task5Feedback');
+  const ravi5 = document.getElementById('raviTask5Text');
+
+  feedback5.textContent = 'MODUL 5 AKTIVIRAN ✓ Paket je uspešno prišel do RAVI-ja.';
+  feedback5.className = 'feedback success';
+  ravi5.textContent = '»Paket dostavljen. Računalnik → usmerjevalnik → internet → RAVI. Omrežje živi.«';
+  document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnostni sistem je odklenjen.';
+
+  updateProgress();
+  renderModules();
+  setTimeout(() => showScreen('screenHub'), 1800);
+}
+
+function handleNetworkKey(event) {
+  if (!document.getElementById('screenTask5')?.classList.contains('active')) return;
+
+  const moves = {
+    ArrowUp: [0, -1],
+    ArrowDown: [0, 1],
+    ArrowLeft: [-1, 0],
+    ArrowRight: [1, 0]
+  };
+
+  if (!moves[event.key]) return;
+  event.preventDefault();
+  const [dx, dy] = moves[event.key];
+  moveNetworkPacket(dx, dy);
 }
 
 
@@ -1738,14 +1845,14 @@ document.getElementById('backHub2').addEventListener('click', () => {
   showScreen('screenHub');
 });
 document.addEventListener('keydown', handleProgramKey);
+document.addEventListener('keydown', handleNetworkKey);
 document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
 document.getElementById('finishTask3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', resetTask4);
 document.getElementById('backHub4').addEventListener('click', () => showScreen('screenHub'));
-document.getElementById('checkTask5').addEventListener('click', checkTask5);
-document.getElementById('resetTask5').addEventListener('click', resetTask5);
+document.getElementById('resetTask5').addEventListener('click', resetNetworkGame);
 document.getElementById('backHub5').addEventListener('click', () => showScreen('screenHub'));
 document.querySelectorAll('.security-btn').forEach((button) => {
   button.addEventListener('click', () => selectSecurityChoice(button.dataset.choice));
@@ -1774,5 +1881,4 @@ renderModules();
 renderComponents();
 renderProgramOrder();
 renderDataRows();
-renderNetworkOrder();
 updateProgress();
