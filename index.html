@@ -711,6 +711,10 @@
           </aside>
 
           <div class="ml-workbench">
+            <div id="mlFocusMessage" class="ml-focus-message">
+              <span>RAVI</span>
+              <strong>Razvrsti prvi primer. Po vsakem izboru ga bom na hitro analiziral.</strong>
+            </div>
             <div class="ml-monitor-bar">
               <span id="mlMonitorTitle">TRAINING DATA // CLASSIFICATION</span>
               <div class="ml-live"><i></i> LIVE</div>
@@ -720,6 +724,12 @@
               <div class="ml-instruction">
                 <strong>1. RAZVRSTI PODATKE</strong>
                 <span>Povleci vseh 8 primerov v pravilno skupino.</span>
+              </div>
+
+              <div id="mlSampleAnalysis" class="ml-sample-analysis hidden">
+                <div class="ml-sample-analysis-core"></div>
+                <span>AI ANALIZIRA PRIMER ...</span>
+                <strong id="mlSampleAnalysisText">PREVERJANJE PODATKA</strong>
               </div>
 
               <div class="ml-training-layout">
@@ -771,11 +781,8 @@
                 <div class="ml-scan-grid"></div>
                 <div class="ml-scan-beam"></div>
                 <div class="ml-animal-card test-cat-card">
-                  <div class="ml-animal-shape dark-cat">
-                    <span class="ear e1"></span><span class="ear e2"></span>
-                    <span class="head"></span><span class="body"></span><span class="tail"></span>
-                  </div>
-                  <span>NEZNAN PRIMER</span>
+                  <div class="ml-clear-animal" aria-label="Črna mačka">🐈‍⬛</div>
+                  <span>NOV PRIMER // ČRNA MAČKA</span>
                 </div>
                 <div class="ml-detect-frame">
                   <span>OBJECT_09</span>
@@ -827,11 +834,8 @@
                   <div class="ml-scan-grid"></div>
                   <div class="ml-scan-beam"></div>
                   <div class="ml-animal-card final-cat-card">
-                    <div class="ml-animal-shape dark-cat">
-                      <span class="ear e1"></span><span class="ear e2"></span>
-                      <span class="head"></span><span class="body"></span><span class="tail"></span>
-                    </div>
-                    <span>RETEST</span>
+                    <div class="ml-clear-animal" aria-label="Črna mačka">🐈‍⬛</div>
+                    <span>RETEST // ČRNA MAČKA</span>
                   </div>
                   <div class="ml-detect-frame success-frame">
                     <span>OBJECT_09</span>
