@@ -2166,144 +2166,260 @@ function finishRunnerGame() {
 }
 
 
-const aiScenarios = [
-  {
-    scene:'scene-0',
-    label:'RAČUNALNIŠKI ZASLON',
-    confidence:96,
-    title:'Računalniški zaslon',
-    text:'Na sliki je računalniški zaslon.',
-    correct:'accept',
-    explanation:'PRAVILNO ✓ Prizor je jasen, rezultat je smiseln in model ima dovolj vizualnih dokazov.',
-    ravi:'»Dobro. AI je tukaj naredil točno to, kar pričakujemo.«'
-  },
-  {
-    scene:'scene-1',
-    label:'OSEBA?',
-    confidence:58,
-    title:'Oseba v prostoru',
-    text:'Model meni, da je v temnem delu slike oseba.',
-    correct:'verify',
-    explanation:'PRAVILNO ✓ 58 % ni dovolj za zanesljiv sklep. Senca ali predmet lahko model hitro zavede.',
-    ravi:'»Točno. Ko je signal nejasen, samozavesten klik ni isto kot dober odgovor.«'
-  },
-  {
-    scene:'scene-2',
-    label:'PYTHON OS',
-    confidence:99,
-    title:'Operacijski sistem: Python',
-    text:'AI trdi: Python je operacijski sistem, podoben Windowsu ali Linuxu.',
-    correct:'verify',
-    explanation:'PRAVILNO ✓ Visoka samozavest ne pomeni resnice. Python je programski jezik, zato mora človek znati rezultat preveriti.',
-    ravi:'»99 % samozavesti. 100 % napačno. Zato potrebujem nekoga, ki zna razmišljati.«'
-  }
+const mlTrainingItems = [
+  { id:'cat1', label:'Muca', type:'cat', icon:'🐱' },
+  { id:'dog1', label:'Pes', type:'dog', icon:'🐶' },
+  { id:'cat2', label:'Mačka', type:'cat', icon:'🐈' },
+  { id:'dog2', label:'Kuža', type:'dog', icon:'🐕' },
+  { id:'cat3', label:'Svetla mačka', type:'cat', icon:'🐱' },
+  { id:'dog3', label:'Velik pes', type:'dog', icon:'🐕‍🦺' },
+  { id:'cat4', label:'Majhna mačka', type:'cat', icon:'🐈' },
+  { id:'dog4', label:'Temen pes', type:'dog', icon:'🐕' }
 ];
 
-let aiScenarioIndex = 0;
-let aiDecisionLocked = false;
-let aiMistakes = 0;
+let mlPlaced = new Map();
+let mlStage = 0;
+let mlBusy = false;
 
-function renderAIScenario() {
-  const scenario = aiScenarios[aiScenarioIndex];
-  if (!scenario) return;
-
-  aiDecisionLocked = false;
-
-  const scene = document.getElementById('aiScene');
-  scene.className = `ai-scene ${scenario.scene} scanning`;
-  document.getElementById('aiScenarioCount').textContent = `${aiScenarioIndex + 1} / ${aiScenarios.length}`;
-  document.getElementById('aiDetectionLabel').textContent = scenario.label;
-  document.getElementById('aiDetectionConfidence').textContent = `${scenario.confidence} %`;
-  document.getElementById('aiConfidenceSide').textContent = `${scenario.confidence} %`;
-  document.getElementById('aiConfidenceText').textContent = `${scenario.confidence} %`;
-  document.getElementById('aiConfidenceBar').style.width = '0%';
-  document.getElementById('aiResultTitle').textContent = scenario.title;
-  document.getElementById('aiResultText').textContent = scenario.text;
-
-  const result = document.getElementById('aiDecisionResult');
-  result.className = 'ai-decision-result hidden';
-  result.textContent = '';
-
-  document.querySelectorAll('.ai-progress-dots span').forEach((dot,index) => {
-    dot.classList.toggle('active', index === aiScenarioIndex);
-    dot.classList.toggle('done', index < aiScenarioIndex);
+function setMLPhase(id) {
+  document.querySelectorAll('#screenTask8 .ml-phase').forEach((phase) => {
+    phase.classList.toggle('active', phase.id === id);
   });
-
-  document.getElementById('aiAcceptBtn').disabled = true;
-  document.getElementById('aiVerifyBtn').disabled = true;
-
-  if (aiScenarioIndex === 0) {
-    document.getElementById('raviTask8Text').textContent = '»Začenjam analizo. Tokrat preverjaš mene, ne obratno.«';
-  } else if (aiScenarioIndex === 1) {
-    document.getElementById('raviTask8Text').textContent = '»Drugi prizor je manj jasen. Poglej tudi stopnjo zaupanja.«';
-  } else {
-    document.getElementById('raviTask8Text').textContent = '»Zadnja analiza. Tokrat sem skoraj povsem prepričan.«';
-  }
-
-  setTimeout(() => {
-    document.getElementById('aiConfidenceBar').style.width = `${scenario.confidence}%`;
-  }, 120);
-
-  setTimeout(() => {
-    scene.classList.remove('scanning');
-    document.getElementById('aiAcceptBtn').disabled = false;
-    document.getElementById('aiVerifyBtn').disabled = false;
-  }, 1150);
 }
 
-function chooseAIDecision(choice) {
-  if (modules[7].status === 'complete' || aiDecisionLocked) return;
+function updateMLStage(stage) {
+  mlStage = stage;
+  document.getElementById('mlStageLabel').textContent = `${stage + 1} / 4`;
+  document.querySelectorAll('.ml-progress-dots span').forEach((dot,index) => {
+    dot.classList.toggle('active', index === stage);
+    dot.classList.toggle('done', index < stage);
+  });
+}
 
-  const scenario = aiScenarios[aiScenarioIndex];
-  const correct = choice === scenario.correct;
-  const result = document.getElementById('aiDecisionResult');
+function renderMLTrainingCards() {
+  const container = document.getElementById('mlTrainingCards');
+  if (!container) return;
+  container.innerHTML = '';
 
-  aiDecisionLocked = true;
-  document.getElementById('aiAcceptBtn').disabled = true;
-  document.getElementById('aiVerifyBtn').disabled = true;
+  mlTrainingItems.forEach((item,index) => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'ml-training-card';
+    card.draggable = true;
+    card.dataset.id = item.id;
+    card.dataset.type = item.type;
+    card.innerHTML = `
+      <span class="ml-card-index">${String(index + 1).padStart(2,'0')}</span>
+      <span class="ml-card-animal">${item.icon}</span>
+      <strong>${item.label}</strong>
+      <small>TRAINING SAMPLE</small>
+    `;
 
-  if (!correct) {
-    aiMistakes += 1;
-    result.innerHTML = '<strong>PREHITRO ✕</strong><span>Ne glej samo odstotka. Ali ima AI res dovolj podatkov za tak sklep?</span>';
-    result.className = 'ai-decision-result wrong';
-    document.getElementById('raviTask8Text').textContent =
-      aiScenarioIndex === 0
-        ? '»Tukaj ni treba dvomiti v vse. Pomembno je vedeti, kdaj so dokazi dovolj jasni.«'
-        : '»Zaupanje modela je podatek, ne dokaz. Poskusi še enkrat.«';
+    card.addEventListener('dragstart', (event) => {
+      event.dataTransfer.setData('text/plain', item.id);
+      card.classList.add('dragging');
+    });
 
-    setTimeout(() => {
-      aiDecisionLocked = false;
-      document.getElementById('aiAcceptBtn').disabled = false;
-      document.getElementById('aiVerifyBtn').disabled = false;
-    }, 1500);
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+    card.addEventListener('click', () => {
+      if (mlPlaced.has(item.id)) return;
+      const target = item.type === 'cat'
+        ? document.querySelector('.ml-dropzone.cat-zone')
+        : document.querySelector('.ml-dropzone.dog-zone');
+      placeMLItem(item.id, target?.dataset.class);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function placeMLItem(itemId, targetClass) {
+  if (mlBusy || mlPlaced.has(itemId)) return;
+
+  const item = mlTrainingItems.find((entry) => entry.id === itemId);
+  if (!item) return;
+
+  const card = document.querySelector(`.ml-training-card[data-id="${itemId}"]`);
+  if (!card) return;
+
+  if (item.type !== targetClass) {
+    card.classList.add('wrong');
+    document.getElementById('raviTask8Text').textContent = '»Ta primer je v napačni skupini. Poskusi še enkrat.«';
+    setTimeout(() => card.classList.remove('wrong'), 550);
     return;
   }
 
-  result.innerHTML = `<strong>${scenario.explanation.split('✓')[0]}✓</strong><span>${scenario.explanation.split('✓')[1]}</span>`;
-  result.className = 'ai-decision-result correct';
-  document.getElementById('raviTask8Text').textContent = scenario.ravi;
+  mlPlaced.set(itemId, targetClass);
+  card.classList.add('placed', targetClass);
+  card.draggable = false;
 
-  setTimeout(() => {
-    aiScenarioIndex += 1;
+  const cats = [...mlPlaced.values()].filter((value) => value === 'cat').length;
+  const dogs = [...mlPlaced.values()].filter((value) => value === 'dog').length;
+  const total = mlPlaced.size;
 
-    if (aiScenarioIndex >= aiScenarios.length) {
-      finishAIModule();
-      return;
-    }
+  document.getElementById('mlTrainCount').textContent = `${total} / 8`;
+  document.getElementById('mlDatasetStatus').textContent = `${total} / 8`;
+  document.getElementById('mlCatCount').textContent = `${cats} primerov`;
+  document.getElementById('mlDogCount').textContent = `${dogs} primerov`;
 
-    renderAIScenario();
-  }, 2300);
+  if (total === 8) {
+    mlBusy = true;
+    document.getElementById('raviTask8Text').textContent = '»Dataset pripravljen. Začenjam trening modela.«';
+    setTimeout(startMLTraining, 650);
+  }
 }
 
-function finishAIModule() {
-  const shell = document.querySelector('.ai-control-shell');
-  shell?.classList.add('ai-complete');
+function initMLDropzones() {
+  document.querySelectorAll('.ml-dropzone').forEach((zone) => {
+    zone.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      zone.classList.add('drag-over');
+    });
 
-  const result = document.getElementById('aiDecisionResult');
-  result.innerHTML = '<strong>AI CORE VERIFIED ✓</strong><span>Človek je preveril vse tri odločitve. Sistem je pripravljen.</span>';
-  result.className = 'ai-decision-result correct final';
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
 
-  document.getElementById('raviTask8Text').textContent = '»To je bistvo. AI je močno orodje — ampak nekdo mora vedeti, kdaj mu zaupati in kdaj ga preveriti.«';
+    zone.addEventListener('drop', (event) => {
+      event.preventDefault();
+      zone.classList.remove('drag-over');
+      placeMLItem(event.dataTransfer.getData('text/plain'), zone.dataset.class);
+    });
+  });
+}
+
+function startMLTraining() {
+  updateMLStage(1);
+  setMLPhase('mlTrainingAnimation');
+  document.getElementById('mlModelStatus').textContent = 'TRAINING';
+  document.getElementById('mlAccuracyStatus').textContent = '--';
+
+  const bar = document.getElementById('mlTrainingBar');
+  const percent = document.getElementById('mlTrainingPercent');
+  const step = document.getElementById('mlTrainingStep');
+  bar.style.width = '0%';
+  percent.textContent = '0 %';
+
+  const frames = [
+    { p:18, text:'Priprava podatkov ...' },
+    { p:41, text:'Iskanje vzorcev ...' },
+    { p:67, text:'Prilagajanje uteži ...' },
+    { p:84, text:'Preverjanje modela ...' },
+    { p:100, text:'MODEL READY' }
+  ];
+
+  frames.forEach((frame,index) => {
+    setTimeout(() => {
+      bar.style.width = `${frame.p}%`;
+      percent.textContent = `${frame.p} %`;
+      step.textContent = frame.text;
+    }, 450 + index * 620);
+  });
+
+  setTimeout(() => {
+    document.getElementById('mlModelStatus').textContent = 'ONLINE';
+    document.getElementById('mlAccuracyStatus').textContent = '84 %';
+    document.getElementById('raviTask8Text').textContent = '»Model je pripravljen. Zdaj bom poskusil sam.«';
+    updateMLStage(2);
+    setMLPhase('mlTestPhase');
+    mlBusy = false;
+    setTimeout(runMLBadPrediction, 420);
+  }, 3900);
+}
+
+function runMLBadPrediction() {
+  const phase = document.getElementById('mlTestPhase');
+  const scene = phase.querySelector('.ml-test-scene');
+  scene.classList.add('scanning');
+
+  document.getElementById('mlPredictionText').textContent = 'ANALIZA ...';
+  document.getElementById('mlPredictionConfidence').textContent = '--';
+
+  setTimeout(() => {
+    scene.classList.remove('scanning');
+    scene.classList.add('prediction-wrong');
+    document.getElementById('mlPredictionText').textContent = 'PES';
+    document.getElementById('mlPredictionConfidence').textContent = '92 %';
+    document.getElementById('mlPredictionSub').textContent = 'Temen velik primer je model zamenjal za psa.';
+    document.getElementById('raviTask8Text').textContent = '»92 % prepričan ... in napačen. Očitno moji podatki niso bili dovolj raznoliki.«';
+
+    setTimeout(() => {
+      updateMLStage(2);
+      setMLPhase('mlRetrainPhase');
+    }, 2200);
+  }, 1450);
+}
+
+function chooseMLPackage(packageId) {
+  if (mlBusy) return;
+
+  const feedback = document.getElementById('mlPackageFeedback');
+  const buttons = document.querySelectorAll('.ml-data-package');
+
+  if (packageId !== 'a') {
+    feedback.className = 'ml-package-feedback wrong';
+    feedback.innerHTML = packageId === 'b'
+      ? '<strong>PREMALO RAZNOLIKO ✕</strong><span>Še več enakih primerov modelu ne pomaga razumeti novih oblik in barv.</span>'
+      : '<strong>NAPAČNI PODATKI ✕</strong><span>Avtomobili ne pomagajo modelu razlikovati med mačko in psom.</span>';
+
+    document.getElementById('raviTask8Text').textContent =
+      packageId === 'b'
+        ? '»Več istega ni vedno boljše. Potrebujem bolj raznolike primere.«'
+        : '»Avtomobili so zanimivi, ampak moj problem je še vedno mačka proti psu.«';
+
+    return;
+  }
+
+  mlBusy = true;
+  buttons.forEach((button) => button.disabled = true);
+  document.querySelector('.ml-data-package[data-package="a"]').classList.add('selected');
+  feedback.className = 'ml-package-feedback correct';
+  feedback.innerHTML = '<strong>DOBRA IZBIRA ✓</strong><span>Raznoliki primeri pomagajo modelu bolje ločiti pomembne značilnosti.</span>';
+  document.getElementById('raviTask8Text').textContent = '»Dodajam bolj raznolike podatke. Ponovno treniram model.«';
+
+  setTimeout(startMLRetraining, 1050);
+}
+
+function startMLRetraining() {
+  updateMLStage(3);
+  setMLPhase('mlTrainingAnimation');
+
+  document.getElementById('mlTrainingPercent').textContent = '0 %';
+  document.getElementById('mlTrainingBar').style.width = '0%';
+  document.getElementById('mlTrainingStep').textContent = 'ADDING NEW DATA ...';
+  document.getElementById('mlModelStatus').textContent = 'RETRAINING';
+
+  const frames = [
+    { p:24, text:'ADDING NEW DATA ...' },
+    { p:49, text:'REBALANCING MODEL ...' },
+    { p:73, text:'LEARNING NEW FEATURES ...' },
+    { p:100, text:'MODEL IMPROVED' }
+  ];
+
+  frames.forEach((frame,index) => {
+    setTimeout(() => {
+      document.getElementById('mlTrainingBar').style.width = `${frame.p}%`;
+      document.getElementById('mlTrainingPercent').textContent = `${frame.p} %`;
+      document.getElementById('mlTrainingStep').textContent = frame.text;
+    }, 350 + index * 620);
+  });
+
+  setTimeout(() => {
+    document.getElementById('mlModelStatus').textContent = 'IMPROVED';
+    document.getElementById('mlAccuracyStatus').textContent = '97 %';
+    document.getElementById('raviTask8Text').textContent = '»Model posodobljen. Ponoviva isti primer.«';
+    setMLPhase('mlFinalPhase');
+    mlBusy = false;
+  }, 3200);
+}
+
+function finishMLModule() {
+  if (modules[7].status === 'complete') return;
+
+  mlBusy = true;
+  const shell = document.querySelector('.ml-lab-shell');
+  shell?.classList.add('ml-complete');
+  document.getElementById('raviTask8Text').textContent =
+    '»Zdaj razumem bistvo: AI se uči iz podatkov. Boljši podatki pomenijo boljši model — človek pa mora znati preveriti rezultat.«';
 
   modules[7].status = 'complete';
   completed = 8;
@@ -2313,16 +2429,44 @@ function finishAIModule() {
 
   setTimeout(() => {
     showScreen('screenFinal');
-    shell?.classList.remove('ai-complete');
-  }, 3200);
+    shell?.classList.remove('ml-complete');
+  }, 3600);
 }
 
 function resetTask8() {
   if (modules[7].status === 'complete') return;
-  aiScenarioIndex = 0;
-  aiDecisionLocked = false;
-  aiMistakes = 0;
-  renderAIScenario();
+
+  mlPlaced = new Map();
+  mlStage = 0;
+  mlBusy = false;
+  updateMLStage(0);
+  setMLPhase('mlTrainingPhase');
+
+  document.getElementById('mlDatasetStatus').textContent = '0 / 8';
+  document.getElementById('mlModelStatus').textContent = 'OFFLINE';
+  document.getElementById('mlAccuracyStatus').textContent = '--';
+  document.getElementById('mlTrainCount').textContent = '0 / 8';
+  document.getElementById('mlCatCount').textContent = '0 primerov';
+  document.getElementById('mlDogCount').textContent = '0 primerov';
+  document.getElementById('mlTrainingBar').style.width = '0%';
+  document.getElementById('mlTrainingPercent').textContent = '0 %';
+
+  const feedback = document.getElementById('mlPackageFeedback');
+  feedback.className = 'ml-package-feedback hidden';
+  feedback.textContent = '';
+
+  document.querySelectorAll('.ml-data-package').forEach((button) => {
+    button.disabled = false;
+    button.classList.remove('selected');
+  });
+
+  const testScene = document.querySelector('.ml-test-scene');
+  testScene?.classList.remove('prediction-wrong','scanning');
+
+  document.getElementById('raviTask8Text').textContent =
+    '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«';
+
+  renderMLTrainingCards();
 }
 
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
@@ -2361,8 +2505,10 @@ document.getElementById('backHub7').addEventListener('click', () => {
 });
 document.addEventListener('keydown', handleRunnerKeyDown);
 document.addEventListener('keyup', handleRunnerKeyUp);
-document.getElementById('aiAcceptBtn').addEventListener('click', () => chooseAIDecision('accept'));
-document.getElementById('aiVerifyBtn').addEventListener('click', () => chooseAIDecision('verify'));
+document.querySelectorAll('.ml-data-package').forEach((button) => {
+  button.addEventListener('click', () => chooseMLPackage(button.dataset.package));
+});
+document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule);
 document.getElementById('resetTask8').addEventListener('click', resetTask8);
 document.getElementById('backHub8').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
@@ -2384,6 +2530,8 @@ safeInit('HTML repair', initHtmlRepairGame);
 safeInit('Data filter', initDataFilterGame);
 safeInit('Network topology', initNetworkTopologyGame);
 safeInit('Security scanner', initSecurityScanner);
+safeInit('ML dropzones', initMLDropzones);
+safeInit('ML training cards', renderMLTrainingCards);
 safeInit('Legacy components', renderComponents);
 safeInit('Program order', renderProgramOrder);
 safeInit('Data rows', renderDataRows);
