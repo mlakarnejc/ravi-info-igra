@@ -1115,40 +1115,57 @@ function initHtmlRepairGame() {
 }
 
 const dataRecords = [
-  { id: 'ana', ime: 'Ana', program: 'Računalništvo', letnik: '1.', tocke: 84 },
-  { id: 'miha', ime: 'Miha', program: 'Elektrotehnika', letnik: '2.', tocke: 71 },
-  { id: 'luka', ime: 'Luka', program: 'Računalništvo', letnik: '3.', tocke: 92 },
-  { id: 'eva', ime: 'Eva', program: 'Strojništvo', letnik: '1.', tocke: 88 },
-  { id: 'nina', ime: 'Nina', program: 'Mehatronika', letnik: '3.', tocke: 79 },
-  { id: 'jan', ime: 'Jan', program: 'Računalništvo', letnik: '4.', tocke: 86 },
-  { id: 'tim', ime: 'Tim', program: 'Strojništvo', letnik: '3.', tocke: 74 },
-  { id: 'lara', ime: 'Lara', program: 'Elektrotehnika', letnik: '4.', tocke: 90 }
+  { id: 'ana', ime: 'Ana', spol: 'Ž', program: 'Računalništvo', letnik: '3.', tocke: 94 },
+  { id: 'luka', ime: 'Luka', spol: 'M', program: 'Računalništvo', letnik: '3.', tocke: 88 },
+  { id: 'jan', ime: 'Jan', spol: 'M', program: 'Računalništvo', letnik: '3.', tocke: 96 },
+  { id: 'rok', ime: 'Rok', spol: 'M', program: 'Računalništvo', letnik: '3.', tocke: 91 },
+  { id: 'miha', ime: 'Miha', spol: 'M', program: 'Elektrotehnika', letnik: '3.', tocke: 98 },
+  { id: 'tim', ime: 'Tim', spol: 'M', program: 'Računalništvo', letnik: '2.', tocke: 99 },
+  { id: 'nina', ime: 'Nina', spol: 'Ž', program: 'Mehatronika', letnik: '3.', tocke: 79 },
+  { id: 'lara', ime: 'Lara', spol: 'Ž', program: 'Elektrotehnika', letnik: '4.', tocke: 90 },
+  { id: 'eva', ime: 'Eva', spol: 'Ž', program: 'Strojništvo', letnik: '1.', tocke: 88 },
+  { id: 'nejc', ime: 'Nejc', spol: 'M', program: 'Strojništvo', letnik: '4.', tocke: 83 },
+  { id: 'zala', ime: 'Zala', spol: 'Ž', program: 'Računalništvo', letnik: '1.', tocke: 97 },
+  { id: 'vid', ime: 'Vid', spol: 'M', program: 'Mehatronika', letnik: '2.', tocke: 87 }
 ];
 
 let task4Attempts = 0;
+let dataSortedByPoints = false;
 
 function getFilteredDataRecords() {
+  const spol = document.getElementById('filterSpol')?.value || '';
   const program = document.getElementById('filterProgram')?.value || '';
   const letnik = document.getElementById('filterLetnik')?.value || '';
 
-  return dataRecords.filter((record) => {
+  let rows = dataRecords.filter((record) => {
+    const spolOk = !spol || record.spol === spol;
     const programOk = !program || record.program === program;
     const letnikOk = !letnik || record.letnik === letnik;
-    return programOk && letnikOk;
+    return spolOk && programOk && letnikOk;
   });
+
+  if (dataSortedByPoints) {
+    rows = [...rows].sort((a, b) => b.tocke - a.tocke);
+  }
+
+  return rows;
 }
 
 function updateDataQueryText() {
+  const spol = document.getElementById('filterSpol')?.value || '';
   const program = document.getElementById('filterProgram')?.value || '';
   const letnik = document.getElementById('filterLetnik')?.value || '';
   const parts = [];
 
+  if (spol) parts.push(`SPOL = "${spol}"`);
   if (program) parts.push(`PROGRAM = "${program}"`);
   if (letnik) parts.push(`LETNIK = "${letnik}"`);
 
-  const query = parts.length
+  let query = parts.length
     ? `PRIKAŽI ZAPISE KJER ${parts.join(' IN ')}`
     : 'PRIKAŽI VSE ZAPISE';
+
+  if (dataSortedByPoints) query += ' | RAZVRSTI PO TOČKAH ↓';
 
   const queryText = document.getElementById('dataQueryText');
   if (queryText) queryText.textContent = query;
@@ -1168,6 +1185,7 @@ function renderDataRows() {
     row.style.animationDelay = `${index * 45}ms`;
     row.innerHTML = `
       <td>${record.ime}</td>
+      <td>${record.spol}</td>
       <td>${record.program}</td>
       <td>${record.letnik}</td>
       <td>${record.tocke}</td>
@@ -1177,6 +1195,27 @@ function renderDataRows() {
 
   const count = document.getElementById('dataResultCount');
   if (count) count.textContent = String(filtered.length);
+
+  const phase = document.getElementById('dataPhaseHint');
+  const sortBtn = document.getElementById('sortPointsBtn');
+  const readyForSort =
+    document.getElementById('filterSpol')?.value === 'M' &&
+    document.getElementById('filterProgram')?.value === 'Računalništvo' &&
+    document.getElementById('filterLetnik')?.value === '3.';
+
+  if (phase) {
+    phase.textContent = dataSortedByPoints
+      ? '2. RAZVRŠČENO PO TOČKAH ↓'
+      : readyForSort
+        ? '2. ZDAJ RAZVRSTI PO TOČKAH'
+        : '1. FILTRIRAJ PODATKE';
+  }
+
+  if (sortBtn) {
+    sortBtn.classList.toggle('ready', readyForSort);
+    sortBtn.classList.toggle('sorted', dataSortedByPoints);
+    sortBtn.textContent = dataSortedByPoints ? 'Točke ↓' : 'Točke ↕';
+  }
 
   updateDataQueryText();
 
@@ -1190,9 +1229,13 @@ function renderDataRows() {
 
   const feedback4 = document.getElementById('task4Feedback');
   if (feedback4 && modules[3].status !== 'complete') {
-    feedback4.textContent = filtered.length === 1
-      ? 'Ostal je en zapis. Če ustreza obema pogojema, potrdi rezultat.'
-      : `Prikazanih zapisov: ${filtered.length}. Nadaljuj s filtriranjem.`;
+    if (readyForSort && !dataSortedByPoints) {
+      feedback4.textContent = 'Pravilno filtrirano. Ostali so 3 dijaki. Zdaj razvrsti po točkah.';
+    } else if (dataSortedByPoints && filtered.length === 3) {
+      feedback4.textContent = 'Razvrščeno. Najboljši rezultat je zdaj na vrhu — potrdi rezultat.';
+    } else {
+      feedback4.textContent = `Prikazanih zapisov: ${filtered.length}. Nadaljuj s filtriranjem.`;
+    }
     feedback4.className = 'feedback';
   }
 }
@@ -1201,22 +1244,48 @@ function resetTask4() {
   if (modules[3].status === 'complete') return;
 
   task4Attempts = 0;
+  dataSortedByPoints = false;
+
+  const spol = document.getElementById('filterSpol');
   const program = document.getElementById('filterProgram');
   const letnik = document.getElementById('filterLetnik');
+
+  if (spol) spol.value = '';
   if (program) program.value = '';
   if (letnik) letnik.value = '';
 
   const ravi4 = document.getElementById('raviTask4Text');
   if (ravi4) {
-    ravi4.textContent = '»V bazi je preveč zapisov. Ne klikaj na slepo — filtriraj podatke, da ostane samo pravi rezultat.«';
+    ravi4.textContent = '»V bazi je preveč zapisov. Iz besedila izlušči pogoje, nato pa podatke še pravilno razvrsti.«';
   }
 
+  renderDataRows();
+}
+
+function sortDataByPoints() {
+  if (modules[3].status === 'complete') return;
+
+  const spol = document.getElementById('filterSpol')?.value || '';
+  const program = document.getElementById('filterProgram')?.value || '';
+  const letnik = document.getElementById('filterLetnik')?.value || '';
+  const feedback4 = document.getElementById('task4Feedback');
+  const ravi4 = document.getElementById('raviTask4Text');
+
+  if (!(spol === 'M' && program === 'Računalništvo' && letnik === '3.')) {
+    feedback4.textContent = 'Najprej pravilno filtriraj podatke. Razvrščanje pride na vrsto šele nato.';
+    feedback4.className = 'feedback error';
+    ravi4.textContent = '»Če razvrstiva napačen nabor podatkov, dobiva zelo urejeno napačen odgovor.«';
+    return;
+  }
+
+  dataSortedByPoints = true;
   renderDataRows();
 }
 
 function checkTask4() {
   if (modules[3].status === 'complete') return;
 
+  const spol = document.getElementById('filterSpol')?.value || '';
   const program = document.getElementById('filterProgram')?.value || '';
   const letnik = document.getElementById('filterLetnik')?.value || '';
   const feedback4 = document.getElementById('task4Feedback');
@@ -1225,23 +1294,28 @@ function checkTask4() {
 
   task4Attempts += 1;
 
-  const isCorrect =
+  const filtersCorrect =
+    spol === 'M' &&
     program === 'Računalništvo' &&
-    letnik === '3.' &&
-    filtered.length === 1 &&
-    filtered[0].id === 'luka';
+    letnik === '3.';
+
+  const isCorrect =
+    filtersCorrect &&
+    dataSortedByPoints &&
+    filtered.length === 3 &&
+    filtered[0].id === 'jan';
 
   if (isCorrect) {
-    const row = document.querySelector('.data-row[data-id="luka"]');
+    const row = document.querySelector('.data-row[data-id="jan"]');
     if (row) row.classList.add('correct');
 
     modules[3].status = 'complete';
     modules[4].status = 'ready';
     completed = Math.max(completed, 4);
 
-    feedback4.textContent = 'MODUL 4 AKTIVIRAN ✓ Iz 8 zapisov si s filtri našel točno pravi podatek.';
+    feedback4.textContent = 'MODUL 4 AKTIVIRAN ✓ Filtriral si podatke in nato izbral najboljši rezultat.';
     feedback4.className = 'feedback success';
-    ravi4.textContent = '»To je to. Podatki postanejo uporabni šele, ko jih znaš pravilno filtrirati.«';
+    ravi4.textContent = '»Filtriranje in razvrščanje. Dvanajst zapisov je postalo en uporaben podatek.«';
     document.getElementById('hubMessage').textContent = 'Podatkovni modul je aktiven. Računalniška omrežja so odklenjena.';
 
     updateProgress();
@@ -1252,33 +1326,54 @@ function checkTask4() {
 
   feedback4.className = 'feedback error';
 
-  if (!program || !letnik) {
-    feedback4.textContent = 'Uporabi oba filtra: program IN letnik.';
-    ravi4.textContent = '»En pogoj ni dovolj. Baza še vedno vrača preveč rezultatov.«';
-  } else if (task4Attempts === 1) {
-    feedback4.textContent = `Ta poizvedba vrne ${filtered.length} zapisov, vendar ne pravega. Preveri oba pogoja.`;
-    ravi4.textContent = '»Filter deluje. Samo vprašanje, ki si ga postavil bazi, še ni pravo.«';
-  } else if (task4Attempts === 2) {
-    feedback4.textContent = 'Namig: program mora biti Računalništvo, letnik pa 3.';
-    ravi4.textContent = '»Iščeva Računalništvo IN tretji letnik. Beseda IN je tu precej pomembna.«';
-  } else {
-    if (program) document.getElementById('filterProgram').value = 'Računalništvo';
-    if (letnik) document.getElementById('filterLetnik').value = '3.';
-    renderDataRows();
-    feedback4.textContent = 'RAVI pomoč: pravilna filtra sem nastavil. Zdaj samo potrdi rezultat.';
-    ravi4.textContent = '»Poizvedba je pripravljena. Ostal je samo še en zapis — preveri ga in potrdi.«';
+  if (!filtersCorrect) {
+    if (task4Attempts === 1) {
+      feedback4.textContent = 'Preberi zahtevo natančno. Beseda "dijaka" pomeni tudi pogoj za spol.';
+      ravi4.textContent = '»V vprašanju je več pogojev, kot jih je videti na prvi pogled.«';
+    } else if (task4Attempts === 2) {
+      feedback4.textContent = 'Namig: SPOL = M, PROGRAM = Računalništvo, LETNIK = 3.';
+      ravi4.textContent = '»Najprej izloči vse, ki ne ustrezajo trem pogojem.«';
+    } else {
+      document.getElementById('filterSpol').value = 'M';
+      document.getElementById('filterProgram').value = 'Računalništvo';
+      document.getElementById('filterLetnik').value = '3.';
+      dataSortedByPoints = false;
+      renderDataRows();
+      feedback4.textContent = 'RAVI pomoč: filtri so pravilno nastavljeni. Zdaj klikni TOČKE, da jih razvrstiš.';
+      ravi4.textContent = '»Filtri so pripravljeni. Zdaj še ugotoviva, kdo ima največ točk.«';
+    }
+    return;
   }
+
+  if (!dataSortedByPoints) {
+    feedback4.textContent = 'Filtri so pravilni, vendar naloga zahteva še največ točk. Klikni glavo stolpca TOČKE.';
+    ravi4.textContent = '»Trije ustrezajo. Potrebujem najboljšega — razvrsti jih po točkah.«';
+    return;
+  }
+
+  feedback4.textContent = 'Podatki so že razvrščeni. Najvišji rezultat je prvi zapis v tabeli.';
+  ravi4.textContent = '»Po razvrščanju je odgovor na vrhu. Zdaj ga samo še potrdi.«';
 }
 
 function initDataFilterGame() {
+  const spol = document.getElementById('filterSpol');
   const program = document.getElementById('filterProgram');
   const letnik = document.getElementById('filterLetnik');
+  const sortBtn = document.getElementById('sortPointsBtn');
 
-  [program, letnik].forEach((select) => {
+  [spol, program, letnik].forEach((select) => {
     if (!select || select.dataset.bound === '1') return;
     select.dataset.bound = '1';
-    select.addEventListener('change', renderDataRows);
+    select.addEventListener('change', () => {
+      dataSortedByPoints = false;
+      renderDataRows();
+    });
   });
+
+  if (sortBtn && sortBtn.dataset.bound !== '1') {
+    sortBtn.dataset.bound = '1';
+    sortBtn.addEventListener('click', sortDataByPoints);
+  }
 }
 
 
