@@ -2299,7 +2299,7 @@ function placeMLItem(itemId, targetClass) {
         analysis.classList.remove('wrong');
         card.classList.remove('wrong');
         mlBusy = false;
-      }, 420);
+      }, 560);
       return;
     }
 
@@ -2336,7 +2336,7 @@ function placeMLItem(itemId, targetClass) {
       } else {
         mlBusy = false;
       }
-    }, 420);
+    }, 560);
   }, 520);
 }
 
@@ -2468,9 +2468,9 @@ function startMLRetrainingScan() {
     { icon:'🐈‍⬛', label:'ČRNA MAČKA' },
     { icon:'🐩', label:'MAJHEN PES' },
     { icon:'🐈', label:'VELIKA MAČKA' },
-    { icon:'🐕', label:'TEMEN PES' },
+    { icon:'🐕‍🦺', label:'TEMEN PES' },
     { icon:'🐱', label:'SVETLA MAČKA' },
-    { icon:'🐕‍🦺', label:'VELIK PES' }
+    { icon:'🐶', label:'SVETEL PES' }
   ];
 
   let index = 0;
@@ -2490,9 +2490,9 @@ function startMLRetrainingScan() {
 
     index += 1;
     if (index < samples.length) {
-      setTimeout(showSample, 620);
+      setTimeout(showSample, 760);
     } else {
-      setTimeout(startMLRetraining, 900);
+      setTimeout(startMLRetraining, 1050);
     }
   }
 
