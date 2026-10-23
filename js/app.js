@@ -486,9 +486,9 @@ function handleCatchKeyUp(event) {
 
 const programGridSize = 5;
 const programStart = { x: 0, y: 4, dir: 0 };
-const programGoal = { x: 4, y: 0 };
-const programObstacles = new Set(['1,3', '2,3', '2,2', '3,2', '1,1']);
-const programSolution = ['F','F','F','F','R','F','F','F','F'];
+const programGoal = { x: 4, y: 1 };
+const programObstacles = new Set(['0,2', '1,2', '3,3', '3,2', '4,2', '1,1', '2,0']);
+const programSolution = ['F','R','F','F','L','F','F','R','F','F'];
 const programMaxCommands = 10;
 
 let programCommands = [];
@@ -525,7 +525,7 @@ function renderProgramSequence(activeIndex = -1) {
   if (!container) return;
   container.innerHTML = '';
 
-  const labels = { F: 'NAPREJ', L: 'OBRAT LEVO', R: 'OBRAT DESNO' };
+  const labels = { F: '↑', L: '↶', R: '↷' };
   programCommands.forEach((command, index) => {
     const item = document.createElement('span');
     item.className = 'program-command';
@@ -701,8 +701,8 @@ async function runProgramGame() {
     feedback2.textContent = 'Program se je izvedel, vendar RAVI ni prišel do cilja. Popravi zaporedje.';
     ravi2.textContent = '»Program sem ubogal do zadnjega ukaza. Cilj pa je očitno imel druge načrte.«';
   } else if (programAttempts === 2) {
-    feedback2.textContent = 'Namig: RAVI je na začetku obrnjen NAVZGOR. Najprej ga premakni naprej, nato razmisli, kje potrebuje obrat.';
-    ravi2.textContent = '»Na začetku gledam navzgor. OBRAT spremeni samo smer, NAPREJ pa me premakne.«';
+    feedback2.textContent = 'Namig: RAVI je na začetku obrnjen NAVZGOR. Začni z NAPREJ, nato boš moral precej hitro narediti DESNI OBRAT.';
+    ravi2.textContent = '»Na začetku gledam navzgor. OBRAT spremeni samo smer, NAPREJ pa me premakne. Tokrat bo treba malo cik-cak.«';
   } else {
     programCommands = [...programSolution];
     renderProgramSequence();
