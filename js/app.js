@@ -1820,7 +1820,7 @@ function initSecurityScanner() {
 const runnerState = {
   x:80, y:70, vx:0, vy:0, running:false, left:false, right:false,
   onGround:true, collected:new Set(), hits:0, checkpoint:80,
-  lastTime:0, raf:null, invulnerableUntil:0, fallingInPit:false
+  lastTime:0, raf:null, invulnerableUntil:0
 };
 
 const runnerGroundY = 70;
@@ -1842,8 +1842,8 @@ const runnerHazards = [
 
 const runnerCodes = [
   { x:365, y:172, checkpoint:300 },
-  { x:900, y:248, checkpoint:840 },
-  { x:1510, y:252, checkpoint:1450 }
+  { x:900, y:290, checkpoint:840 },
+  { x:1510, y:294, checkpoint:1450 }
 ];
 
 function updateRunnerHud() {
@@ -1882,7 +1882,6 @@ function resetRunnerGame() {
   runnerState.lastTime = 0;
   runnerState.raf = null;
   runnerState.invulnerableUntil = 0;
-  runnerState.fallingInPit = false;
 
   document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
   document.getElementById('runnerGoal')?.classList.remove('unlocked');
@@ -2005,15 +2004,16 @@ function runnerLoop(now) {
     runnerState.x - 16 < pit.x + pit.w
   );
 
-  if (overPit && runnerState.y <= runnerGroundY + 8) {
-    runnerState.fallingInPit = true;
-  }
+  const crossedGroundFromAbove =
+    previousY >= runnerGroundY &&
+    runnerState.y <= runnerGroundY &&
+    runnerState.vy <= 0;
 
-  if (!runnerState.fallingInPit && !overPit && runnerState.y <= runnerGroundY) {
+  if (!overPit && crossedGroundFromAbove) {
     landingY = runnerGroundY;
   }
 
-  if (runnerState.vy <= 0 && !runnerState.fallingInPit) {
+  if (runnerState.vy <= 0) {
     for (const platform of runnerPlatforms) {
       const overPlatform =
         runnerState.x + 18 > platform.x &&
@@ -2036,7 +2036,6 @@ function runnerLoop(now) {
 
   if (runnerState.y < -75) {
     runnerHit();
-    runnerState.fallingInPit = false;
   }
 
   for (const hazard of runnerHazards) {
@@ -2054,10 +2053,10 @@ function runnerLoop(now) {
     const playerBottom = runnerState.y;
     const playerTop = runnerState.y + 68;
 
-    const codeLeft = code.x - 21;
-    const codeRight = code.x + 21;
-    const codeBottom = code.y - 21;
-    const codeTop = code.y + 21;
+    const codeLeft = code.x - 18;
+    const codeRight = code.x + 18;
+    const codeBottom = code.y - 18;
+    const codeTop = code.y + 18;
 
     const touching =
       playerRight > codeLeft &&
