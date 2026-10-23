@@ -313,3 +313,63 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }
+
+.network-order {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 28px 0 22px;
+}
+.network-node {
+  min-height: 150px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel-2);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 10px;
+  position: relative;
+}
+.network-node:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 900;
+}
+.network-icon {
+  font-size: 38px;
+}
+.network-name {
+  font-weight: 900;
+}
+.network-controls {
+  display: flex;
+  gap: 6px;
+}
+.network-node.correct {
+  border-color: rgba(56,193,114,.65);
+  background: rgba(56,193,114,.06);
+}
+.network-node.hint {
+  border-color: rgba(244,185,66,.7);
+  background: rgba(244,185,66,.06);
+}
+@media (max-width: 760px) {
+  .network-order { grid-template-columns: 1fr; }
+  .network-node:not(:last-child)::after {
+    content: "↓";
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: -24px;
+    transform: translateX(-50%);
+  }
+}
