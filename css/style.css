@@ -2583,3 +2583,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenTask6 #task6Feedback.hidden {
   display:none !important;
 }
+
+.security-reason.result-correct {
+  border-color:rgba(56,193,114,.55);
+  background:linear-gradient(180deg,rgba(56,193,114,.12),rgba(56,193,114,.045));
+}
+.security-reason.result-correct strong {
+  color:#8ee9b6;
+}
+.security-reason.result-wrong {
+  border-color:rgba(239,51,64,.55);
+  background:linear-gradient(180deg,rgba(239,51,64,.12),rgba(239,51,64,.045));
+}
+.security-reason.result-wrong strong {
+  color:#ff8b95;
+}
