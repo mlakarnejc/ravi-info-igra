@@ -1935,13 +1935,10 @@ function handleRunnerKeyUp(event) {
   if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') runnerState.right = false;
 }
 
-function runnerHit() {
-  const now = performance.now();
-  if (now < runnerState.invulnerableUntil) return;
-
+function runnerHit(respawnX = null) {
   runnerState.hits += 1;
-  runnerState.invulnerableUntil = now + 900;
-  runnerState.x = runnerState.checkpoint;
+  runnerState.invulnerableUntil = performance.now() + 450;
+  runnerState.x = respawnX ?? runnerState.checkpoint;
   runnerState.y = runnerGroundY;
   runnerState.vx = 0;
   runnerState.vy = 0;
@@ -2047,7 +2044,8 @@ function runnerLoop(now) {
       playerBottom < hazardTop;
 
     if (overlaps) {
-      runnerHit();
+      const isFinalWall = hazard.x >= 2000;
+      runnerHit(isFinalWall ? 1575 : null);
       break;
     }
   }
