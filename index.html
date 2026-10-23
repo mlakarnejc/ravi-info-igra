@@ -154,20 +154,43 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask2Text">»Moj zagonski program se je malo zmedel. Trenutno se poskušam prikazati, še preden sem se sploh zagnal.«</p>
+            <p id="raviTask2Text">»Tokrat me ne premikaj neposredno. Napiši mi program in ga bom ubogal. Upam.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 2</div>
-          <h2>Uredi moj program</h2>
-          <p>Razporedi <strong>4 ukaze</strong> v smiseln vrstni red. Uporabi puščici ob vsakem ukazu.</p>
+          <h2>Programiraj RAVI-ja</h2>
+          <p>S tipkami <strong>↑ ← →</strong> sestavi program. Nato pritisni <strong>ENTER</strong> in RAVI bo izvedel ukaze po vrsti.</p>
 
-          <div id="codeOrder" class="code-order" aria-label="Ukazi za razvrščanje"></div>
+          <div class="program-game-layout">
+            <div class="program-board-wrap">
+              <div id="programBoard" class="program-board" tabindex="0" aria-label="Mreža za programiranje RAVI-ja"></div>
+              <div class="program-legend">
+                <span><b>🤖</b> RAVI</span>
+                <span><b>⚡</b> cilj</span>
+                <span><b>■</b> ovira</span>
+              </div>
+            </div>
+
+            <div class="program-panel">
+              <div class="program-panel-head">
+                <span>PROGRAM</span>
+                <strong id="programCount">0 / 8</strong>
+              </div>
+              <div id="programSequence" class="program-sequence"></div>
+              <div class="program-key-help">
+                <span>↑ NAPREJ</span>
+                <span>← LEVO</span>
+                <span>→ DESNO</span>
+                <span>ENTER ZAŽENI</span>
+              </div>
+            </div>
+          </div>
 
           <div class="task-actions">
-            <button id="checkTask2" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask2" class="ghost-btn" type="button">PREMEŠAJ ZNOVA</button>
+            <button id="runProgramGame" class="primary-btn" type="button">ZAŽENI PROGRAM</button>
+            <button id="clearProgramGame" class="ghost-btn" type="button">POČISTI PROGRAM</button>
             <button id="backHub2" class="ghost-btn" type="button">NAZAJ</button>
           </div>
           <div id="task2Feedback" class="feedback" aria-live="polite"></div>
