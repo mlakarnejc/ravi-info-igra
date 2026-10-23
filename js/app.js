@@ -488,7 +488,7 @@ const programGridSize = 5;
 const programStart = { x: 0, y: 4, dir: 0 };
 const programGoal = { x: 4, y: 0 };
 const programObstacles = new Set(['1,3', '2,3', '2,2', '3,2', '1,1']);
-const programSolution = ['F','F','R','F','F','L','F','F'];
+const programSolution = ['F','F','F','F','R','F','F','F','F'];
 const programMaxCommands = 10;
 
 let programCommands = [];
