@@ -1820,7 +1820,7 @@ function initSecurityScanner() {
 const runnerState = {
   x:80, y:70, vx:0, vy:0, running:false, left:false, right:false,
   onGround:true, collected:new Set(), hits:0, checkpoint:80,
-  lastTime:0, raf:null, invulnerableUntil:0
+  lastTime:0, raf:null, invulnerableUntil:0, finishing:false
 };
 
 const runnerGroundY = 70;
@@ -1880,6 +1880,7 @@ function resetRunnerGame() {
   runnerState.lastTime = 0;
   runnerState.raf = null;
   runnerState.invulnerableUntil = 0;
+  runnerState.finishing = false;
 
   document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
   document.getElementById('runnerGoal')?.classList.remove('unlocked');
@@ -1899,7 +1900,7 @@ function resetRunnerGame() {
 }
 
 function startRunnerGame() {
-  if (modules[6].status === 'complete' || runnerState.running) return;
+  if (modules[6].status === 'complete' || runnerState.running || runnerState.finishing) return;
   document.getElementById('runnerOverlay')?.classList.add('hidden');
   runnerState.running = true;
   runnerState.lastTime = performance.now();
@@ -2071,13 +2072,13 @@ function runnerLoop(now) {
     if (touching) collectRunnerCode(index);
   });
 
-  if (runnerState.x > 2245) {
+  if (runnerState.x > 2215) {
     if (runnerState.collected.size === 3) {
-      finishRunnerGame();
+      startRunnerExitSequence();
       return;
     }
 
-    runnerState.x = 2200;
+    runnerState.x = 2185;
     runnerState.vx = -90;
     const feedback7 = document.getElementById('task7Feedback');
     feedback7.textContent = `Terminal je zaklenjen. Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
@@ -2088,8 +2089,37 @@ function runnerLoop(now) {
   runnerState.raf = requestAnimationFrame(runnerLoop);
 }
 
+function startRunnerExitSequence() {
+  if (runnerState.finishing) return;
+
+  runnerState.finishing = true;
+  runnerState.running = false;
+  if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
+
+  const player = document.getElementById('runnerPlayer');
+  const goal = document.getElementById('runnerGoal');
+  const feedback7 = document.getElementById('task7Feedback');
+
+  if (feedback7) {
+    feedback7.textContent = 'TERMINAL ODKLENJEN ✓ RAVI vstopa v sistem ...';
+    feedback7.className = 'feedback success';
+  }
+
+  goal?.classList.add('entering');
+  player?.classList.add('entering-terminal');
+
+  setTimeout(() => {
+    player?.classList.add('inside-terminal');
+  }, 520);
+
+  setTimeout(() => {
+    finishRunnerGame();
+  }, 1250);
+}
+
 function finishRunnerGame() {
   runnerState.running = false;
+  runnerState.finishing = false;
   if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
 
   modules[6].status = 'complete';
