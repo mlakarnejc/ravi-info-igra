@@ -1835,8 +1835,8 @@ const runnerHazards = [
 ];
 const runnerCodes = [
   { x:390, y:120, checkpoint:330 },
-  { x:835, y:190, checkpoint:760 },
-  { x:1340, y:205, checkpoint:1260 }
+  { x:835, y:205, checkpoint:760 },
+  { x:1340, y:220, checkpoint:1260 }
 ];
 
 function updateRunnerHud() {
@@ -1990,17 +1990,29 @@ function runnerLoop(now) {
 
   runnerState.onGround = false;
 
-  let floorY = runnerGroundY;
-  for (const platform of runnerPlatforms) {
-    const overPlatform = runnerState.x + 18 > platform.x && runnerState.x - 18 < platform.x + platform.w;
-    const crossedSurface = previousY >= platform.y && runnerState.y <= platform.y && runnerState.vy <= 0;
-    if (overPlatform && crossedSurface) {
-      floorY = Math.max(floorY, platform.y);
+  let landingY = null;
+
+  if (runnerState.y <= runnerGroundY) {
+    landingY = runnerGroundY;
+  }
+
+  if (runnerState.vy <= 0) {
+    for (const platform of runnerPlatforms) {
+      const overPlatform =
+        runnerState.x + 18 > platform.x &&
+        runnerState.x - 18 < platform.x + platform.w;
+
+      const wasAboveSurface = previousY >= platform.y;
+      const reachedSurface = runnerState.y <= platform.y;
+
+      if (overPlatform && wasAboveSurface && reachedSurface) {
+        if (landingY === null || platform.y > landingY) landingY = platform.y;
+      }
     }
   }
 
-  if (runnerState.y <= floorY) {
-    runnerState.y = floorY;
+  if (landingY !== null) {
+    runnerState.y = landingY;
     runnerState.vy = 0;
     runnerState.onGround = true;
   }
@@ -2015,9 +2027,23 @@ function runnerLoop(now) {
 
   runnerCodes.forEach((code, index) => {
     if (runnerState.collected.has(index)) return;
-    const dx = Math.abs(runnerState.x - code.x);
-    const dy = Math.abs((runnerState.y + 30) - code.y);
-    if (dx < 42 && dy < 55) collectRunnerCode(index);
+    const playerLeft = runnerState.x - 20;
+    const playerRight = runnerState.x + 20;
+    const playerBottom = runnerState.y;
+    const playerTop = runnerState.y + 68;
+
+    const codeLeft = code.x - 26;
+    const codeRight = code.x + 26;
+    const codeBottom = code.y - 26;
+    const codeTop = code.y + 26;
+
+    const touching =
+      playerRight > codeLeft &&
+      playerLeft < codeRight &&
+      playerTop > codeBottom &&
+      playerBottom < codeTop;
+
+    if (touching) collectRunnerCode(index);
   });
 
   if (runnerState.x > 1650) {
