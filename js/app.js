@@ -120,6 +120,11 @@ function openModule(index) {
     return;
   }
 
+  if (index === 7) {
+    showScreen('screenTask8');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -775,6 +780,83 @@ function resetTask7() {
   feedback7.className = 'feedback';
 }
 
+
+let selectedAIChoice = null;
+let task8Attempts = 0;
+
+function selectAIChoice(choice) {
+  if (modules[7].status === 'complete') return;
+
+  selectedAIChoice = choice;
+  document.querySelectorAll('.ai-btn').forEach((button) => {
+    button.classList.toggle('selected', button.dataset.choice === choice);
+    button.classList.remove('wrong');
+  });
+
+  const feedback8 = document.getElementById('task8Feedback');
+  feedback8.textContent = choice === 'true' ? 'Izbrano: drži.' : 'Izbrano: ne drži.';
+  feedback8.className = 'feedback';
+}
+
+function checkTask8() {
+  if (modules[7].status === 'complete') return;
+
+  const feedback8 = document.getElementById('task8Feedback');
+  const ravi8 = document.getElementById('raviTask8Text');
+
+  if (!selectedAIChoice) {
+    feedback8.textContent = 'Najprej izberi eno možnost.';
+    feedback8.className = 'feedback error';
+    return;
+  }
+
+  task8Attempts += 1;
+  const selectedButton = document.querySelector(`.ai-btn[data-choice="${selectedAIChoice}"]`);
+
+  if (selectedAIChoice === 'false') {
+    selectedButton.classList.add('correct');
+    modules[7].status = 'complete';
+    completed = 8;
+
+    feedback8.textContent = 'MODUL 8 AKTIVIRAN ✓ Prav imaš: Python je programski jezik, ne operacijski sistem.';
+    feedback8.className = 'feedback success';
+    ravi8.textContent = '»Ujet. Bil sem zelo samozavesten in vseeno napačen. Zato je pomembno, da človek zna preveriti odgovor.«';
+    document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenFinal'), 2100);
+    return;
+  }
+
+  selectedButton.classList.add('wrong');
+  feedback8.className = 'feedback error';
+
+  if (task8Attempts === 1) {
+    feedback8.textContent = 'Preveri trditev še enkrat. Ali je Python res nekaj podobnega Windowsu?';
+    ravi8.textContent = '»Zvenim prepričljivo, vem. Ampak prepričljiv ton še ni dokaz.«';
+  } else if (task8Attempts === 2) {
+    feedback8.textContent = 'Namig: Python uporabljamo za pisanje programov.';
+    ravi8.textContent = '»Če v Pythonu pišemo programe, potem verjetno ni operacijski sistem.«';
+  } else {
+    feedback8.textContent = 'Močan namig: trditev NE DRŽI.';
+    ravi8.textContent = '»Priznam. Python je programski jezik. Klikni NE DRŽI in rešiva še zadnji modul.«';
+  }
+}
+
+function resetTask8() {
+  if (modules[7].status === 'complete') return;
+
+  selectedAIChoice = null;
+  document.querySelectorAll('.ai-btn').forEach((button) => {
+    button.classList.remove('selected', 'wrong', 'correct');
+  });
+
+  const feedback8 = document.getElementById('task8Feedback');
+  feedback8.textContent = '';
+  feedback8.className = 'feedback';
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
@@ -802,6 +884,13 @@ document.querySelectorAll('.design-option').forEach((button) => {
 document.getElementById('checkTask7').addEventListener('click', checkTask7);
 document.getElementById('resetTask7').addEventListener('click', resetTask7);
 document.getElementById('backHub7').addEventListener('click', () => showScreen('screenHub'));
+document.querySelectorAll('.ai-btn').forEach((button) => {
+  button.addEventListener('click', () => selectAIChoice(button.dataset.choice));
+});
+document.getElementById('checkTask8').addEventListener('click', checkTask8);
+document.getElementById('resetTask8').addEventListener('click', resetTask8);
+document.getElementById('backHub8').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
