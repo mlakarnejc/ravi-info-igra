@@ -1363,3 +1363,24 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .program-game-layout { grid-template-columns:1fr; }
   .program-sequence { min-height:120px; }
 }
+
+.program-ravi::before {
+  content:"▲";
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  color:var(--accent-2);
+  font-size:18px;
+  line-height:1;
+  filter:drop-shadow(0 0 7px rgba(239,51,64,.5));
+}
+.program-ravi {
+  position:relative;
+}
+.program-command {
+  min-width:94px;
+  font-size:11px;
+  line-height:1.15;
+  text-align:center;
+}
