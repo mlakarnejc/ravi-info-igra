@@ -115,6 +115,11 @@ function openModule(index) {
     return;
   }
 
+  if (index === 6) {
+    showScreen('screenTask7');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -692,6 +697,84 @@ function resetTask6() {
   feedback6.className = 'feedback';
 }
 
+
+let selectedDesignChoice = null;
+let task7Attempts = 0;
+
+function selectDesignChoice(choice) {
+  if (modules[6].status === 'complete') return;
+
+  selectedDesignChoice = choice;
+  document.querySelectorAll('.design-option').forEach((button) => {
+    button.classList.toggle('selected', button.dataset.choice === choice);
+    button.classList.remove('wrong');
+  });
+
+  const feedback7 = document.getElementById('task7Feedback');
+  feedback7.textContent = `Izbran dizajn: ${choice.toUpperCase()}`;
+  feedback7.className = 'feedback';
+}
+
+function checkTask7() {
+  if (modules[6].status === 'complete') return;
+
+  const feedback7 = document.getElementById('task7Feedback');
+  const ravi7 = document.getElementById('raviTask7Text');
+
+  if (!selectedDesignChoice) {
+    feedback7.textContent = 'Najprej izberi en plakat.';
+    feedback7.className = 'feedback error';
+    return;
+  }
+
+  task7Attempts += 1;
+  const selectedButton = document.querySelector(`.design-option[data-choice="${selectedDesignChoice}"]`);
+
+  if (selectedDesignChoice === 'b') {
+    selectedButton.classList.add('correct');
+    modules[6].status = 'complete';
+    modules[7].status = 'ready';
+    completed = Math.max(completed, 7);
+
+    feedback7.textContent = 'MODUL 7 AKTIVIRAN ✓ Jasna hierarhija, dobra berljivost in dovolj prostora.';
+    feedback7.className = 'feedback success';
+    ravi7.textContent = '»Odlično. Oči so mi hvaležne. In prvič danes mi ni treba zmanjšati svetlosti zaslona.«';
+    document.getElementById('hubMessage').textContent = 'Oblikovalski modul je aktiven. Zadnji modul – Umetna inteligenca – je odklenjen.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  selectedButton.classList.add('wrong');
+  feedback7.className = 'feedback error';
+
+  if (task7Attempts === 1) {
+    feedback7.textContent = 'Ta različica ni najbolj pregledna. Poglej berljivost, količino besedila in poudarke.';
+    ravi7.textContent = '»Če ne vem, kam naj najprej pogledam, je dizajn verjetno malo preveč navdušen sam nad sabo.«';
+  } else if (task7Attempts === 2) {
+    feedback7.textContent = 'Namig: najboljši dizajn ima jasen naslov, malo besedila in dobro vizualno hierarhijo.';
+    ravi7.textContent = '»Manj je včasih več. Še posebej pri plakatih. In kablih.«';
+  } else {
+    feedback7.textContent = 'Močan namig: izberi plakat B.';
+    ravi7.textContent = '»B. Čist, pregleden, berljiv. Moj grafični modul glasuje za B.«';
+  }
+}
+
+function resetTask7() {
+  if (modules[6].status === 'complete') return;
+
+  selectedDesignChoice = null;
+  document.querySelectorAll('.design-option').forEach((button) => {
+    button.classList.remove('selected', 'wrong', 'correct');
+  });
+
+  const feedback7 = document.getElementById('task7Feedback');
+  feedback7.textContent = '';
+  feedback7.className = 'feedback';
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
@@ -713,6 +796,12 @@ document.querySelectorAll('.security-btn').forEach((button) => {
 document.getElementById('checkTask6').addEventListener('click', checkTask6);
 document.getElementById('resetTask6').addEventListener('click', resetTask6);
 document.getElementById('backHub6').addEventListener('click', () => showScreen('screenHub'));
+document.querySelectorAll('.design-option').forEach((button) => {
+  button.addEventListener('click', () => selectDesignChoice(button.dataset.choice));
+});
+document.getElementById('checkTask7').addEventListener('click', checkTask7);
+document.getElementById('resetTask7').addEventListener('click', resetTask7);
+document.getElementById('backHub7').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
