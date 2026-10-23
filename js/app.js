@@ -1670,17 +1670,32 @@ const securityMessages = [
 let securityIndex = 0;
 let securityMistakes = 0;
 let securityLocked = false;
+let activeSecurityMessages = [...securityMessages];
+
+function shuffleSecurityMessages() {
+  const tricky = securityMessages[activeSecurityMessages.length - 1];
+  const others = securityMessages.slice(0, -1);
+
+  for (let i = others.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = others[i];
+    others[i] = others[j];
+    others[j] = tmp;
+  }
+
+  activeSecurityMessages = [...others, tricky];
+}
 
 function renderSecurityMessage() {
-  const msg = securityMessages[securityIndex];
+  const msg = activeSecurityMessages[securityIndex];
   if (!msg) return;
 
   document.getElementById('securitySender').textContent = msg.sender;
   document.getElementById('securitySubject').textContent = msg.subject;
   document.getElementById('securityBody').textContent = msg.body;
   document.getElementById('securityExtra').textContent = msg.extra;
-  document.getElementById('securityBadge').textContent = `${securityIndex + 1} / ${securityMessages.length}`;
-  document.getElementById('securityProgress').textContent = `${securityIndex} / ${securityMessages.length}`;
+  document.getElementById('securityBadge').textContent = `${securityIndex + 1} / ${activeSecurityMessages.length}`;
+  document.getElementById('securityProgress').textContent = `${securityIndex} / ${activeSecurityMessages.length}`;
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
 
   const card = document.getElementById('securityMessageCard');
@@ -1694,6 +1709,7 @@ function resetTask6() {
   securityIndex = 0;
   securityMistakes = 0;
   securityLocked = false;
+  shuffleSecurityMessages();
 
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
@@ -1708,7 +1724,7 @@ function resetTask6() {
 function classifySecurityMessage(choice) {
   if (modules[5].status === 'complete' || securityLocked) return;
 
-  const msg = securityMessages[securityIndex];
+  const msg = activeSecurityMessages[securityIndex];
   const isSafeChoice = choice === 'safe';
   const correct = isSafeChoice === msg.safe;
   const card = document.getElementById('securityMessageCard');
@@ -1728,7 +1744,7 @@ function classifySecurityMessage(choice) {
     setTimeout(() => {
       securityIndex += 1;
 
-      if (securityIndex >= securityMessages.length) {
+      if (securityIndex >= activeSecurityMessages.length) {
         finishSecurityGame();
         return;
       }
@@ -1759,7 +1775,7 @@ function finishSecurityGame() {
   modules[6].status = 'ready';
   completed = Math.max(completed, 6);
 
-  document.getElementById('securityProgress').textContent = `${securityMessages.length} / ${securityMessages.length}`;
+  document.getElementById('securityProgress').textContent = `${activeSecurityMessages.length} / ${activeSecurityMessages.length}`;
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
 
