@@ -1824,24 +1824,26 @@ const runnerState = {
 };
 
 const runnerGroundY = 70;
-const runnerWorldWidth = 1800;
+const runnerWorldWidth = 2360;
 const runnerPlatforms = [
-  { x:760, w:230, y:145 },
-  { x:1280, w:190, y:160 },
-  { x:1440, w:110, y:205 }
+  { x:700, w:170, y:145 },
+  { x:1180, w:170, y:145 },
+  { x:1710, w:190, y:150 }
 ];
 
 const runnerPits = [
-  { x:1495, w:155 }
+  { x:1900, w:220 }
 ];
+
 const runnerHazards = [
-  { x:560, w:70 },
-  { x:1080, w:82 }
+  { x:535, w:64 },
+  { x:1030, w:76 }
 ];
+
 const runnerCodes = [
-  { x:390, y:168, checkpoint:330 },
-  { x:845, y:226, checkpoint:760 },
-  { x:1360, y:240, checkpoint:1280 }
+  { x:365, y:172, checkpoint:300 },
+  { x:900, y:172, checkpoint:840 },
+  { x:1510, y:172, checkpoint:1450 }
 ];
 
 function updateRunnerHud() {
@@ -2046,10 +2048,10 @@ function runnerLoop(now) {
     const playerBottom = runnerState.y;
     const playerTop = runnerState.y + 68;
 
-    const codeLeft = code.x - 26;
-    const codeRight = code.x + 26;
-    const codeBottom = code.y - 26;
-    const codeTop = code.y + 26;
+    const codeLeft = code.x - 21;
+    const codeRight = code.x + 21;
+    const codeBottom = code.y - 21;
+    const codeTop = code.y + 21;
 
     const touching =
       playerRight > codeLeft &&
@@ -2060,13 +2062,13 @@ function runnerLoop(now) {
     if (touching) collectRunnerCode(index);
   });
 
-  if (runnerState.x > 1650) {
+  if (runnerState.x > 2205) {
     if (runnerState.collected.size === 3) {
       finishRunnerGame();
       return;
     }
 
-    runnerState.x = 1580;
+    runnerState.x = 2160;
     runnerState.vx = -90;
     const feedback7 = document.getElementById('task7Feedback');
     feedback7.textContent = `Terminal je zaklenjen. Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
