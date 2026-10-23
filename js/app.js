@@ -1618,12 +1618,12 @@ function initNetworkTopologyGame() {
 
 const securityMessages = [
   {
-    sender: 'Microsoft 365 <security@microsoft.com>',
-    subject: 'Nova prijava v vaš račun',
-    body: 'V vaš račun je bila zaznana nova prijava. Če ste bili to vi, ni potrebno storiti ničesar.',
-    extra: 'account.microsoft.com/security',
+    sender: 'Google <no-reply@accounts.google.com>',
+    subject: 'Nova prijava v vaš Google račun',
+    body: 'Zaznali smo novo prijavo v vaš račun. Če ste bili to vi, ni potrebno storiti ničesar.',
+    extra: 'accounts.google.com/security',
     safe: true,
-    reason: 'Uradna domena, brez zahteve po geslu ali nujnem kliku.'
+    reason: 'Uradna Google domena, brez zahteve po geslu ali občutljivih podatkih.'
   },
   {
     sender: 'Šolski administrator <admin@srednja-sola-ravne.support>',
@@ -1697,8 +1697,8 @@ function resetTask6() {
 
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
-  feedback6.textContent = 'Preglej sporočilo in ga pošlji levo ali desno.';
-  feedback6.className = 'feedback';
+  feedback6.textContent = '';
+  feedback6.className = 'feedback hidden';
   ravi6.textContent = '»Varnostni skener je poln sporočil. Ti odločaš: levo v karanteno, desno med varna.«';
 
   renderSecurityMessage();
@@ -1720,8 +1720,8 @@ function classifySecurityMessage(choice) {
   card.classList.add(choice === 'safe' ? 'swipe-right' : 'swipe-left');
 
   if (correct) {
-    feedback6.textContent = msg.safe ? 'VARNO ✓ Sporočilo gre naprej.' : 'SUMLJIVO ✓ Sporočilo gre v karanteno.';
-    feedback6.className = 'feedback success';
+    feedback6.textContent = '';
+    feedback6.className = 'feedback hidden';
     reason.innerHTML = `<strong>ZAKAJ?</strong><span>${msg.reason}</span>`;
     reason.classList.remove('hidden');
 
@@ -1742,8 +1742,8 @@ function classifySecurityMessage(choice) {
 
   securityMistakes += 1;
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
-  feedback6.textContent = 'Napačna odločitev. Poglej, kaj je pri sporočilu pomembno.';
-  feedback6.className = 'feedback error';
+  feedback6.textContent = '';
+  feedback6.className = 'feedback hidden';
   reason.textContent = msg.reason;
   reason.classList.remove('hidden');
   card.classList.add('wrong-answer');
@@ -1769,8 +1769,11 @@ function finishSecurityGame() {
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
 
-  feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Varnostni skener je očistil vseh 6 sporočil.';
-  feedback6.className = 'feedback success';
+  feedback6.textContent = '';
+  feedback6.className = 'feedback hidden';
+  const reason = document.getElementById('securityReason');
+  reason.innerHTML = '<strong>MODUL 6 AKTIVIRAN ✓</strong><span>Varnostni skener je očistil vseh 6 sporočil.</span>';
+  reason.classList.remove('hidden');
   ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
 
