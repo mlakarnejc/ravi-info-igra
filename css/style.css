@@ -2921,3 +2921,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   border-color:#38c172;
   box-shadow:0 0 34px rgba(56,193,114,.38), inset 0 0 0 4px #0b121d;
 }
+
+.runner-final-wall {
+  transition:opacity .28s ease, transform .28s ease, filter .28s ease;
+}
+.runner-final-wall.open {
+  opacity:.16;
+  transform:translateY(-150px);
+  filter:grayscale(1);
+  pointer-events:none;
+}
