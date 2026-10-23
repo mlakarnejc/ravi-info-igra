@@ -1841,9 +1841,9 @@ const runnerHazards = [
 ];
 
 const runnerCodes = [
-  { x:365, y:172, checkpoint:300 },
-  { x:900, y:290, checkpoint:840 },
-  { x:1510, y:294, checkpoint:1450 }
+  { x:365, y:150, checkpoint:300 },
+  { x:800, y:205, checkpoint:700 },
+  { x:1245, y:205, checkpoint:1180 }
 ];
 
 function updateRunnerHud() {
@@ -2009,7 +2009,13 @@ function runnerLoop(now) {
     runnerState.y <= runnerGroundY &&
     runnerState.vy <= 0;
 
-  if (!overPit && crossedGroundFromAbove) {
+  const nearGroundAfterPit =
+    !overPit &&
+    runnerState.vy <= 0 &&
+    runnerState.y <= runnerGroundY &&
+    runnerState.y >= runnerGroundY - 24;
+
+  if (!overPit && (crossedGroundFromAbove || nearGroundAfterPit)) {
     landingY = runnerGroundY;
   }
 
@@ -2048,21 +2054,21 @@ function runnerLoop(now) {
 
   runnerCodes.forEach((code, index) => {
     if (runnerState.collected.has(index)) return;
-    const playerLeft = runnerState.x - 20;
-    const playerRight = runnerState.x + 20;
+    const playerLeft = runnerState.x - 18;
+    const playerRight = runnerState.x + 18;
     const playerBottom = runnerState.y;
     const playerTop = runnerState.y + 68;
 
-    const codeLeft = code.x - 18;
-    const codeRight = code.x + 18;
-    const codeBottom = code.y - 18;
-    const codeTop = code.y + 18;
+    const codeLeft = code.x - 20;
+    const codeRight = code.x + 20;
+    const codeBottom = code.y;
+    const codeTop = code.y + 40;
 
     const touching =
-      playerRight > codeLeft &&
-      playerLeft < codeRight &&
-      playerTop > codeBottom &&
-      playerBottom < codeTop;
+      playerRight >= codeLeft &&
+      playerLeft <= codeRight &&
+      playerTop >= codeBottom &&
+      playerBottom <= codeTop;
 
     if (touching) collectRunnerCode(index);
   });
