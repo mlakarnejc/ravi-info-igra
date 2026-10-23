@@ -329,9 +329,18 @@
         <div class="task-card">
           <div class="task-number">MODUL 4</div>
           <h2>Filtriraj podatke</h2>
-          <p>Poišči dijaka iz programa <strong>Računalništvo</strong>, ki obiskuje <strong>3. letnik</strong>. Nastavi oba filtra in nato potrdi rezultat.</p>
+          <p>Poišči <strong>dijaka</strong> iz programa <strong>Računalništvo</strong>, ki obiskuje <strong>3. letnik</strong> in ima med ustreznimi zapisi <strong>največ točk</strong>.</p>
 
           <div class="data-filter-panel">
+            <div class="data-filter">
+              <label for="filterSpol">SPOL</label>
+              <select id="filterSpol">
+                <option value="">Vsi</option>
+                <option value="M">M</option>
+                <option value="Ž">Ž</option>
+              </select>
+            </div>
+
             <div class="data-filter">
               <label for="filterProgram">PROGRAM</label>
               <select id="filterProgram">
@@ -365,14 +374,17 @@
             <code id="dataQueryText">PRIKAŽI VSE ZAPISE</code>
           </div>
 
+          <div id="dataPhaseHint" class="data-phase-hint">1. FILTRIRAJ PODATKE</div>
+
           <div class="data-table-wrap">
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Ime</th>
+                  <th>Spol</th>
                   <th>Program</th>
                   <th>Letnik</th>
-                  <th>Točke</th>
+                  <th><button id="sortPointsBtn" class="sort-head-btn" type="button">Točke ↕</button></th>
                 </tr>
               </thead>
               <tbody id="dataRows"></tbody>
