@@ -672,95 +672,194 @@
     </section>
 
     <section id="screenTask8" class="screen">
-      <div class="ai-control-shell">
-        <div class="ai-control-top">
+      <div class="ml-lab-shell">
+        <div class="ml-ambient-orb orb-a"></div>
+        <div class="ml-ambient-orb orb-b"></div>
+        <div class="ml-topline">
           <div>
-            <p class="eyebrow">MODUL 8 // AI CONTROL ROOM</p>
-            <h2>RAVI VISION</h2>
-            <p>AI analizira prizor. Ti odločiš, ali lahko rezultat <strong>sprejmemo</strong> ali ga moramo <strong>preveriti</strong>.</p>
+            <p class="eyebrow">MODUL 8 // MACHINE LEARNING LAB</p>
+            <h2>NAUČI RAVI-JA</h2>
+            <p>Razvrsti podatke, natreniraj model in popravi njegovo napako.</p>
           </div>
-          <div class="ai-control-status">
-            <span>ANALIZA</span>
-            <strong id="aiScenarioCount">1 / 3</strong>
+          <div class="ml-stage-indicator">
+            <span>FAZA</span>
+            <strong id="mlStageLabel">1 / 4</strong>
           </div>
         </div>
 
-        <div class="ai-control-grid">
-          <aside class="ai-ravi-console">
-            <div class="ai-ravi-core">
-              <div class="ai-core-ring ring-a"></div>
-              <div class="ai-core-ring ring-b"></div>
-              <div class="ai-core-face">
-                <span></span><span></span>
-              </div>
-              <div class="ai-core-letter">R</div>
+        <div class="ml-main-grid">
+          <aside class="ml-ravi-console">
+            <div class="ml-core-wrap">
+              <div class="ml-core-halo halo-1"></div>
+              <div class="ml-core-halo halo-2"></div>
+              <div class="ml-core-halo halo-3"></div>
+              <div class="ml-core-face"><i></i><i></i></div>
+              <div class="ml-core-badge">R</div>
+              <div class="ml-core-pulse"></div>
             </div>
-            <div class="ai-ravi-dialog">
-              <span>RAVI // AI CORE</span>
-              <p id="raviTask8Text">»Začenjam analizo. Tokrat preverjaš mene, ne obratno.«</p>
+
+            <div class="ml-ravi-speech">
+              <span>RAVI // LEARNING CORE</span>
+              <p id="raviTask8Text">»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«</p>
             </div>
-            <div class="ai-system-lines">
-              <span>VISION MODEL <b>ONLINE</b></span>
-              <span>CONFIDENCE <b id="aiConfidenceSide">96 %</b></span>
-              <span>HUMAN CHECK <b>REQUIRED</b></span>
+
+            <div class="ml-system-readout">
+              <div><span>DATASET</span><b id="mlDatasetStatus">0 / 8</b></div>
+              <div><span>MODEL</span><b id="mlModelStatus">OFFLINE</b></div>
+              <div><span>ACCURACY</span><b id="mlAccuracyStatus">--</b></div>
             </div>
           </aside>
 
-          <div class="ai-vision-panel">
-            <div class="ai-vision-header">
-              <span>LIVE ANALYSIS // CAM_08</span>
-              <div class="ai-live-dot"><i></i> LIVE</div>
+          <div class="ml-workbench">
+            <div class="ml-monitor-bar">
+              <span id="mlMonitorTitle">TRAINING DATA // CLASSIFICATION</span>
+              <div class="ml-live"><i></i> LIVE</div>
             </div>
 
-            <div id="aiScene" class="ai-scene scene-0">
-              <div class="ai-grid-overlay"></div>
-              <div class="ai-scan-line"></div>
-              <div class="ai-corner tl"></div><div class="ai-corner tr"></div>
-              <div class="ai-corner bl"></div><div class="ai-corner br"></div>
-
-              <div class="ai-scene-art">
-                <div class="scene-object object-monitor"><span></span></div>
-                <div class="scene-object object-keyboard"></div>
-                <div class="scene-object object-cup"></div>
-                <div class="scene-object object-shadow"></div>
+            <div id="mlTrainingPhase" class="ml-phase active">
+              <div class="ml-instruction">
+                <strong>1. RAZVRSTI PODATKE</strong>
+                <span>Povleci vseh 8 primerov v pravilno skupino.</span>
               </div>
 
-              <div id="aiDetectionBox" class="ai-detection-box">
-                <span id="aiDetectionLabel">RAČUNALNIŠKI ZASLON</span>
-                <b id="aiDetectionConfidence">96 %</b>
-              </div>
+              <div class="ml-training-layout">
+                <div class="ml-dataset-bank">
+                  <div class="ml-bank-head"><span>DATASET INPUT</span><b id="mlTrainCount">0 / 8</b></div>
+                  <div id="mlTrainingCards" class="ml-training-cards"></div>
+                </div>
 
-              <div class="ai-analysis-result">
-                <span>AI REZULTAT</span>
-                <strong id="aiResultTitle">Računalniški zaslon</strong>
-                <p id="aiResultText">Na sliki je računalniški zaslon.</p>
+                <div class="ml-dropzones">
+                  <div class="ml-dropzone cat-zone" data-class="cat">
+                    <div class="ml-zone-icon">◉</div>
+                    <strong>MAČKA</strong>
+                    <span id="mlCatCount">0 primerov</span>
+                  </div>
+                  <div class="ml-dropzone dog-zone" data-class="dog">
+                    <div class="ml-zone-icon">◆</div>
+                    <strong>PES</strong>
+                    <span id="mlDogCount">0 primerov</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="ai-confidence-row">
-              <span>ZAUPANJE MODELA</span>
-              <div class="ai-confidence-track"><div id="aiConfidenceBar"></div></div>
-              <strong id="aiConfidenceText">96 %</strong>
+            <div id="mlTrainingAnimation" class="ml-phase">
+              <div class="ml-training-center">
+                <div class="ml-neural-field">
+                  <span class="node n1"></span><span class="node n2"></span><span class="node n3"></span>
+                  <span class="node n4"></span><span class="node n5"></span><span class="node n6"></span>
+                  <span class="link l1"></span><span class="link l2"></span><span class="link l3"></span>
+                  <span class="link l4"></span><span class="link l5"></span>
+                  <div class="ml-data-stream"></div>
+                </div>
+                <div class="ml-training-copy">
+                  <span>TRAINING MODEL</span>
+                  <strong id="mlTrainingPercent">0 %</strong>
+                  <div class="ml-training-track"><div id="mlTrainingBar"></div></div>
+                  <small id="mlTrainingStep">Priprava podatkov ...</small>
+                </div>
+              </div>
             </div>
 
-            <div id="aiDecisionResult" class="ai-decision-result hidden"></div>
+            <div id="mlTestPhase" class="ml-phase">
+              <div class="ml-instruction">
+                <strong>2. TEST MODE</strong>
+                <span>RAVI prvič analizira nov primer.</span>
+              </div>
 
-            <div class="ai-decision-buttons">
-              <button id="aiAcceptBtn" class="ai-decision-btn accept" type="button">
-                <span>✓</span><strong>SPREJMI REZULTAT</strong><small>AI ima dovolj dokazov</small>
-              </button>
-              <button id="aiVerifyBtn" class="ai-decision-btn verify" type="button">
-                <span>◎</span><strong>PREVERI AI</strong><small>Rezultat potrebuje človeka</small>
-              </button>
+              <div class="ml-test-scene glitch-ready">
+                <div class="ml-scan-grid"></div>
+                <div class="ml-scan-beam"></div>
+                <div class="ml-animal-card test-cat-card">
+                  <div class="ml-animal-shape dark-cat">
+                    <span class="ear e1"></span><span class="ear e2"></span>
+                    <span class="head"></span><span class="body"></span><span class="tail"></span>
+                  </div>
+                  <span>NEZNAN PRIMER</span>
+                </div>
+                <div class="ml-detect-frame">
+                  <span>OBJECT_09</span>
+                  <b id="mlPredictionConfidence">92 %</b>
+                </div>
+                <div class="ml-prediction-panel">
+                  <span>RAVI PREDICTION</span>
+                  <strong id="mlPredictionText">PES</strong>
+                  <p id="mlPredictionSub">Model sklepa na podlagi trening podatkov.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="mlRetrainPhase" class="ml-phase">
+              <div class="ml-instruction">
+                <strong>3. POPRAVI MODEL</strong>
+                <span>Izberi podatke, ki bodo najbolje popravili napako.</span>
+              </div>
+
+              <div class="ml-package-grid">
+                <button class="ml-data-package" data-package="a" type="button">
+                  <span class="ml-package-tag">PAKET A</span>
+                  <div class="ml-package-icons">🐈 🐕 🐈‍⬛ 🐩</div>
+                  <strong>Raznolike mačke in psi</strong>
+                  <small>Veliki, majhni, svetli in temni primeri.</small>
+                </button>
+
+                <button class="ml-data-package" data-package="b" type="button">
+                  <span class="ml-package-tag">PAKET B</span>
+                  <div class="ml-package-icons">🐱 🐱 🐱 🐱</div>
+                  <strong>Še več enakih mačk</strong>
+                  <small>Podobni primeri kot prej.</small>
+                </button>
+
+                <button class="ml-data-package" data-package="c" type="button">
+                  <span class="ml-package-tag">PAKET C</span>
+                  <div class="ml-package-icons">🚗 🚙 🏎️ 🚕</div>
+                  <strong>Slike avtomobilov</strong>
+                  <small>Veliko novih podatkov, ampak napačne vrste.</small>
+                </button>
+              </div>
+
+              <div id="mlPackageFeedback" class="ml-package-feedback hidden"></div>
+            </div>
+
+            <div id="mlFinalPhase" class="ml-phase">
+              <div class="ml-final-test">
+                <div class="ml-final-scan">
+                  <div class="ml-scan-grid"></div>
+                  <div class="ml-scan-beam"></div>
+                  <div class="ml-animal-card final-cat-card">
+                    <div class="ml-animal-shape dark-cat">
+                      <span class="ear e1"></span><span class="ear e2"></span>
+                      <span class="head"></span><span class="body"></span><span class="tail"></span>
+                    </div>
+                    <span>RETEST</span>
+                  </div>
+                  <div class="ml-detect-frame success-frame">
+                    <span>OBJECT_09</span>
+                    <b>97 %</b>
+                  </div>
+                  <div class="ml-prediction-panel success">
+                    <span>RAVI PREDICTION</span>
+                    <strong>MAČKA ✓</strong>
+                    <p>Model je po boljših podatkih popravil napoved.</p>
+                  </div>
+                </div>
+
+                <div class="ml-final-insight">
+                  <span>MODEL IMPROVED</span>
+                  <strong>AI se uči iz podatkov.</strong>
+                  <p>Bolj raznoliki in kakovostni podatki lahko pomagajo zmanjšati napake modela.</p>
+                  <button id="mlFinishBtn" class="primary-btn" type="button">AKTIVIRAJ AI CORE</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="ai-control-footer">
-          <div class="ai-progress-dots">
-            <span class="active"></span><span></span><span></span>
+        <div class="ml-footer">
+          <div class="ml-progress-dots">
+            <span class="active"></span><span></span><span></span><span></span>
           </div>
-          <button id="resetTask8" class="ghost-btn" type="button">PONOVI ANALIZO</button>
+          <button id="resetTask8" class="ghost-btn" type="button">PONOVI MODUL</button>
           <button id="backHub8" class="ghost-btn" type="button">NAZAJ</button>
           <div class="subject-label">Predmet: <strong>Umetna inteligenca</strong></div>
         </div>
