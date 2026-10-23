@@ -469,7 +469,6 @@ function finishCatchGame() {
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1900);
 }
 
 function handleCatchKeyDown(event) {
@@ -898,6 +897,7 @@ function resetTask3() {
 let htmlDraggedTag = null;
 let htmlSelectedTag = null;
 let htmlFixedCount = 0;
+const htmlTargetCount = 6;
 let htmlRepairAttempts = 0;
 
 function resetHtmlRepairGame() {
@@ -916,7 +916,16 @@ function resetHtmlRepairGame() {
   });
 
   const count = document.getElementById('htmlRepairCount');
-  if (count) count.textContent = '0 / 4';
+  if (count) count.textContent = `0 / ${htmlTargetCount}`;
+
+  const live = document.getElementById('htmlLivePage');
+  const finalPreview = document.getElementById('htmlFinalPreview');
+  const toolbox = document.getElementById('htmlToolbox');
+  const finishBtn = document.getElementById('finishTask3');
+  if (live) live.classList.remove('hidden');
+  if (finalPreview) finalPreview.classList.add('hidden');
+  if (toolbox) toolbox.classList.remove('hidden');
+  if (finishBtn) finishBtn.classList.add('hidden');
 
   const feedback3 = document.getElementById('task3Feedback');
   if (feedback3) {
@@ -964,11 +973,11 @@ function tryHtmlRepair(tag, zone) {
     htmlSelectedTag = null;
     htmlDraggedTag = null;
 
-    document.getElementById('htmlRepairCount').textContent = `${htmlFixedCount} / 4`;
+    document.getElementById('htmlRepairCount').textContent = `${htmlFixedCount} / ${htmlTargetCount}`;
     feedback3.textContent = `Pravilno: <${tag}>. Del strani je popravljen.`;
     feedback3.className = 'feedback success';
 
-    if (htmlFixedCount >= 4) {
+    if (htmlFixedCount >= htmlTargetCount) {
       finishHtmlRepairGame();
     }
     return;
@@ -996,6 +1005,16 @@ function tryHtmlRepair(tag, zone) {
 }
 
 function finishHtmlRepairGame() {
+  const live = document.getElementById('htmlLivePage');
+  const finalPreview = document.getElementById('htmlFinalPreview');
+  const toolbox = document.getElementById('htmlToolbox');
+  const finishBtn = document.getElementById('finishTask3');
+
+  if (live) live.classList.add('hidden');
+  if (toolbox) toolbox.classList.add('hidden');
+  if (finalPreview) finalPreview.classList.remove('hidden');
+  if (finishBtn) finishBtn.classList.remove('hidden');
+
   modules[2].status = 'complete';
   modules[3].status = 'ready';
   completed = Math.max(completed, 3);
@@ -1003,9 +1022,9 @@ function finishHtmlRepairGame() {
   const feedback3 = document.getElementById('task3Feedback');
   const ravi3 = document.getElementById('raviTask3Text');
 
-  feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Spletna stran je pravilno sestavljena.';
+  feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Stran je sestavljena. Zdaj jo vidiš kot pravo končno spletno stran.';
   feedback3.className = 'feedback success';
-  ravi3.textContent = '»Odlično. Naslov je naslov, slika je slika in gumb je spet dejansko gumb. Splet diha.«';
+  ravi3.textContent = '»Odlično. Šest elementov, ena prava stran. Tako je videti, ko se HTML končno ne prepira sam s sabo.«';
   document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
 
   updateProgress();
@@ -1535,6 +1554,7 @@ document.getElementById('backHub2').addEventListener('click', () => {
 });
 document.addEventListener('keydown', handleProgramKey);
 document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
+document.getElementById('finishTask3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', resetTask4);
