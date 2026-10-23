@@ -1820,7 +1820,7 @@ function initSecurityScanner() {
 const runnerState = {
   x:80, y:70, vx:0, vy:0, running:false, left:false, right:false,
   onGround:true, collected:new Set(), hits:0, checkpoint:80,
-  lastTime:0, raf:null, invulnerableUntil:0, finishing:false
+  lastTime:0, raf:null, invulnerableUntil:0, finishing:false, firewallOpen:false
 };
 
 const runnerGroundY = 70;
@@ -1881,6 +1881,7 @@ function resetRunnerGame() {
   runnerState.raf = null;
   runnerState.invulnerableUntil = 0;
   runnerState.finishing = false;
+  runnerState.firewallOpen = false;
 
   document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
   document.getElementById('runnerGoal')?.classList.remove('unlocked');
@@ -1991,6 +1992,18 @@ function runnerLoop(now) {
   runnerState.y += runnerState.vy * dt;
   runnerState.x = Math.max(24, Math.min(runnerWorldWidth - 30, runnerState.x));
 
+  const firewallEl = document.querySelector('.runner-final-wall');
+
+  if (!runnerState.firewallOpen && runnerState.x > 2145) {
+    runnerState.firewallOpen = true;
+    firewallEl?.classList.add('open');
+  }
+
+  if (runnerState.firewallOpen && runnerState.x < 2000) {
+    runnerState.firewallOpen = false;
+    firewallEl?.classList.remove('open');
+  }
+
   runnerState.onGround = false;
 
   let landingY = null;
@@ -2038,14 +2051,14 @@ function runnerLoop(now) {
     const hazardBottom = runnerGroundY;
     const hazardTop = runnerGroundY + hazard.h;
 
+    const isFinalWall = hazard.x >= 2000;
     const overlaps =
       playerRight > hazardLeft &&
       playerLeft < hazardRight &&
       playerTop > hazardBottom &&
       playerBottom < hazardTop;
 
-    if (overlaps) {
-      const isFinalWall = hazard.x >= 2000;
+    if (overlaps && !(isFinalWall && runnerState.firewallOpen)) {
       runnerHit(isFinalWall ? 1575 : null);
       break;
     }
@@ -2078,12 +2091,13 @@ function runnerLoop(now) {
       return;
     }
 
-    runnerHit(1575);
+    runnerState.x = 2195;
+    runnerState.vx = 0;
 
     const feedback7 = document.getElementById('task7Feedback');
-    feedback7.textContent = `TERMINAL ZAKLENJEN ✕ Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
+    feedback7.textContent = `ACCESS DENIED ✕ KODA: ${runnerState.collected.size} / 3`;
     feedback7.className = 'feedback error';
-    document.getElementById('raviTask7Text').textContent = '»Brez vse kode terminal ne odpre vrat. Nazaj po manjkajoči košček.«';
+    document.getElementById('raviTask7Text').textContent = '»Terminal potrebuje vse tri koščke kode. Firewall je odprt — lahko greš nazaj po manjkajočega.«';
   }
 
   renderRunnerPosition();
