@@ -1688,3 +1688,45 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .html-tags { grid-template-columns:1fr; }
   .final-web-hero { grid-template-columns:1fr; }
 }
+
+.html-preview-shell.magic-build {
+  position:relative;
+  overflow:hidden;
+}
+.html-preview-shell.magic-build::after {
+  content:"STRAN SE SESTAVLJA...";
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:grid;
+  place-items:center;
+  background:rgba(10,16,26,.72);
+  color:white;
+  font:900 18px ui-monospace,monospace;
+  letter-spacing:.14em;
+  backdrop-filter:blur(5px);
+  animation:magicOverlay 1.6s ease forwards;
+}
+.html-preview-shell.magic-build .html-live-page {
+  animation:magicEditorOut 1.45s ease forwards;
+}
+.html-final-preview.magic-reveal {
+  animation:magicPageIn 1.15s cubic-bezier(.2,.75,.2,1) both;
+  transform-origin:center center;
+}
+@keyframes magicEditorOut {
+  0% { opacity:1; filter:blur(0); transform:scale(1); }
+  55% { opacity:.75; filter:blur(1px) brightness(1.2); transform:scale(.995); }
+  100% { opacity:0; filter:blur(8px) brightness(1.35); transform:scale(.96); }
+}
+@keyframes magicOverlay {
+  0% { opacity:0; }
+  20% { opacity:1; }
+  72% { opacity:1; }
+  100% { opacity:0; }
+}
+@keyframes magicPageIn {
+  0% { opacity:0; filter:blur(10px) brightness(1.25); transform:scale(.94); }
+  55% { opacity:.7; filter:blur(3px) brightness(1.1); transform:scale(.985); }
+  100% { opacity:1; filter:blur(0) brightness(1); transform:scale(1); }
+}
