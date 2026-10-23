@@ -110,6 +110,11 @@ function openModule(index) {
     return;
   }
 
+  if (index === 5) {
+    showScreen('screenTask6');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -609,6 +614,84 @@ function checkTask5() {
   }
 }
 
+
+let selectedSecurityChoice = null;
+let task6Attempts = 0;
+
+function selectSecurityChoice(choice) {
+  if (modules[5].status === 'complete') return;
+
+  selectedSecurityChoice = choice;
+  document.querySelectorAll('.security-btn').forEach((button) => {
+    button.classList.toggle('selected', button.dataset.choice === choice);
+    button.classList.remove('wrong');
+  });
+
+  const feedback6 = document.getElementById('task6Feedback');
+  feedback6.textContent = choice === 'safe' ? 'Izbrano: varno sporočilo.' : 'Izbrano: sumljivo sporočilo.';
+  feedback6.className = 'feedback';
+}
+
+function checkTask6() {
+  if (modules[5].status === 'complete') return;
+
+  const feedback6 = document.getElementById('task6Feedback');
+  const ravi6 = document.getElementById('raviTask6Text');
+
+  if (!selectedSecurityChoice) {
+    feedback6.textContent = 'Najprej izberi eno možnost.';
+    feedback6.className = 'feedback error';
+    return;
+  }
+
+  task6Attempts += 1;
+  const selectedButton = document.querySelector(`.security-btn[data-choice="${selectedSecurityChoice}"]`);
+
+  if (selectedSecurityChoice === 'phishing') {
+    selectedButton.classList.add('correct');
+    modules[5].status = 'complete';
+    modules[6].status = 'ready';
+    completed = Math.max(completed, 6);
+
+    feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Prevaro si pravilno prepoznal.';
+    feedback6.className = 'feedback success';
+    ravi6.textContent = '»Napad blokiran. Moj račun ostaja moj. Geslo pa tudi.«';
+    document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  selectedButton.classList.add('wrong');
+  feedback6.className = 'feedback error';
+
+  if (task6Attempts === 1) {
+    feedback6.textContent = 'Poglej sporočilo še enkrat. Nekaj znakov je precej sumljivih.';
+    ravi6.textContent = '»Če komu pošljem geslo, bom mogoče res postal zelo odprt sistem. Preveč odprt.«';
+  } else if (task6Attempts === 2) {
+    feedback6.textContent = 'Namig: preveri naslov pošiljatelja, časovni pritisk in zahtevo po geslu.';
+    ravi6.textContent = '»Čuden naslov, grožnja z izbrisom in zahteva po geslu. To ni najbolj miren e-mail.«';
+  } else {
+    feedback6.textContent = 'Močan namig: to je phishing oziroma sumljivo sporočilo.';
+    ravi6.textContent = '»Tole je prevara. Klikni sumljivo sporočilo in rešiva moj račun.«';
+  }
+}
+
+function resetTask6() {
+  if (modules[5].status === 'complete') return;
+
+  selectedSecurityChoice = null;
+  document.querySelectorAll('.security-btn').forEach((button) => {
+    button.classList.remove('selected', 'wrong', 'correct');
+  });
+
+  const feedback6 = document.getElementById('task6Feedback');
+  feedback6.textContent = '';
+  feedback6.className = 'feedback';
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
@@ -624,6 +707,12 @@ document.getElementById('backHub4').addEventListener('click', () => showScreen('
 document.getElementById('checkTask5').addEventListener('click', checkTask5);
 document.getElementById('resetTask5').addEventListener('click', resetTask5);
 document.getElementById('backHub5').addEventListener('click', () => showScreen('screenHub'));
+document.querySelectorAll('.security-btn').forEach((button) => {
+  button.addEventListener('click', () => selectSecurityChoice(button.dataset.choice));
+});
+document.getElementById('checkTask6').addEventListener('click', checkTask6);
+document.getElementById('resetTask6').addEventListener('click', resetTask6);
+document.getElementById('backHub6').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
