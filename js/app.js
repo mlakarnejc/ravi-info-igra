@@ -149,6 +149,7 @@ function openModule(index) {
 
   if (index === 5) {
     showScreen('screenTask6');
+    if (modules[5].status !== 'complete') resetTask6();
     return;
   }
 
@@ -1615,83 +1616,185 @@ function initNetworkTopologyGame() {
 }
 
 
-let selectedSecurityChoice = null;
-let task6Attempts = 0;
-
-function selectSecurityChoice(choice) {
-  if (modules[5].status === 'complete') return;
-
-  selectedSecurityChoice = choice;
-  document.querySelectorAll('.security-btn').forEach((button) => {
-    button.classList.toggle('selected', button.dataset.choice === choice);
-    button.classList.remove('wrong');
-  });
-
-  const feedback6 = document.getElementById('task6Feedback');
-  feedback6.textContent = choice === 'safe' ? 'Izbrano: varno sporočilo.' : 'Izbrano: sumljivo sporočilo.';
-  feedback6.className = 'feedback';
-}
-
-function checkTask6() {
-  if (modules[5].status === 'complete') return;
-
-  const feedback6 = document.getElementById('task6Feedback');
-  const ravi6 = document.getElementById('raviTask6Text');
-
-  if (!selectedSecurityChoice) {
-    feedback6.textContent = 'Najprej izberi eno možnost.';
-    feedback6.className = 'feedback error';
-    return;
+const securityMessages = [
+  {
+    sender: 'Microsoft 365 <security@microsoft.com>',
+    subject: 'Nova prijava v vaš račun',
+    body: 'V vaš račun je bila zaznana nova prijava. Če ste bili to vi, ni potrebno storiti ničesar.',
+    extra: 'account.microsoft.com/security',
+    safe: true,
+    reason: 'Uradna domena, brez zahteve po geslu ali nujnem kliku.'
+  },
+  {
+    sender: 'Šolski administrator <admin@srednja-sola-ravne.support>',
+    subject: 'NUJNO: račun bo izbrisan v 30 minutah',
+    body: 'Potrdite geslo takoj, sicer bo vaš šolski račun trajno izbrisan.',
+    extra: 'POTRDI GESLO → srednja-sola-ravne.support/login',
+    safe: false,
+    reason: 'Lažna domena, časovni pritisk in zahteva po geslu so klasični znaki phishinga.'
+  },
+  {
+    sender: 'Knjižnica <knjiznica@srednjasolaravne.si>',
+    subject: 'Opomnik za vračilo knjige',
+    body: 'Prosimo, da izposojeno knjigo vrnete do petka. Če ste jo že vrnili, sporočilo prezrite.',
+    extra: 'Brez povezav in brez zahtev po osebnih podatkih.',
+    safe: true,
+    reason: 'Šolska domena in običajno informativno sporočilo brez občutljivih zahtev.'
+  },
+  {
+    sender: 'NAGRADA <winner@free-gift-now.biz>',
+    subject: 'ČESTITAMO! Osvojili ste iPhone',
+    body: 'Za prevzem nagrade vnesite podatke kartice. Ponudba velja samo še 10 minut!',
+    extra: 'PREVZEMI → free-gift-now.biz/claim',
+    safe: false,
+    reason: 'Neverjetna nagrada, sumljiva domena, časovni pritisk in zahteva po podatkih kartice.'
+  },
+  {
+    sender: 'Google <no-reply@accounts.google.com>',
+    subject: 'Varnostno opozorilo',
+    body: 'Geslo za vaš račun je bilo spremenjeno. Če ste to storili vi, lahko sporočilo prezrete.',
+    extra: 'accounts.google.com',
+    safe: true,
+    reason: 'Uradna domena in tipično varnostno obvestilo brez zahteve po pošiljanju gesla.'
   }
+];
 
-  task6Attempts += 1;
-  const selectedButton = document.querySelector(`.security-btn[data-choice="${selectedSecurityChoice}"]`);
+let securityIndex = 0;
+let securityMistakes = 0;
+let securityLocked = false;
 
-  if (selectedSecurityChoice === 'phishing') {
-    selectedButton.classList.add('correct');
-    modules[5].status = 'complete';
-    modules[6].status = 'ready';
-    completed = Math.max(completed, 6);
+function renderSecurityMessage() {
+  const msg = securityMessages[securityIndex];
+  if (!msg) return;
 
-    feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Prevaro si pravilno prepoznal.';
-    feedback6.className = 'feedback success';
-    ravi6.textContent = '»Napad blokiran. Moj račun ostaja moj. Geslo pa tudi.«';
-    document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
+  document.getElementById('securitySender').textContent = msg.sender;
+  document.getElementById('securitySubject').textContent = msg.subject;
+  document.getElementById('securityBody').textContent = msg.body;
+  document.getElementById('securityExtra').textContent = msg.extra;
+  document.getElementById('securityBadge').textContent = `${securityIndex + 1} / ${securityMessages.length}`;
+  document.getElementById('securityProgress').textContent = `${securityIndex} / ${securityMessages.length}`;
+  document.getElementById('securityMistakes').textContent = String(securityMistakes);
 
-    updateProgress();
-    renderModules();
-    setTimeout(() => showScreen('screenHub'), 1700);
-    return;
-  }
-
-  selectedButton.classList.add('wrong');
-  feedback6.className = 'feedback error';
-
-  if (task6Attempts === 1) {
-    feedback6.textContent = 'Poglej sporočilo še enkrat. Nekaj znakov je precej sumljivih.';
-    ravi6.textContent = '»Če komu pošljem geslo, bom mogoče res postal zelo odprt sistem. Preveč odprt.«';
-  } else if (task6Attempts === 2) {
-    feedback6.textContent = 'Namig: preveri naslov pošiljatelja, časovni pritisk in zahtevo po geslu.';
-    ravi6.textContent = '»Čuden naslov, grožnja z izbrisom in zahteva po geslu. To ni najbolj miren e-mail.«';
-  } else {
-    feedback6.textContent = 'Močan namig: to je phishing oziroma sumljivo sporočilo.';
-    ravi6.textContent = '»Tole je prevara. Klikni sumljivo sporočilo in rešiva moj račun.«';
-  }
+  const card = document.getElementById('securityMessageCard');
+  card.classList.remove('swipe-left','swipe-right','wrong-answer');
+  document.getElementById('securityReason').classList.add('hidden');
 }
 
 function resetTask6() {
   if (modules[5].status === 'complete') return;
 
-  selectedSecurityChoice = null;
-  document.querySelectorAll('.security-btn').forEach((button) => {
-    button.classList.remove('selected', 'wrong', 'correct');
-  });
+  securityIndex = 0;
+  securityMistakes = 0;
+  securityLocked = false;
 
   const feedback6 = document.getElementById('task6Feedback');
-  feedback6.textContent = '';
+  const ravi6 = document.getElementById('raviTask6Text');
+  feedback6.textContent = 'Preglej sporočilo in ga pošlji levo ali desno.';
   feedback6.className = 'feedback';
+  ravi6.textContent = '»Varnostni skener je poln sporočil. Ti odločaš: levo v karanteno, desno med varna.«';
+
+  renderSecurityMessage();
+  setTimeout(() => document.getElementById('securityScanner')?.focus(), 30);
 }
 
+function classifySecurityMessage(choice) {
+  if (modules[5].status === 'complete' || securityLocked) return;
+
+  const msg = securityMessages[securityIndex];
+  const isSafeChoice = choice === 'safe';
+  const correct = isSafeChoice === msg.safe;
+  const card = document.getElementById('securityMessageCard');
+  const reason = document.getElementById('securityReason');
+  const feedback6 = document.getElementById('task6Feedback');
+  const ravi6 = document.getElementById('raviTask6Text');
+
+  securityLocked = true;
+  card.classList.add(choice === 'safe' ? 'swipe-right' : 'swipe-left');
+
+  if (correct) {
+    feedback6.textContent = msg.safe ? 'VARNO ✓ Sporočilo gre naprej.' : 'SUMLJIVO ✓ Sporočilo gre v karanteno.';
+    feedback6.className = 'feedback success';
+    reason.textContent = msg.reason;
+    reason.classList.remove('hidden');
+
+    setTimeout(() => {
+      securityIndex += 1;
+
+      if (securityIndex >= securityMessages.length) {
+        finishSecurityGame();
+        return;
+      }
+
+      securityLocked = false;
+      renderSecurityMessage();
+    }, 1050);
+
+    return;
+  }
+
+  securityMistakes += 1;
+  document.getElementById('securityMistakes').textContent = String(securityMistakes);
+  feedback6.textContent = 'Napačna odločitev. Poglej, kaj je pri sporočilu pomembno.';
+  feedback6.className = 'feedback error';
+  reason.textContent = msg.reason;
+  reason.classList.remove('hidden');
+  card.classList.add('wrong-answer');
+
+  if (securityMistakes === 1) {
+    ravi6.textContent = '»Ni problema. Pri varnosti je bolje dvakrat pogledati kot enkrat prehitro klikniti.«';
+  } else if (securityMistakes >= 3) {
+    ravi6.textContent = '»Poglej predvsem domeno, pritisk, zahteve po geslu in podatkih kartice.«';
+  }
+
+  setTimeout(() => {
+    card.classList.remove('swipe-left','swipe-right','wrong-answer');
+    securityLocked = false;
+  }, 900);
+}
+
+function finishSecurityGame() {
+  modules[5].status = 'complete';
+  modules[6].status = 'ready';
+  completed = Math.max(completed, 6);
+
+  document.getElementById('securityProgress').textContent = `${securityMessages.length} / ${securityMessages.length}`;
+  const feedback6 = document.getElementById('task6Feedback');
+  const ravi6 = document.getElementById('raviTask6Text');
+
+  feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Varnostni skener je očistil vseh 5 sporočil.';
+  feedback6.className = 'feedback success';
+  ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
+  document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
+
+  updateProgress();
+  renderModules();
+  setTimeout(() => showScreen('screenHub'), 1900);
+}
+
+function handleSecurityKey(event) {
+  if (!document.getElementById('screenTask6')?.classList.contains('active')) return;
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    classifySecurityMessage('danger');
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    classifySecurityMessage('safe');
+  }
+}
+
+function initSecurityScanner() {
+  const danger = document.getElementById('securityDangerBtn');
+  const safe = document.getElementById('securitySafeBtn');
+
+  if (danger && danger.dataset.bound !== '1') {
+    danger.dataset.bound = '1';
+    danger.addEventListener('click', () => classifySecurityMessage('danger'));
+  }
+  if (safe && safe.dataset.bound !== '1') {
+    safe.dataset.bound = '1';
+    safe.addEventListener('click', () => classifySecurityMessage('safe'));
+  }
+}
 
 let selectedDesignChoice = null;
 let task7Attempts = 0;
@@ -1871,12 +1974,9 @@ document.getElementById('resetTask4').addEventListener('click', resetTask4);
 document.getElementById('backHub4').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('resetTask5').addEventListener('click', resetNetworkGame);
 document.getElementById('backHub5').addEventListener('click', () => showScreen('screenHub'));
-document.querySelectorAll('.security-btn').forEach((button) => {
-  button.addEventListener('click', () => selectSecurityChoice(button.dataset.choice));
-});
-document.getElementById('checkTask6').addEventListener('click', checkTask6);
 document.getElementById('resetTask6').addEventListener('click', resetTask6);
 document.getElementById('backHub6').addEventListener('click', () => showScreen('screenHub'));
+document.addEventListener('keydown', handleSecurityKey);
 document.querySelectorAll('.design-option').forEach((button) => {
   button.addEventListener('click', () => selectDesignChoice(button.dataset.choice));
 });
@@ -1895,6 +1995,7 @@ document.getElementById('placeholderBack').addEventListener('click', () => showS
 initHtmlRepairGame();
 initDataFilterGame();
 initNetworkTopologyGame();
+initSecurityScanner();
 renderModules();
 renderComponents();
 renderProgramOrder();
