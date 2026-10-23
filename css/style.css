@@ -2931,3 +2931,11 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   filter:grayscale(1);
   pointer-events:none;
 }
+
+.runner-final-wall.completed-open {
+  opacity:0;
+  transform:none;
+  filter:none;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
