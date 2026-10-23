@@ -935,7 +935,7 @@ function resetHtmlRepairGame() {
 
   const ravi3 = document.getElementById('raviTask3Text');
   if (ravi3) {
-    ravi3.textContent = '»Moja spletna stran je razpadla na štiri dele. Povleci pravo HTML oznako na pravi element in jo sestavi nazaj.«';
+    ravi3.textContent = '»Moja spletna stran je razpadla na šest delov. Povleci prave HTML oznake na pravo mesto in jo sestavi nazaj.«';
   }
 }
 
@@ -970,6 +970,13 @@ function tryHtmlRepair(tag, zone) {
       tagButton.disabled = true;
     }
 
+    if (tag === 'img') {
+      const imageBox = zone.querySelector('.repair-image-placeholder');
+      if (imageBox) {
+        imageBox.innerHTML = `<img alt="RAVI robot" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 220'%3E%3Crect width='320' height='220' rx='28' fill='%23111a28'/%3E%3Ccircle cx='160' cy='112' r='78' fill='%23283852'/%3E%3Crect x='95' y='48' width='130' height='82' rx='28' fill='%23c7d0dd' stroke='%2353637b' stroke-width='8'/%3E%3Ccircle cx='133' cy='88' r='10' fill='%23ef3340'/%3E%3Ccircle cx='187' cy='88' r='10' fill='%23ef3340'/%3E%3Cpath d='M132 111 Q160 128 188 111' fill='none' stroke='%23313b4b' stroke-width='6' stroke-linecap='round'/%3E%3Crect x='108' y='140' width='104' height='58' rx='20' fill='%23213045' stroke='%2353637b' stroke-width='8'/%3E%3Ccircle cx='160' cy='169' r='20' fill='%23ef3340'/%3E%3Ctext x='160' y='177' text-anchor='middle' font-family='Arial' font-weight='700' font-size='22' fill='white'%3ER%3C/text%3E%3C/svg%3E">`;
+      }
+    }
+
     htmlSelectedTag = null;
     htmlDraggedTag = null;
 
@@ -993,8 +1000,8 @@ function tryHtmlRepair(tag, zone) {
     feedback3.textContent = `<${tag}> ne sodi sem. Poskusi drug element.`;
     ravi3.textContent = '»HTML je precej dobeseden. Če oznaka ne ustreza elementu, stran hitro postane čudna.«';
   } else if (htmlRepairAttempts === 2) {
-    feedback3.textContent = 'Namig: <h1> je naslov, <img> slika, <p> odstavek, <button> pa gumb.';
-    ravi3.textContent = '»Naslov, slika, odstavek, gumb. Štiri zelo različne naloge, štiri različne oznake.«';
+    feedback3.textContent = 'Namig: <h1> je naslov, <img> slika, <p> odstavek, <button> gumb, <nav> navigacija, <footer> pa noga strani.';
+    ravi3.textContent = '»Šest različnih nalog, šest različnih oznak. Nekaj oznak v orodjarni je samo vaba.«';
   } else {
     const answer = zone.dataset.answer;
     feedback3.textContent = `Močan namig: ta del potrebuje <${answer}>.`;
@@ -1029,7 +1036,6 @@ function finishHtmlRepairGame() {
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1900);
 }
 
 function initHtmlRepairGame() {
