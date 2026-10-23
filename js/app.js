@@ -24,6 +24,16 @@ let completed = 0;
 let attempts = 0;
 let selected = new Set();
 
+const programSteps = [
+  { id: 'check', text: 'PREVERI NAPAJANJE' },
+  { id: 'power', text: 'VKLOPI SISTEM' },
+  { id: 'load', text: 'NALOŽI PROGRAM' },
+  { id: 'hello', text: 'PRIKAŽI "RAVI PRIPRAVLJEN"' }
+];
+const correctProgramOrder = ['check', 'power', 'load', 'hello'];
+let currentProgramOrder = ['hello', 'load', 'check', 'power'];
+let task2Attempts = 0;
+
 const screens = [...document.querySelectorAll('.screen')];
 const moduleGrid = document.getElementById('moduleGrid');
 const componentGrid = document.getElementById('componentGrid');
@@ -74,6 +84,12 @@ function renderModules() {
 function openModule(index) {
   if (index === 0) {
     showScreen('screenTask1');
+    return;
+  }
+
+  if (index === 1) {
+    renderProgramOrder();
+    showScreen('screenTask2');
     return;
   }
 
@@ -169,11 +185,124 @@ function checkTask1() {
   }, 700);
 }
 
+
+function renderProgramOrder() {
+  const container = document.getElementById('codeOrder');
+  container.innerHTML = '';
+
+  currentProgramOrder.forEach((stepId, index) => {
+    const step = programSteps.find((item) => item.id === stepId);
+    const row = document.createElement('div');
+    row.className = 'code-step';
+
+    row.innerHTML = `
+      <span class="code-step-number">${index + 1}</span>
+      <span class="code-step-text">${step.text}</span>
+      <span class="code-step-controls">
+        <button class="move-btn move-up" type="button" aria-label="Premakni ukaz gor" ${index === 0 ? 'disabled' : ''}>↑</button>
+        <button class="move-btn move-down" type="button" aria-label="Premakni ukaz dol" ${index === currentProgramOrder.length - 1 ? 'disabled' : ''}>↓</button>
+      </span>
+    `;
+
+    row.querySelector('.move-up').addEventListener('click', () => moveProgramStep(index, -1));
+    row.querySelector('.move-down').addEventListener('click', () => moveProgramStep(index, 1));
+    container.appendChild(row);
+  });
+}
+
+function moveProgramStep(index, direction) {
+  if (modules[1].status === 'complete') return;
+
+  const target = index + direction;
+  if (target < 0 || target >= currentProgramOrder.length) return;
+
+  const temp = currentProgramOrder[index];
+  currentProgramOrder[index] = currentProgramOrder[target];
+  currentProgramOrder[target] = temp;
+
+  document.getElementById('task2Feedback').textContent = '';
+  document.getElementById('task2Feedback').className = 'feedback';
+  renderProgramOrder();
+}
+
+function resetTask2() {
+  if (modules[1].status === 'complete') return;
+
+  const rotations = [
+    ['hello', 'load', 'check', 'power'],
+    ['load', 'hello', 'power', 'check'],
+    ['power', 'hello', 'check', 'load']
+  ];
+
+  const currentIndex = rotations.findIndex(
+    (order) => order.join('|') === currentProgramOrder.join('|')
+  );
+
+  currentProgramOrder = [...rotations[(currentIndex + 1) % rotations.length]];
+  renderProgramOrder();
+
+  const feedback2 = document.getElementById('task2Feedback');
+  feedback2.textContent = 'Ukazi so ponovno premešani.';
+  feedback2.className = 'feedback';
+}
+
+function checkTask2() {
+  if (modules[1].status === 'complete') return;
+
+  task2Attempts += 1;
+  const feedback2 = document.getElementById('task2Feedback');
+  const ravi2 = document.getElementById('raviTask2Text');
+  const isCorrect = currentProgramOrder.every(
+    (stepId, index) => stepId === correctProgramOrder[index]
+  );
+
+  if (isCorrect) {
+    modules[1].status = 'complete';
+    modules[2].status = 'ready';
+    completed = Math.max(completed, 2);
+
+    document.querySelectorAll('#codeOrder .code-step').forEach((row) => {
+      row.classList.add('correct');
+    });
+
+    feedback2.textContent = 'MODUL 2 AKTIVIRAN ✓ Program se izvede v pravilnem vrstnem redu.';
+    feedback2.className = 'feedback success';
+    ravi2.textContent = '»Koda teče. Brez dima. To štejem kot uspeh.«';
+    document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  feedback2.className = 'feedback error';
+
+  if (task2Attempts === 1) {
+    feedback2.textContent = 'Vrstni red še ni pravilen. Pomisli, kaj se mora zgoditi najprej.';
+    ravi2.textContent = '»To je približno tako, kot da bi hotel odpreti igro, preden prižgeš računalnik.«';
+  } else if (task2Attempts === 2) {
+    feedback2.textContent = 'Namig: najprej preveri napajanje, nato vključi sistem.';
+    ravi2.textContent = '»Najprej preveriva, ali sploh imam energijo. Šele potem me lahko vključiš.«';
+  } else {
+    feedback2.textContent = 'Močan namig: PREVERI NAPAJANJE → VKLOPI SISTEM → NALOŽI PROGRAM → PRIKAŽI SPOROČILO.';
+    ravi2.textContent = '»V redu, skoraj ti povem celo rešitev. Samo pravilno jo razporedi.«';
+
+    document.querySelectorAll('#codeOrder .code-step').forEach((row, index) => {
+      if (currentProgramOrder[index] === correctProgramOrder[index]) row.classList.add('hint');
+    });
+  }
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('checkTask2').addEventListener('click', checkTask2);
+document.getElementById('resetTask2').addEventListener('click', resetTask2);
+document.getElementById('backHub2').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
 renderComponents();
+renderProgramOrder();
 updateProgress();
