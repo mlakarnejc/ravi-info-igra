@@ -2509,3 +2509,45 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .security-scanner { grid-template-columns:1fr; }
   .security-lane { min-height:70px; }
 }
+
+/* Security scanner visual separation */
+.security-scanner {
+  background:
+    radial-gradient(circle at 50% 40%,rgba(72,113,255,.12),transparent 23rem),
+    linear-gradient(180deg,#0a111b,#0c1623);
+}
+.lane-danger {
+  border-color:rgba(239,51,64,.42);
+  background:
+    linear-gradient(180deg,rgba(239,51,64,.09),rgba(239,51,64,.025));
+  color:#d99097;
+}
+.lane-safe {
+  border-color:rgba(56,193,114,.42);
+  background:
+    linear-gradient(180deg,rgba(56,193,114,.09),rgba(56,193,114,.025));
+  color:#8fd7ad;
+}
+.security-message-card {
+  background:
+    linear-gradient(180deg,#18263a,#121d2d);
+  border-color:#52647f;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.03);
+}
+.security-message-card h3 {
+  color:#f7f9fc;
+}
+.security-extra {
+  border-color:#45566f;
+  background:#0c1522;
+}
+.security-mail-badge {
+  border-color:#4b5d78;
+  background:#101a28;
+}
+.security-reason {
+  border-color:#4a5d78;
+  background:#111b2a;
+}
