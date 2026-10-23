@@ -411,20 +411,35 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask5Text">»Izgubil sem povezavo. Trenutno sem zelo pameten računalnik brez omrežja. Torej precej osamljen.«</p>
+            <p id="raviTask5Text">»Pošlji podatkovni paket od računalnika do mene. Na poti mora skozi usmerjevalnik in internet — drugače paket nima pojma, kam gre.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 5</div>
-          <h2>Vzpostavi povezavo</h2>
-          <p>Razporedi naprave v pravilen vrstni red, da RAVI pride do interneta.</p>
+          <h2>Usmeri podatkovni paket</h2>
+          <p>S puščicami <strong>↑ ↓ ← →</strong> vodi paket od računalnika do RAVI-ja. Paket mora po vrsti obiskati <strong>USMERJEVALNIK</strong> in <strong>INTERNET</strong>.</p>
 
-          <div id="networkOrder" class="network-order" aria-label="Omrežne naprave za razvrščanje"></div>
+          <div class="network-game-hud">
+            <span>PAKET: <strong id="networkPacketStatus">RAČUNALNIK</strong></span>
+            <span>KORAKI: <strong id="networkSteps">0</strong></span>
+          </div>
+
+          <div class="network-game-layout">
+            <div id="networkMaze" class="network-maze" tabindex="0" aria-label="Omrežni labirint"></div>
+
+            <div class="network-route-panel">
+              <span class="network-route-title">POT PAKETA</span>
+              <div class="route-check active" data-stage="pc"><b>1</b><span>RAČUNALNIK</span></div>
+              <div class="route-check" data-stage="router"><b>2</b><span>USMERJEVALNIK</span></div>
+              <div class="route-check" data-stage="internet"><b>3</b><span>INTERNET</span></div>
+              <div class="route-check" data-stage="ravi"><b>4</b><span>RAVI</span></div>
+              <small>Paket ne sme preskočiti nobene stopnje.</small>
+            </div>
+          </div>
 
           <div class="task-actions">
-            <button id="checkTask5" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask5" class="ghost-btn" type="button">PREMEŠAJ ZNOVA</button>
+            <button id="resetTask5" class="ghost-btn" type="button">PONOVI POT</button>
             <button id="backHub5" class="ghost-btn" type="button">NAZAJ</button>
           </div>
           <div id="task5Feedback" class="feedback" aria-live="polite"></div>
