@@ -255,16 +255,20 @@ const catchItems = [
   { label: 'CPU', icon: '🧠', good: true },
   { label: 'RAM', icon: '▥', good: true },
   { label: 'SSD', icon: '💾', good: true },
+  { label: 'MIŠKA', icon: '🖱️', good: true },
+  { label: 'TIPKOVNICA', icon: '⌨️', good: true },
+  { label: 'ZASLON', icon: '🖥️', good: true },
+  { label: 'SLUŠALKE', icon: '🎧', good: true },
+  { label: 'SPLETNA KAMERA', icon: '📷', good: true },
+
   { label: 'OPEKAČ', icon: '🍞', good: false },
-  { label: 'COPAT', icon: '👟', good: false },
-  { label: 'LONČNICA', icon: '🪴', good: false },
-  { label: 'MIKROVALOVKA', icon: '🍲', good: false },
-  { label: 'KAVA', icon: '☕', good: false },
-  { label: 'KNJIGA', icon: '📘', good: false },
-  { label: 'ŽOGA', icon: '⚽', good: false },
-  { label: 'SLUŠALKE', icon: '🎧', good: false },
-  { label: 'TIPKOVNICA', icon: '⌨️', good: false },
-  { label: 'MIŠKA', icon: '🖱️', good: false }
+  { label: 'ČEVELJ', icon: '👞', good: false },
+  { label: 'AKVARIJ', icon: '🐠', good: false },
+  { label: 'BANANA', icon: '🍌', good: false },
+  { label: 'WC ŠČETKA', icon: '🧹', good: false },
+  { label: 'PICA', icon: '🍕', good: false },
+  { label: 'MEDVEDEK', icon: '🧸', good: false },
+  { label: 'KAKTUS', icon: '🌵', good: false }
 ];
 
 let catchRunning = false;
@@ -301,7 +305,7 @@ function resetCatchGame() {
   document.getElementById('catchMistakes').textContent = '0';
 
   const f = document.getElementById('taskFeedback');
-  f.textContent = 'Zberi 10 točk. CPU, RAM in SSD prinesejo +1, napačen predmet pa −1. Točke ne morejo pasti pod 0.';
+  f.textContent = 'Zberi 10 točk. Vse, kar spada k računalniku, prinese +1; ostali predmeti −1. Točke ne morejo pasti pod 0.';
   f.className = 'feedback';
 }
 
@@ -419,7 +423,7 @@ function catchGameLoop(now) {
         game.classList.remove('hit');
         void game.offsetWidth;
         game.classList.add('hit');
-        document.getElementById('taskFeedback').textContent = `−1: ${obj.label} ni računalniška komponenta. Nadaljuj!`;
+        document.getElementById('taskFeedback').textContent = `−1: ${obj.label} ne spada k računalniški opremi. Nadaljuj!`;
         document.getElementById('taskFeedback').className = 'feedback error';
         document.getElementById('raviTaskText').textContent =
           catchMistakeValue === 1
@@ -452,9 +456,9 @@ function finishCatchGame() {
   const game = document.getElementById('catchGame');
   game.classList.add('win');
 
-  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Zbral si 10 točk in dostavil dovolj pravih komponent.';
+  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Zbral si 10 točk in dostavil dovolj računalniške opreme.';
   document.getElementById('taskFeedback').className = 'feedback success';
-  document.getElementById('raviTaskText').textContent = '»Odlično. Jedro ima vse, kar potrebuje. In niti enega opekača.«';
+  document.getElementById('raviTaskText').textContent = '»Odlično. Računalnik ima vse, kar potrebuje. Akvarij pa je ostal tam, kjer mora biti.«';
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
 
   updateProgress();
