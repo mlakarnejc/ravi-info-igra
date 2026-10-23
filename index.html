@@ -32,7 +32,7 @@
 
         <div class="dialog-panel">
           <p class="eyebrow">INFORMATIVNI DAN // MISIJA 01</p>
-          <h1>Pomagaj RAVI-ju zagnati vseh 8 sistemov.</h1>
+          <h1>Pomagaj RAVI-ju zagnati vseh 9 sistemov.</h1>
           <p class="ravi-speech">»Živjo. Sem RAVI. Nekaj mojih sistemov še ni aktivnih. Sam tega ne morem dokončati. Potrebujem nekoga, ki razume računalništvo.«</p>
           <p class="muted">Vsaka uspešno rešena naloga aktivira en modul. Napačen odgovor te ne ustavi – RAVI ti po potrebi pomaga.</p>
           <button id="startBtn" class="primary-btn" type="button">ZAČNI MISIJO</button>
@@ -600,12 +600,89 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask7Text">»Naredil sem tri plakate. Eden je videti kot eksplozija barv, drugi kot domača naloga iz leta 2004. Eden pa je dejansko uporaben.«</p>
+            <p id="raviTask7Text">»Končno nekaj, kjer lahko tudi padeš v luknjo. Brez skrbi — tukaj imam shranjevanje.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 7</div>
+          <h2>RAVI RUN</h2>
+          <p>S tipkama <strong>← →</strong> premikaj RAVI-ja, s <strong>SPACE</strong> skoči. Poberi <strong>3 koščke kode</strong> in pridi do izhodnega terminala.</p>
+
+          <div class="runner-hud">
+            <span>KODA: <strong id="runnerCodeCount">0 / 3</strong></span>
+            <span>NAPAKE: <strong id="runnerHits">0</strong></span>
+            <span>TIPKE: <strong>← → + SPACE</strong></span>
+          </div>
+
+          <div id="runnerViewport" class="runner-viewport" tabindex="0" aria-label="RAVI RUN platformna igra">
+            <div id="runnerWorld" class="runner-world">
+              <div class="runner-sky-grid"></div>
+              <div class="runner-city city-a"></div>
+              <div class="runner-city city-b"></div>
+
+              <div class="runner-ground"></div>
+
+              <div class="runner-platform" style="--x:760px;--y:238px;--w:190px"></div>
+              <div class="runner-platform" style="--x:1260px;--y:225px;--w:180px"></div>
+
+              <div class="runner-hazard" data-x="560" data-w="70" style="--x:560px;--w:70px">BUG</div>
+              <div class="runner-hazard tall" data-x="1080" data-w="82" style="--x:1080px;--w:82px">404</div>
+
+              <div class="runner-code" data-code="0" data-x="390" data-y="250" style="--x:390px;--y:250px">{ }</div>
+              <div class="runner-code" data-code="1" data-x="835" data-y="188" style="--x:835px;--y:188px">&lt;/&gt;</div>
+              <div class="runner-code" data-code="2" data-x="1340" data-y="175" style="--x:1340px;--y:175px">JS</div>
+
+              <div id="runnerGoal" class="runner-goal" style="--x:1690px">
+                <span>EXIT</span>
+                <strong>TERMINAL</strong>
+              </div>
+
+              <div id="runnerPlayer" class="runner-player" style="--x:80px;--y:270px">
+                <div class="runner-antenna"></div>
+                <div class="runner-face"><i></i><i></i></div>
+                <div class="runner-body">R</div>
+              </div>
+            </div>
+
+            <div id="runnerOverlay" class="runner-overlay">
+              <strong>RAVI RUN</strong>
+              <span>Poberi 3 koščke kode in pridi do terminala.</span>
+              <button id="startRunner" class="primary-btn" type="button">ZAČNI IGRO</button>
+            </div>
+          </div>
+
+          <div class="runner-help">
+            <span><kbd>←</kbd><kbd>→</kbd> premikanje</span>
+            <span><kbd>SPACE</kbd> skok</span>
+            <span>Ovire te samo vrnejo na zadnjo varno točko.</span>
+          </div>
+
+          <div class="task-actions">
+            <button id="resetTask7" class="ghost-btn" type="button">PONOVI IGRO</button>
+            <button id="backHub7" class="ghost-btn" type="button">NAZAJ</button>
+          </div>
+          <div id="task7Feedback" class="feedback" aria-live="polite"></div>
+          <div class="subject-label">Predmet: <strong>Programiranje aplikacij</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenTask8" class="screen">
+      <div class="task-layout">
+        <aside class="ravi-side">
+          <div class="mini-ravi" aria-hidden="true">
+            <div class="mini-head"><span></span><span></span></div>
+            <div class="mini-body">R</div>
+          </div>
+          <div class="speech-box">
+            <strong>RAVI</strong>
+            <p id="raviTask8Text">»Naredil sem tri plakate. Eden je videti kot eksplozija barv, drugi kot domača naloga iz leta 2004. Eden pa je dejansko uporaben.«</p>
+          </div>
+        </aside>
+
+        <div class="task-card">
+          <div class="task-number">MODUL 8</div>
           <h2>Izberi najboljši dizajn</h2>
           <p>Kateri plakat je najbolj <strong>pregleden, berljiv in primeren</strong> za informativni dan?</p>
 
@@ -634,17 +711,17 @@
           </div>
 
           <div class="task-actions">
-            <button id="checkTask7" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask7" class="ghost-btn" type="button">POČISTI IZBOR</button>
-            <button id="backHub7" class="ghost-btn" type="button">NAZAJ</button>
+            <button id="checkTask8Design" class="primary-btn" type="button">PREVERI</button>
+            <button id="resetTask8Design" class="ghost-btn" type="button">POČISTI IZBOR</button>
+            <button id="backHub8Design" class="ghost-btn" type="button">NAZAJ</button>
           </div>
-          <div id="task7Feedback" class="feedback" aria-live="polite"></div>
+          <div id="task8DesignFeedback" class="feedback" aria-live="polite"></div>
           <div class="subject-label">Predmet: <strong>Računalniško oblikovanje</strong></div>
         </div>
       </div>
     </section>
 
-    <section id="screenTask8" class="screen">
+    <section id="screenTask9" class="screen">
       <div class="task-layout">
         <aside class="ravi-side">
           <div class="mini-ravi" aria-hidden="true">
@@ -653,12 +730,12 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask8Text">»Prepričan sem, da je Python operacijski sistem. Zelo prepričan. Skoraj sumljivo prepričan.«</p>
+            <p id="raviTask9Text">»Prepričan sem, da je Python operacijski sistem. Zelo prepričan. Skoraj sumljivo prepričan.«</p>
           </div>
         </aside>
 
         <div class="task-card">
-          <div class="task-number">MODUL 8</div>
+          <div class="task-number">MODUL 9</div>
           <h2>Preveri umetno inteligenco</h2>
           <p>RAVI poda odgovor. Odloči, ali trditev <strong>drži</strong> ali <strong>ne drži</strong>.</p>
 
@@ -673,11 +750,11 @@
           </div>
 
           <div class="task-actions">
-            <button id="checkTask8" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask8" class="ghost-btn" type="button">POČISTI IZBOR</button>
-            <button id="backHub8" class="ghost-btn" type="button">NAZAJ</button>
+            <button id="checkTask9" class="primary-btn" type="button">PREVERI</button>
+            <button id="resetTask9" class="ghost-btn" type="button">POČISTI IZBOR</button>
+            <button id="backHub9" class="ghost-btn" type="button">NAZAJ</button>
           </div>
-          <div id="task8Feedback" class="feedback" aria-live="polite"></div>
+          <div id="task9Feedback" class="feedback" aria-live="polite"></div>
           <div class="subject-label">Predmet: <strong>Umetna inteligenca</strong></div>
         </div>
       </div>
