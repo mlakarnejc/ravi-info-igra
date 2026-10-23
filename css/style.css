@@ -2709,7 +2709,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   position:absolute;
   left:var(--x);
   bottom:var(--y);
-  transform:translate(-50%,-50%);
+  transform:translateX(-50%);
   width:52px;
   height:52px;
   display:grid;
@@ -2725,7 +2725,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 }
 .runner-code.collected {
   opacity:0;
-  transform:translate(-50%,-80%) scale(.45) rotate(18deg);
+  transform:translateX(-50%) translateY(-26px) scale(.45) rotate(18deg);
 }
 @keyframes runnerCodeFloat {
   from { margin-bottom:0; }
@@ -2884,9 +2884,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   align-self:center;
   margin:12px auto 0;
   min-width:180px;
-}
-.runner-platform {
-  transform:translateY(16px);
 }
 .runner-pit {
   position:absolute;
