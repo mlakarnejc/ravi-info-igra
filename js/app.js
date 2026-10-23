@@ -1377,189 +1377,201 @@ function initDataFilterGame() {
 }
 
 
-const networkGrid = {
-  cols: 7,
-  rows: 5,
-  start: { x: 0, y: 4 },
-  router: { x: 2, y: 4 },
-  internet: { x: 4, y: 2 },
-  ravi: { x: 6, y: 0 }
+const topologyNodes = {
+  pc:       { label: 'RAČUNALNIK', x: 9, y: 65 },
+  router:   { label: 'USMERJEVALNIK', x: 32, y: 45 },
+  printer:  { label: 'TISKALNIK', x: 30, y: 83 },
+  internet: { label: 'INTERNET', x: 59, y: 27 },
+  server:   { label: 'STREŽNIK', x: 55.5, y: 72 },
+  ravi:     { label: 'RAVI', x: 87.5, y: 20 },
+  camera:   { label: 'KAMERA', x: 84.5, y: 70 }
 };
 
-const networkWalls = new Set([
-  '0,2','1,2',
-  '3,4','4,4','5,4','6,4',
-  '0,1','1,1','3,1','4,1','6,1',
-  '0,0','1,0','2,0','3,0'
-]);
+const topologyLinks = {
+  pc: ['router', 'printer'],
+  router: ['pc', 'internet', 'server'],
+  printer: ['pc'],
+  internet: ['router', 'ravi', 'camera'],
+  server: ['router', 'camera'],
+  ravi: ['internet'],
+  camera: ['internet', 'server']
+};
 
-const networkHintPath = new Set([
-  '0,4','1,4','2,4',
-  '2,3','2,2','3,2','4,2',
-  '5,2','5,1','5,0','6,0'
-]);
-
-let networkPacket = { x: 0, y: 4 };
-let networkStage = 0;
-let networkSteps = 0;
-let networkBumps = 0;
+const correctTopologyRoute = ['pc', 'router', 'internet', 'ravi'];
+let topologyCurrent = 'pc';
+let topologyStage = 0;
+let topologyWrongAttempts = 0;
+let topologyMoving = false;
 
 function resetNetworkGame() {
   if (modules[4].status === 'complete') return;
 
-  networkPacket = { ...networkGrid.start };
-  networkStage = 0;
-  networkSteps = 0;
-  networkBumps = 0;
+  topologyCurrent = 'pc';
+  topologyStage = 0;
+  topologyWrongAttempts = 0;
+  topologyMoving = false;
+
+  const packet = document.getElementById('networkPacketDot');
+  if (packet) {
+    packet.style.setProperty('--x', topologyNodes.pc.x + '%');
+    packet.style.setProperty('--y', topologyNodes.pc.y + '%');
+    packet.classList.remove('moving');
+  }
+
+  document.querySelectorAll('.topology-node').forEach((node) => {
+    node.classList.remove('current', 'correct-hop', 'wrong-hop', 'hint-next');
+    if (node.dataset.node === 'pc') node.classList.add('current');
+  });
+
+  renderDiscoveredRoute();
 
   const feedback5 = document.getElementById('task5Feedback');
   const ravi5 = document.getElementById('raviTask5Text');
   if (feedback5) {
-    feedback5.textContent = 'Uporabi puščice in pošlji paket po pravilni poti.';
+    feedback5.textContent = 'Izberi napravo, kamor naj paket potuje naslednji.';
     feedback5.className = 'feedback';
   }
   if (ravi5) {
-    ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Na poti mora skozi usmerjevalnik in internet — drugače paket nima pojma, kam gre.«';
+    ravi5.textContent = '»Pošlji paket od računalnika do mene. Omrežje ima več naprav in niso vse prava pot. Izbiraj pametno.«';
   }
-
-  renderNetworkMaze();
-  setTimeout(() => document.getElementById('networkMaze')?.focus(), 40);
 }
 
-function renderNetworkMaze() {
-  const maze = document.getElementById('networkMaze');
-  if (!maze) return;
+function renderDiscoveredRoute() {
+  const routeBox = document.getElementById('networkDiscoveredRoute');
+  const currentLabel = document.getElementById('networkCurrentNode');
+  if (!routeBox || !currentLabel) return;
 
-  maze.innerHTML = '';
+  const discovered = correctTopologyRoute.slice(0, topologyStage + 1);
+  routeBox.innerHTML = discovered
+    .map((id) => `<span class="route-chip">${topologyNodes[id].label}</span>`)
+    .join('');
 
-  for (let y = 0; y < networkGrid.rows; y += 1) {
-    for (let x = 0; x < networkGrid.cols; x += 1) {
-      const key = `${x},${y}`;
-      const cell = document.createElement('div');
-      cell.className = 'network-cell';
-
-      if (networkWalls.has(key)) {
-        cell.classList.add('wall');
-      }
-
-      if (networkBumps >= 5 && networkHintPath.has(key)) {
-        cell.classList.add('hint-path');
-      }
-
-      let node = null;
-      if (x === networkGrid.start.x && y === networkGrid.start.y) {
-        node = { icon: '💻', label: 'RAČUNALNIK' };
-      } else if (x === networkGrid.router.x && y === networkGrid.router.y) {
-        node = { icon: '📡', label: 'USMERJEVALNIK' };
-      } else if (x === networkGrid.internet.x && y === networkGrid.internet.y) {
-        node = { icon: '🌐', label: 'INTERNET' };
-      } else if (x === networkGrid.ravi.x && y === networkGrid.ravi.y) {
-        node = { icon: '🤖', label: 'RAVI' };
-      }
-
-      if (node) {
-        cell.classList.add('node');
-        cell.innerHTML = `<span class="node-icon">${node.icon}</span><span class="node-label">${node.label}</span>`;
-      }
-
-      if (x === networkPacket.x && y === networkPacket.y) {
-        cell.classList.add('packet-here');
-        const packet = document.createElement('div');
-        packet.className = 'network-packet';
-        cell.appendChild(packet);
-      }
-
-      maze.appendChild(cell);
-    }
-  }
-
-  document.getElementById('networkSteps').textContent = String(networkSteps);
-
-  const labels = ['RAČUNALNIK', 'USMERJEVALNIK', 'INTERNET', 'RAVI'];
-  document.getElementById('networkPacketStatus').textContent = labels[networkStage];
-
-  document.querySelectorAll('.route-check').forEach((item, index) => {
-    item.classList.remove('active', 'done');
-    if (index < networkStage) item.classList.add('done');
-    if (index === networkStage) item.classList.add('active');
-  });
+  currentLabel.textContent = topologyNodes[topologyCurrent].label;
 }
 
-function moveNetworkPacket(dx, dy) {
-  if (modules[4].status === 'complete') return;
+function moveTopologyPacket(targetId, returnBack = false) {
+  const packet = document.getElementById('networkPacketDot');
+  if (!packet) return;
 
-  const nx = networkPacket.x + dx;
-  const ny = networkPacket.y + dy;
-  const maze = document.getElementById('networkMaze');
+  packet.classList.add('moving');
+  packet.style.setProperty('--x', topologyNodes[targetId].x + '%');
+  packet.style.setProperty('--y', topologyNodes[targetId].y + '%');
+
+  if (returnBack) {
+    setTimeout(() => {
+      packet.style.setProperty('--x', topologyNodes[topologyCurrent].x + '%');
+      packet.style.setProperty('--y', topologyNodes[topologyCurrent].y + '%');
+    }, 620);
+
+    setTimeout(() => {
+      packet.classList.remove('moving');
+      topologyMoving = false;
+    }, 1200);
+  } else {
+    setTimeout(() => {
+      packet.classList.remove('moving');
+    }, 580);
+  }
+}
+
+function chooseTopologyNode(targetId) {
+  if (modules[4].status === 'complete' || topologyMoving || targetId === topologyCurrent) return;
+
   const feedback5 = document.getElementById('task5Feedback');
   const ravi5 = document.getElementById('raviTask5Text');
+  const targetButton = document.querySelector(`.topology-node[data-node="${targetId}"]`);
+  const linked = topologyLinks[topologyCurrent]?.includes(targetId);
+  const expected = correctTopologyRoute[topologyStage + 1];
 
-  if (
-    nx < 0 || nx >= networkGrid.cols ||
-    ny < 0 || ny >= networkGrid.rows ||
-    networkWalls.has(`${nx},${ny}`)
-  ) {
-    networkBumps += 1;
-    if (maze) {
-      maze.classList.remove('bump');
-      void maze.offsetWidth;
-      maze.classList.add('bump');
-      setTimeout(() => maze.classList.remove('bump'), 240);
+  if (!linked) {
+    topologyWrongAttempts += 1;
+    feedback5.textContent = `Med ${topologyNodes[topologyCurrent].label} in ${topologyNodes[targetId].label} ni neposredne povezave.`;
+    feedback5.className = 'feedback error';
+
+    if (targetButton) {
+      targetButton.classList.remove('wrong-hop');
+      void targetButton.offsetWidth;
+      targetButton.classList.add('wrong-hop');
+      setTimeout(() => targetButton.classList.remove('wrong-hop'), 420);
     }
 
-    if (networkBumps === 1) {
-      feedback5.textContent = 'Ta povezava je zaprta. Poišči drugo pot.';
-      ravi5.textContent = '»Paket je treščil v zaprto povezavo. Brez skrbi, paketi nimajo čustev.«';
-    } else if (networkBumps === 3) {
-      feedback5.textContent = 'Namig: najprej poišči USMERJEVALNIK, nato INTERNET.';
-      ravi5.textContent = '»Najprej usmerjevalnik. Potem internet. Šele nato lahko prideš do mene.«';
-    } else if (networkBumps >= 5) {
-      feedback5.textContent = 'Močan namig: prava pot je označena z rumenim robom.';
-      ravi5.textContent = '»Označil sem ti varno traso. Zdaj bi moral paket preživeti.«';
-    }
-    renderNetworkMaze();
+    applyTopologyHint();
     return;
   }
 
-  networkPacket = { x: nx, y: ny };
-  networkSteps += 1;
+  topologyMoving = true;
+  moveTopologyPacket(targetId, targetId !== expected);
 
-  if (
-    networkStage === 0 &&
-    nx === networkGrid.router.x &&
-    ny === networkGrid.router.y
-  ) {
-    networkStage = 1;
-    feedback5.textContent = 'USMERJEVALNIK dosežen ✓ Paket zdaj ve, kam naprej.';
-    feedback5.className = 'feedback success';
-  } else if (
-    networkStage === 1 &&
-    nx === networkGrid.internet.x &&
-    ny === networkGrid.internet.y
-  ) {
-    networkStage = 2;
-    feedback5.textContent = 'INTERNET dosežen ✓ Zdaj poišči RAVI-ja.';
-    feedback5.className = 'feedback success';
-  } else if (
-    nx === networkGrid.ravi.x &&
-    ny === networkGrid.ravi.y
-  ) {
-    if (networkStage === 2) {
-      networkStage = 3;
-      renderNetworkMaze();
+  if (targetId !== expected) {
+    topologyWrongAttempts += 1;
+    feedback5.textContent = `${topologyNodes[targetId].label} je povezan, vendar paket po tej poti ne pride pravilno do cilja.`;
+    feedback5.className = 'feedback error';
+
+    if (targetButton) {
+      targetButton.classList.add('wrong-hop');
+      setTimeout(() => targetButton.classList.remove('wrong-hop'), 500);
+    }
+
+    if (topologyWrongAttempts === 1) {
+      ravi5.textContent = '»Povezava obstaja, ampak ni vsaka povezava prava pot do cilja.«';
+    }
+
+    applyTopologyHint();
+    return;
+  }
+
+  setTimeout(() => {
+    document.querySelectorAll('.topology-node').forEach((node) => {
+      node.classList.remove('current', 'hint-next');
+    });
+
+    topologyCurrent = targetId;
+    topologyStage += 1;
+    topologyMoving = false;
+
+    if (targetButton) {
+      targetButton.classList.add('current', 'correct-hop');
+      setTimeout(() => targetButton.classList.remove('correct-hop'), 700);
+    }
+
+    renderDiscoveredRoute();
+
+    if (targetId === 'ravi') {
       finishNetworkGame();
       return;
     }
 
-    feedback5.textContent = 'Do RAVI-ja si prišel prehitro. Paket mora prej skozi usmerjevalnik in internet.';
-    feedback5.className = 'feedback error';
-    ravi5.textContent = '»Cilj je pravi, pot pa ne. Omrežja so malo občutljiva na vrstni red.«';
-  } else {
-    feedback5.textContent = 'Paket potuje...';
-    feedback5.className = 'feedback';
+    feedback5.textContent = `Pravilno ✓ Paket je dosegel: ${topologyNodes[targetId].label}.`;
+    feedback5.className = 'feedback success';
+
+    if (targetId === 'router') {
+      ravi5.textContent = '»Dobro. Usmerjevalnik ve, kam poslati promet naprej.«';
+    } else if (targetId === 'internet') {
+      ravi5.textContent = '»Zdaj je paket v internetu. Do mene manjka še zadnji korak.«';
+    }
+  }, 590);
+}
+
+function applyTopologyHint() {
+  const feedback5 = document.getElementById('task5Feedback');
+  const ravi5 = document.getElementById('raviTask5Text');
+  const expected = correctTopologyRoute[topologyStage + 1];
+
+  if (topologyWrongAttempts === 2) {
+    if (topologyStage === 0) {
+      ravi5.textContent = '»Katera naprava odloča, kam naj omrežni promet potuje naprej?«';
+    } else if (topologyStage === 1) {
+      ravi5.textContent = '»Zdaj mora paket iz lokalnega omrežja naprej v širši svet.«';
+    } else {
+      ravi5.textContent = '»Paket je že v internetu. Cilj je precej očiten.«';
+    }
   }
 
-  renderNetworkMaze();
+  if (topologyWrongAttempts >= 4 && expected) {
+    const hintNode = document.querySelector(`.topology-node[data-node="${expected}"]`);
+    if (hintNode) hintNode.classList.add('hint-next');
+    feedback5.textContent += ' RAVI je označil verjetno naslednjo napravo.';
+  }
 }
 
 function finishNetworkGame() {
@@ -1572,28 +1584,20 @@ function finishNetworkGame() {
 
   feedback5.textContent = 'MODUL 5 AKTIVIRAN ✓ Paket je uspešno prišel do RAVI-ja.';
   feedback5.className = 'feedback success';
-  ravi5.textContent = '»Paket dostavljen. Računalnik → usmerjevalnik → internet → RAVI. Omrežje živi.«';
+  ravi5.textContent = '»Paket dostavljen. Pot si odkril sam — tako omrežje dobi smisel.«';
   document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnostni sistem je odklenjen.';
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1800);
+  setTimeout(() => showScreen('screenHub'), 1900);
 }
 
-function handleNetworkKey(event) {
-  if (!document.getElementById('screenTask5')?.classList.contains('active')) return;
-
-  const moves = {
-    ArrowUp: [0, -1],
-    ArrowDown: [0, 1],
-    ArrowLeft: [-1, 0],
-    ArrowRight: [1, 0]
-  };
-
-  if (!moves[event.key]) return;
-  event.preventDefault();
-  const [dx, dy] = moves[event.key];
-  moveNetworkPacket(dx, dy);
+function initNetworkTopologyGame() {
+  document.querySelectorAll('.topology-node').forEach((node) => {
+    if (node.dataset.bound === '1') return;
+    node.dataset.bound = '1';
+    node.addEventListener('click', () => chooseTopologyNode(node.dataset.node));
+  });
 }
 
 
@@ -1845,7 +1849,6 @@ document.getElementById('backHub2').addEventListener('click', () => {
   showScreen('screenHub');
 });
 document.addEventListener('keydown', handleProgramKey);
-document.addEventListener('keydown', handleNetworkKey);
 document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
 document.getElementById('finishTask3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
@@ -1877,6 +1880,7 @@ document.getElementById('placeholderBack').addEventListener('click', () => showS
 
 initHtmlRepairGame();
 initDataFilterGame();
+initNetworkTopologyGame();
 renderModules();
 renderComponents();
 renderProgramOrder();
