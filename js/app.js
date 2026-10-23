@@ -1658,12 +1658,12 @@ const securityMessages = [
     reason: 'Uradna domena in tipično varnostno obvestilo brez zahteve po pošiljanju gesla.'
   },
   {
-    sender: 'Microsoft <security@micropoft.com>',
+    sender: 'Microsoft <security@mikrosoft.com>',
     subject: 'Preverjanje varnosti računa',
     body: 'Zaradi varnostnega pregleda prosimo, da preverite aktivnost v svojem računu.',
-    extra: 'https://micropoft.com/account/security',
+    extra: 'https://mikrosoft.com/account/security',
     safe: false,
-    reason: 'Skoraj vse izgleda pravilno, vendar je domena napačna: MICROPОFT namesto MICROSOFT. Ena sama napačna črka je lahko znak prevare.'
+    reason: 'Skoraj vse izgleda pravilno, vendar je domena napačna: MIKROSOFT namesto MICROSOFT. Ena sama napačna črka je lahko znak prevare.'
   }
 ];
 
@@ -1722,7 +1722,7 @@ function classifySecurityMessage(choice) {
   if (correct) {
     feedback6.textContent = msg.safe ? 'VARNO ✓ Sporočilo gre naprej.' : 'SUMLJIVO ✓ Sporočilo gre v karanteno.';
     feedback6.className = 'feedback success';
-    reason.textContent = msg.reason;
+    reason.innerHTML = `<strong>ZAKAJ?</strong><span>${msg.reason}</span>`;
     reason.classList.remove('hidden');
 
     setTimeout(() => {
@@ -1735,7 +1735,7 @@ function classifySecurityMessage(choice) {
 
       securityLocked = false;
       renderSecurityMessage();
-    }, 1050);
+    }, 3000);
 
     return;
   }
@@ -1757,7 +1757,7 @@ function classifySecurityMessage(choice) {
   setTimeout(() => {
     card.classList.remove('swipe-left','swipe-right','wrong-answer');
     securityLocked = false;
-  }, 900);
+  }, 2800);
 }
 
 function finishSecurityGame() {
