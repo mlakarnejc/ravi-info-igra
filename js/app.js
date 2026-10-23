@@ -229,8 +229,7 @@ function checkTask1() {
     document.getElementById('hubMessage').textContent = 'Prvi sistem je aktiven. Naslednji modul je odklenjen.';
 
     updateProgress();
-    initHtmlRepairGame();
-renderModules();
+    renderModules();
     setTimeout(() => showScreen('screenHub'), 1600);
     return;
   }
@@ -1564,6 +1563,7 @@ document.getElementById('backHub8').addEventListener('click', () => showScreen('
 document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
+initHtmlRepairGame();
 renderModules();
 renderComponents();
 renderProgramOrder();
