@@ -2501,9 +2501,37 @@ function startMLRetraining() {
     document.getElementById('mlAccuracyStatus').textContent = '97 %';
     document.getElementById('raviTask8Text').textContent = '»Model posodobljen. Ponoviva isti primer.«';
     setMLPhase('mlFinalPhase');
-    document.querySelector('#mlFocusMessage strong').textContent = 'Isti primer še enkrat: model zdaj pravilno prepozna črno mačko.';
+    document.querySelector('#mlFocusMessage strong').textContent = 'Isti primer še enkrat. RAVI ga ponovno analizira z izboljšanim modelom.';
+    runMLFinalRetest();
     mlBusy = false;
   }, 3200);
+}
+
+function runMLFinalRetest() {
+  const scene = document.querySelector('.ml-final-scan');
+  const panel = scene?.querySelector('.ml-prediction-panel');
+  const title = panel?.querySelector('strong');
+  const text = panel?.querySelector('p');
+  const confidence = scene?.querySelector('.ml-detect-frame b');
+
+  if (!scene || !panel || !title || !text || !confidence) return;
+
+  scene.classList.remove('scanning');
+  void scene.offsetWidth;
+  scene.classList.add('scanning');
+
+  title.textContent = 'ANALIZA ...';
+  text.textContent = 'RAVI ponovno preverja isti primer.';
+  confidence.textContent = '--';
+
+  setTimeout(() => {
+    scene.classList.remove('scanning');
+    title.textContent = 'MAČKA ✓';
+    text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
+    confidence.textContent = '97 %';
+    document.querySelector('#mlFocusMessage strong').textContent =
+      'Uspeh: isti primer je po boljšem treningu pravilno prepoznan kot MAČKA.';
+  }, 1300);
 }
 
 function finishMLModule() {
