@@ -980,15 +980,11 @@ function tryHtmlRepair(tag, zone) {
       const imageBox = zone.querySelector('.repair-image-placeholder');
       if (imageBox) {
         imageBox.innerHTML = `
-          <div class="repair-ravi-image" aria-label="RAVI robot">
-            <div class="repair-ravi-antenna"></div>
-            <div class="repair-ravi-head">
-              <span class="repair-ravi-eye"></span>
-              <span class="repair-ravi-eye"></span>
-              <span class="repair-ravi-mouth"></span>
-            </div>
-            <div class="repair-ravi-body"><strong>R</strong></div>
-          </div>
+          <img
+            class="repair-ravi-photo"
+            alt="RAVI robot"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 300'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23101927'/%3E%3Cstop offset='1' stop-color='%2322334a'/%3E%3C/linearGradient%3E%3ClinearGradient id='metal' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23d9e1ea'/%3E%3Cstop offset='1' stop-color='%238692a3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='420' height='300' rx='30' fill='url(%23bg)'/%3E%3Ccircle cx='210' cy='150' r='110' fill='%232a3b54' opacity='.65'/%3E%3Cline x1='210' y1='55' x2='210' y2='28' stroke='%236a7890' stroke-width='9' stroke-linecap='round'/%3E%3Ccircle cx='210' cy='20' r='11' fill='%23ef3340'/%3E%3Crect x='118' y='58' width='184' height='110' rx='38' fill='url(%23metal)' stroke='%2353637b' stroke-width='10'/%3E%3Ccircle cx='168' cy='108' r='14' fill='%23ef3340'/%3E%3Ccircle cx='252' cy='108' r='14' fill='%23ef3340'/%3E%3Cpath d='M165 139 Q210 166 255 139' fill='none' stroke='%23313b4b' stroke-width='8' stroke-linecap='round'/%3E%3Crect x='138' y='180' width='144' height='92' rx='30' fill='%23213045' stroke='%2353637b' stroke-width='10'/%3E%3Ccircle cx='210' cy='226' r='31' fill='%23ef3340'/%3E%3Ctext x='210' y='237' text-anchor='middle' font-family='Arial' font-weight='700' font-size='34' fill='white'%3ER%3C/text%3E%3Cpath d='M128 206 L90 226' stroke='%2353637b' stroke-width='14' stroke-linecap='round'/%3E%3Cpath d='M292 206 L330 226' stroke='%2353637b' stroke-width='14' stroke-linecap='round'/%3E%3C/svg%3E"
+          >
         `;
       }
     }
