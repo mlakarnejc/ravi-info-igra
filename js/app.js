@@ -47,6 +47,32 @@ function showScreen(id) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+
+function setRaviMessage(elementId, message, state = 'instruction') {
+  const textEl = document.getElementById(elementId);
+  if (!textEl) return;
+
+  textEl.textContent = message;
+  const panel = textEl.closest('.ravi-message-panel');
+  if (!panel) return;
+
+  panel.classList.remove('message-instruction','message-hint','message-error','message-success','message-flash');
+  panel.classList.add(`message-${state}`);
+  void panel.offsetWidth;
+  panel.classList.add('message-flash');
+
+  const label = panel.querySelector('.ravi-message-head span');
+  if (label) {
+    const labels = {
+      instruction:'NAVODILO',
+      hint:'NAMIG',
+      error:'NAPAKA',
+      success:'USPEH'
+    };
+    label.textContent = labels[state] || 'NAVODILO';
+  }
+}
+
 function updateProgress() {
   const percent = Math.round((completed / modules.length) * 100);
   document.getElementById('progressText').textContent = `${completed} / ${modules.length} modulov`;
@@ -2248,11 +2274,10 @@ function placeMLItem(itemId, targetClass) {
   mlBusy = true;
   const analysis = document.getElementById('mlSampleAnalysis');
   const analysisText = document.getElementById('mlSampleAnalysisText');
-  const focus = document.getElementById('mlFocusMessage');
 
   analysis.classList.remove('hidden','correct','wrong');
   analysisText.textContent = `${item.icon}  ${item.label.toUpperCase()} // ANALIZA`;
-  focus.querySelector('strong').textContent = 'RAVI analizira izbrani primer ...';
+  setRaviMessage('raviTask8Text', '»Analiziram izbrani primer ...«', 'instruction');
 
   setTimeout(() => {
     const correct = item.type === targetClass;
@@ -2261,10 +2286,13 @@ function placeMLItem(itemId, targetClass) {
       analysis.classList.add('wrong');
       analysisText.textContent = 'NAPAČNA SKUPINA ✕';
       card.classList.add('wrong');
-      focus.querySelector('strong').textContent =
+      setRaviMessage(
+        'raviTask8Text',
         item.type === 'cat'
-          ? 'To je mačka. Premakni jo v skupino MAČKA.'
-          : 'To je pes. Premakni ga v skupino PES.';
+          ? '»To je mačka. Premakni jo v skupino MAČKA.«'
+          : '»To je pes. Premakni ga v skupino PES.«',
+        'error'
+      );
 
       setTimeout(() => {
         analysis.classList.add('hidden');
@@ -2290,10 +2318,13 @@ function placeMLItem(itemId, targetClass) {
     document.getElementById('mlCatCount').textContent = `${cats} primerov`;
     document.getElementById('mlDogCount').textContent = `${dogs} primerov`;
 
-    focus.querySelector('strong').textContent =
+    setRaviMessage(
+      'raviTask8Text',
       total < 8
-        ? `Pravilno. Primer ${total}/8 je dodan v trening podatke.`
-        : 'Vseh 8 primerov je pripravljenih. Začenjam trening modela.';
+        ? `»Pravilno. Primer ${total}/8 je dodan v trening podatke.«`
+        : '»Vseh 8 primerov je pripravljenih. Začenjam trening modela.«',
+      'success'
+    );
 
     setTimeout(() => {
       analysis.classList.add('hidden');
@@ -2329,7 +2360,7 @@ function initMLDropzones() {
 function startMLTraining() {
   updateMLStage(1);
   setMLPhase('mlTrainingAnimation');
-  document.querySelector('#mlFocusMessage strong').textContent = 'Trening je avtomatski. Opazuj, kako model išče vzorce v podatkih.';
+  setRaviMessage('raviTask8Text', '»Trening je avtomatski. Opazuj, kako model išče vzorce v podatkih.«', 'instruction');
   document.getElementById('mlModelStatus').textContent = 'TRAINING';
   document.getElementById('mlAccuracyStatus').textContent = '--';
 
@@ -2361,7 +2392,7 @@ function startMLTraining() {
     document.getElementById('raviTask8Text').textContent = '»Model je pripravljen. Zdaj bom poskusil sam.«';
     updateMLStage(2);
     setMLPhase('mlTestPhase');
-    document.querySelector('#mlFocusMessage strong').textContent = 'Nov primer: črna mačka. Poglej, kaj bo napovedal RAVI.';
+    setRaviMessage('raviTask8Text', '»Nov primer: črna mačka. Poglej, kaj bom napovedal.«', 'instruction');
     mlBusy = false;
     setTimeout(runMLBadPrediction, 420);
   }, 3900);
@@ -2381,19 +2412,17 @@ function runMLBadPrediction() {
     document.getElementById('mlPredictionText').textContent = 'PES';
     document.getElementById('mlPredictionConfidence').textContent = '92 %';
     document.getElementById('mlPredictionSub').textContent = 'Temen velik primer je model zamenjal za psa.';
-    document.getElementById('raviTask8Text').textContent = '»92 % prepričan ... in napačen. Očitno moji podatki niso bili dovolj raznoliki.«';
+    setRaviMessage('raviTask8Text', '»92 % prepričan ... in napačen. Očitno moji podatki niso bili dovolj raznoliki.«', 'error');
 
     const continueBtn = document.getElementById('mlContinueAfterError');
     continueBtn.classList.remove('hidden');
-    document.querySelector('#mlFocusMessage strong').textContent =
-      'RAVI se je zmotil. Preberi rezultat, nato klikni NADALJUJ.';
+    setRaviMessage('raviTask8Text', '»Zmotil sem se. Preberi rezultat, nato klikni NADALJUJ.«', 'error');
 
     continueBtn.onclick = () => {
       continueBtn.classList.add('hidden');
       updateMLStage(2);
       setMLPhase('mlRetrainPhase');
-      document.querySelector('#mlFocusMessage strong').textContent =
-        'Izberi EN paket podatkov, ki bi model najbolje izboljšal.';
+      setRaviMessage('raviTask8Text', '»Izberi EN paket podatkov, ki bi moj model najbolje izboljšal.«', 'instruction');
     };
   }, 1450);
 }
@@ -2425,7 +2454,7 @@ function chooseMLPackage(packageId) {
   document.querySelector('.ml-data-package[data-package="a"]').classList.add('selected');
   feedback.className = 'ml-package-feedback correct';
   feedback.innerHTML = '<strong>DOBRA IZBIRA ✓</strong><span>Raznoliki primeri pomagajo modelu bolje ločiti pomembne značilnosti.</span>';
-  document.getElementById('raviTask8Text').textContent = '»Dodajam bolj raznolike podatke. Ponovno treniram model.«';
+  setRaviMessage('raviTask8Text', '»Dodajam bolj raznolike podatke. Ponovno treniram model.«', 'success');
 
   setTimeout(startMLRetrainingScan, 850);
 }
@@ -2433,8 +2462,7 @@ function chooseMLPackage(packageId) {
 function startMLRetrainingScan() {
   updateMLStage(3);
   setMLPhase('mlRetrainScanPhase');
-  document.querySelector('#mlFocusMessage strong').textContent =
-    'RAVI pregleduje nove, bolj raznolike primere.';
+  setRaviMessage('raviTask8Text', '»Pregledujem nove, bolj raznolike primere.«', 'instruction');
 
   const samples = [
     { icon:'🐈‍⬛', label:'ČRNA MAČKA' },
@@ -2474,7 +2502,7 @@ function startMLRetrainingScan() {
 function startMLRetraining() {
   updateMLStage(3);
   setMLPhase('mlTrainingAnimation');
-  document.querySelector('#mlFocusMessage strong').textContent = 'Dobri podatki izbrani. RAVI ponovno trenira isti model.';
+  setRaviMessage('raviTask8Text', '»Dobri podatki izbrani. Ponovno treniram isti model.«', 'success');
 
   document.getElementById('mlTrainingPercent').textContent = '0 %';
   document.getElementById('mlTrainingBar').style.width = '0%';
@@ -2501,7 +2529,7 @@ function startMLRetraining() {
     document.getElementById('mlAccuracyStatus').textContent = '97 %';
     document.getElementById('raviTask8Text').textContent = '»Model posodobljen. Ponoviva isti primer.«';
     setMLPhase('mlFinalPhase');
-    document.querySelector('#mlFocusMessage strong').textContent = 'Isti primer še enkrat. RAVI ga ponovno analizira z izboljšanim modelom.';
+    setRaviMessage('raviTask8Text', '»Isti primer še enkrat. Ponovno ga analiziram z izboljšanim modelom.«', 'instruction');
     runMLFinalRetest();
     mlBusy = false;
   }, 3200);
@@ -2529,8 +2557,7 @@ function runMLFinalRetest() {
     title.textContent = 'MAČKA ✓';
     text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
     confidence.textContent = '97 %';
-    document.querySelector('#mlFocusMessage strong').textContent =
-      'Uspeh: isti primer je po boljšem treningu pravilno prepoznan kot MAČKA.';
+    setRaviMessage('raviTask8Text', '»Uspeh. Po boljšem treningu sem isti primer pravilno prepoznal kot MAČKO.«', 'success');
   }, 1300);
 }
 
@@ -2587,8 +2614,7 @@ function resetTask8() {
 
   document.getElementById('raviTask8Text').textContent =
     '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«';
-  document.querySelector('#mlFocusMessage strong').textContent =
-    'Razvrsti prvi primer. Po vsakem izboru ga bo RAVI na hitro analiziral.';
+  setRaviMessage('raviTask8Text', '»Razvrsti prvi primer. Po vsakem izboru ga bom na hitro analiziral.«', 'instruction');
 
   renderMLTrainingCards();
 }
@@ -2637,6 +2663,20 @@ document.getElementById('resetTask8').addEventListener('click', resetTask8);
 document.getElementById('backHub8').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
+
+
+document.querySelectorAll('.ravi-message-panel').forEach((panel) => {
+  panel.classList.add('message-instruction');
+  const text = panel.querySelector('p');
+  if (!text) return;
+
+  const observer = new MutationObserver(() => {
+    panel.classList.remove('message-flash');
+    void panel.offsetWidth;
+    panel.classList.add('message-flash');
+  });
+  observer.observe(text, { childList:true, characterData:true, subtree:true });
+});
 
 // Critical shell first: the hub must render even if one mini-game initialization fails.
 renderModules();
