@@ -130,6 +130,7 @@ function openModule(index) {
   }
 
   if (index === 2) {
+    if (modules[2].status !== 'complete') resetHtmlRepairGame();
     showScreen('screenTask3');
     return;
   }
@@ -228,7 +229,8 @@ function checkTask1() {
     document.getElementById('hubMessage').textContent = 'Prvi sistem je aktiven. Naslednji modul je odklenjen.';
 
     updateProgress();
-    renderModules();
+    initHtmlRepairGame();
+renderModules();
     setTimeout(() => showScreen('screenHub'), 1600);
     return;
   }
@@ -893,6 +895,172 @@ function resetTask3() {
 }
 
 
+
+let htmlDraggedTag = null;
+let htmlSelectedTag = null;
+let htmlFixedCount = 0;
+let htmlRepairAttempts = 0;
+
+function resetHtmlRepairGame() {
+  htmlDraggedTag = null;
+  htmlSelectedTag = null;
+  htmlFixedCount = 0;
+  htmlRepairAttempts = 0;
+
+  document.querySelectorAll('.repair-zone').forEach((zone) => {
+    zone.classList.remove('fixed', 'wrong', 'drag-over');
+  });
+
+  document.querySelectorAll('.html-tag').forEach((tag) => {
+    tag.classList.remove('used', 'selected', 'dragging');
+    tag.disabled = false;
+  });
+
+  const count = document.getElementById('htmlRepairCount');
+  if (count) count.textContent = '0 / 4';
+
+  const feedback3 = document.getElementById('task3Feedback');
+  if (feedback3) {
+    feedback3.textContent = 'Povleci HTML oznako na pravi del spletne strani.';
+    feedback3.className = 'feedback';
+  }
+
+  const ravi3 = document.getElementById('raviTask3Text');
+  if (ravi3) {
+    ravi3.textContent = '»Moja spletna stran je razpadla na štiri dele. Povleci pravo HTML oznako na pravi element in jo sestavi nazaj.«';
+  }
+}
+
+function selectHtmlTag(tagButton) {
+  if (tagButton.classList.contains('used') || modules[2].status === 'complete') return;
+
+  document.querySelectorAll('.html-tag').forEach((tag) => tag.classList.remove('selected'));
+  htmlSelectedTag = tagButton.dataset.tag;
+  tagButton.classList.add('selected');
+
+  const feedback3 = document.getElementById('task3Feedback');
+  feedback3.textContent = `Izbrana oznaka: <${htmlSelectedTag}>. Zdaj klikni pravi del strani ali jo povleci nanj.`;
+  feedback3.className = 'feedback';
+}
+
+function tryHtmlRepair(tag, zone) {
+  if (!tag || !zone || zone.classList.contains('fixed') || modules[2].status === 'complete') return;
+
+  const feedback3 = document.getElementById('task3Feedback');
+  const ravi3 = document.getElementById('raviTask3Text');
+  const correct = zone.dataset.answer === tag;
+
+  if (correct) {
+    zone.classList.remove('wrong', 'drag-over');
+    zone.classList.add('fixed');
+    htmlFixedCount += 1;
+
+    const tagButton = document.querySelector(`.html-tag[data-tag="${tag}"]`);
+    if (tagButton) {
+      tagButton.classList.remove('selected', 'dragging');
+      tagButton.classList.add('used');
+      tagButton.disabled = true;
+    }
+
+    htmlSelectedTag = null;
+    htmlDraggedTag = null;
+
+    document.getElementById('htmlRepairCount').textContent = `${htmlFixedCount} / 4`;
+    feedback3.textContent = `Pravilno: <${tag}>. Del strani je popravljen.`;
+    feedback3.className = 'feedback success';
+
+    if (htmlFixedCount >= 4) {
+      finishHtmlRepairGame();
+    }
+    return;
+  }
+
+  htmlRepairAttempts += 1;
+  zone.classList.remove('wrong');
+  void zone.offsetWidth;
+  zone.classList.add('wrong');
+  feedback3.className = 'feedback error';
+
+  if (htmlRepairAttempts === 1) {
+    feedback3.textContent = `<${tag}> ne sodi sem. Poskusi drug element.`;
+    ravi3.textContent = '»HTML je precej dobeseden. Če oznaka ne ustreza elementu, stran hitro postane čudna.«';
+  } else if (htmlRepairAttempts === 2) {
+    feedback3.textContent = 'Namig: <h1> je naslov, <img> slika, <p> odstavek, <button> pa gumb.';
+    ravi3.textContent = '»Naslov, slika, odstavek, gumb. Štiri zelo različne naloge, štiri različne oznake.«';
+  } else {
+    const answer = zone.dataset.answer;
+    feedback3.textContent = `Močan namig: ta del potrebuje <${answer}>.`;
+    ravi3.textContent = '»Zdaj ti že skoraj rišem zemljevid. Uporabi oznako, ki ti jo namig pokaže.«';
+  }
+
+  setTimeout(() => zone.classList.remove('wrong'), 350);
+}
+
+function finishHtmlRepairGame() {
+  modules[2].status = 'complete';
+  modules[3].status = 'ready';
+  completed = Math.max(completed, 3);
+
+  const feedback3 = document.getElementById('task3Feedback');
+  const ravi3 = document.getElementById('raviTask3Text');
+
+  feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Spletna stran je pravilno sestavljena.';
+  feedback3.className = 'feedback success';
+  ravi3.textContent = '»Odlično. Naslov je naslov, slika je slika in gumb je spet dejansko gumb. Splet diha.«';
+  document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
+
+  updateProgress();
+  renderModules();
+  setTimeout(() => showScreen('screenHub'), 1900);
+}
+
+function initHtmlRepairGame() {
+  document.querySelectorAll('.html-tag').forEach((tagButton) => {
+    tagButton.addEventListener('dragstart', (event) => {
+      if (tagButton.classList.contains('used')) {
+        event.preventDefault();
+        return;
+      }
+      htmlDraggedTag = tagButton.dataset.tag;
+      tagButton.classList.add('dragging');
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', htmlDraggedTag);
+      }
+    });
+
+    tagButton.addEventListener('dragend', () => {
+      tagButton.classList.remove('dragging');
+      htmlDraggedTag = null;
+      document.querySelectorAll('.repair-zone').forEach((zone) => zone.classList.remove('drag-over'));
+    });
+
+    tagButton.addEventListener('click', () => selectHtmlTag(tagButton));
+  });
+
+  document.querySelectorAll('.repair-zone').forEach((zone) => {
+    zone.addEventListener('dragover', (event) => {
+      if (zone.classList.contains('fixed')) return;
+      event.preventDefault();
+      zone.classList.add('drag-over');
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    });
+
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+
+    zone.addEventListener('drop', (event) => {
+      event.preventDefault();
+      zone.classList.remove('drag-over');
+      const tag = htmlDraggedTag || (event.dataTransfer ? event.dataTransfer.getData('text/plain') : null);
+      tryHtmlRepair(tag, zone);
+    });
+
+    zone.addEventListener('click', () => {
+      if (htmlSelectedTag) tryHtmlRepair(htmlSelectedTag, zone);
+    });
+  });
+}
+
 const dataRecords = [
   { id: 'ana', ime: 'Ana', program: 'Računalništvo', letnik: '1.' },
   { id: 'miha', ime: 'Miha', program: 'Elektrotehnika', letnik: '2.' },
@@ -1367,8 +1535,7 @@ document.getElementById('backHub2').addEventListener('click', () => {
   showScreen('screenHub');
 });
 document.addEventListener('keydown', handleProgramKey);
-document.getElementById('checkTask3').addEventListener('click', checkTask3);
-document.getElementById('resetTask3').addEventListener('click', resetTask3);
+document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', resetTask4);
