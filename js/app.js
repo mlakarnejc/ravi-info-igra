@@ -923,7 +923,12 @@ function resetHtmlRepairGame() {
   const toolbox = document.getElementById('htmlToolbox');
   const finishBtn = document.getElementById('finishTask3');
   if (live) live.classList.remove('hidden');
-  if (finalPreview) finalPreview.classList.add('hidden');
+  if (finalPreview) {
+    finalPreview.classList.add('hidden');
+    finalPreview.classList.remove('magic-reveal');
+  }
+  const shell = document.querySelector('#screenTask3 .html-preview-shell');
+  if (shell) shell.classList.remove('magic-build');
   if (toolbox) toolbox.classList.remove('hidden');
   if (finishBtn) finishBtn.classList.add('hidden');
 
@@ -1016,11 +1021,26 @@ function finishHtmlRepairGame() {
   const finalPreview = document.getElementById('htmlFinalPreview');
   const toolbox = document.getElementById('htmlToolbox');
   const finishBtn = document.getElementById('finishTask3');
+  const shell = document.querySelector('#screenTask3 .html-preview-shell');
 
-  if (live) live.classList.add('hidden');
   if (toolbox) toolbox.classList.add('hidden');
-  if (finalPreview) finalPreview.classList.remove('hidden');
-  if (finishBtn) finishBtn.classList.remove('hidden');
+  if (finishBtn) finishBtn.classList.add('hidden');
+  if (shell) shell.classList.add('magic-build');
+
+  setTimeout(() => {
+    if (live) live.classList.add('hidden');
+    if (finalPreview) {
+      finalPreview.classList.remove('hidden');
+      finalPreview.classList.remove('magic-reveal');
+      void finalPreview.offsetWidth;
+      finalPreview.classList.add('magic-reveal');
+    }
+  }, 1250);
+
+  setTimeout(() => {
+    if (shell) shell.classList.remove('magic-build');
+    if (finishBtn) finishBtn.classList.remove('hidden');
+  }, 2400);
 
   modules[2].status = 'complete';
   modules[3].status = 'ready';
