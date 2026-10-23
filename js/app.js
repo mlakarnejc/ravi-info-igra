@@ -1826,24 +1826,22 @@ const runnerState = {
 const runnerGroundY = 70;
 const runnerWorldWidth = 2360;
 const runnerPlatforms = [
-  { x:700, w:170, y:145 },
-  { x:1180, w:170, y:145 },
-  { x:1710, w:190, y:150 }
-];
-
-const runnerPits = [
-  { x:1900, w:220 }
+  { x:700, w:170, y:161 },
+  { x:1180, w:170, y:161 },
+  { x:1690, w:180, y:161 },
+  { x:1855, w:150, y:241 }
 ];
 
 const runnerHazards = [
-  { x:535, w:64 },
-  { x:1030, w:76 }
+  { x:535, w:64, h:44 },
+  { x:1030, w:76, h:58 },
+  { x:2050, w:90, h:190 }
 ];
 
 const runnerCodes = [
   { x:365, y:150, checkpoint:300 },
-  { x:800, y:205, checkpoint:700 },
-  { x:1245, y:205, checkpoint:1180 }
+  { x:860, y:255, checkpoint:700 },
+  { x:1345, y:255, checkpoint:1180 }
 ];
 
 function updateRunnerHud() {
@@ -1894,7 +1892,7 @@ function resetRunnerGame() {
   }
 
   const ravi7 = document.getElementById('raviTask7Text');
-  if (ravi7) ravi7.textContent = '»Končno nekaj, kjer lahko tudi padeš v luknjo. Brez skrbi — tukaj imam shranjevanje.«';
+  if (ravi7) ravi7.textContent = '»Tokrat ne bo dovolj samo teči naravnost. Nekatere ovire zahtevajo malo višine.«';
 
   updateRunnerHud();
   requestAnimationFrame(renderRunnerPosition);
@@ -1998,24 +1996,12 @@ function runnerLoop(now) {
   runnerState.onGround = false;
 
   let landingY = null;
-
-  const overPit = runnerPits.some((pit) =>
-    runnerState.x + 16 > pit.x &&
-    runnerState.x - 16 < pit.x + pit.w
-  );
-
   const crossedGroundFromAbove =
     previousY >= runnerGroundY &&
     runnerState.y <= runnerGroundY &&
     runnerState.vy <= 0;
 
-  const nearGroundAfterPit =
-    !overPit &&
-    runnerState.vy <= 0 &&
-    runnerState.y <= runnerGroundY &&
-    runnerState.y >= runnerGroundY - 24;
-
-  if (!overPit && (crossedGroundFromAbove || nearGroundAfterPit)) {
+  if (crossedGroundFromAbove) {
     landingY = runnerGroundY;
   }
 
@@ -2045,8 +2031,22 @@ function runnerLoop(now) {
   }
 
   for (const hazard of runnerHazards) {
-    const overlapX = runnerState.x + 18 > hazard.x && runnerState.x - 18 < hazard.x + hazard.w;
-    if (overlapX && runnerState.y < 125) {
+    const playerLeft = runnerState.x - 18;
+    const playerRight = runnerState.x + 18;
+    const playerBottom = runnerState.y;
+    const playerTop = runnerState.y + 68;
+    const hazardLeft = hazard.x;
+    const hazardRight = hazard.x + hazard.w;
+    const hazardBottom = runnerGroundY;
+    const hazardTop = runnerGroundY + hazard.h;
+
+    const overlaps =
+      playerRight > hazardLeft &&
+      playerLeft < hazardRight &&
+      playerTop > hazardBottom &&
+      playerBottom < hazardTop;
+
+    if (overlaps) {
       runnerHit();
       break;
     }
@@ -2073,13 +2073,13 @@ function runnerLoop(now) {
     if (touching) collectRunnerCode(index);
   });
 
-  if (runnerState.x > 2205) {
+  if (runnerState.x > 2245) {
     if (runnerState.collected.size === 3) {
       finishRunnerGame();
       return;
     }
 
-    runnerState.x = 2160;
+    runnerState.x = 2200;
     runnerState.vx = -90;
     const feedback7 = document.getElementById('task7Feedback');
     feedback7.textContent = `Terminal je zaklenjen. Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
