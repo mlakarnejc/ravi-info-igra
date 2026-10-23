@@ -1685,7 +1685,7 @@ function renderSecurityMessage() {
 
   const card = document.getElementById('securityMessageCard');
   card.classList.remove('swipe-left','swipe-right','wrong-answer');
-  document.getElementById('securityReason').classList.add('hidden');
+  document.getElementById('securityReason').className = 'security-reason hidden';
 }
 
 function resetTask6() {
@@ -1722,8 +1722,8 @@ function classifySecurityMessage(choice) {
   if (correct) {
     feedback6.textContent = '';
     feedback6.className = 'feedback hidden';
-    reason.innerHTML = `<strong>ZAKAJ?</strong><span>${msg.reason}</span>`;
-    reason.classList.remove('hidden');
+    reason.innerHTML = `<strong>PRAVILNO ✓</strong><span>${msg.reason}</span>`;
+    reason.className = 'security-reason result-correct';
 
     setTimeout(() => {
       securityIndex += 1;
@@ -1744,15 +1744,9 @@ function classifySecurityMessage(choice) {
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
   feedback6.textContent = '';
   feedback6.className = 'feedback hidden';
-  reason.textContent = msg.reason;
-  reason.classList.remove('hidden');
+  reason.innerHTML = `<strong>NAPAČNO ✕</strong><span>${msg.reason}</span>`;
+  reason.className = 'security-reason result-wrong';
   card.classList.add('wrong-answer');
-
-  if (securityMistakes === 1) {
-    ravi6.textContent = '»Ni problema. Pri varnosti je bolje dvakrat pogledati kot enkrat prehitro klikniti.«';
-  } else if (securityMistakes >= 3) {
-    ravi6.textContent = '»Poglej predvsem domeno, pritisk, zahteve po geslu in podatkih kartice.«';
-  }
 
   setTimeout(() => {
     card.classList.remove('swipe-left','swipe-right','wrong-answer');
