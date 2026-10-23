@@ -794,6 +794,9 @@
                   <p id="mlPredictionSub">Model sklepa na podlagi trening podatkov.</p>
                 </div>
               </div>
+              <div class="ml-test-actions">
+                <button id="mlContinueAfterError" class="primary-btn hidden" type="button">NADALJUJ</button>
+              </div>
             </div>
 
             <div id="mlRetrainPhase" class="ml-phase">
@@ -826,6 +829,24 @@
               </div>
 
               <div id="mlPackageFeedback" class="ml-package-feedback hidden"></div>
+            </div>
+
+            <div id="mlRetrainScanPhase" class="ml-phase">
+              <div class="ml-instruction">
+                <strong>4. NOVI PODATKI</strong>
+                <span>RAVI zdaj pregleda bolj raznolike primere.</span>
+              </div>
+
+              <div class="ml-retrain-scan">
+                <div class="ml-scan-grid"></div>
+                <div class="ml-scan-beam"></div>
+                <div id="mlRetrainAnimal" class="ml-retrain-animal">🐈‍⬛</div>
+                <div class="ml-retrain-readout">
+                  <span>ADDING SAMPLE</span>
+                  <strong id="mlRetrainLabel">ČRNA MAČKA</strong>
+                  <p id="mlRetrainCounter">1 / 6</p>
+                </div>
+              </div>
             </div>
 
             <div id="mlFinalPhase" class="ml-phase">
