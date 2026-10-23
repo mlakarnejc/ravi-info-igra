@@ -104,6 +104,12 @@ function openModule(index) {
     return;
   }
 
+  if (index === 4) {
+    renderNetworkOrder();
+    showScreen('screenTask5');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -490,6 +496,119 @@ function resetTask4() {
   feedback4.className = 'feedback';
 }
 
+
+const networkDevices = [
+  { id: 'pc', name: 'RAČUNALNIK', icon: '💻' },
+  { id: 'router', name: 'USMERJEVALNIK', icon: '📡' },
+  { id: 'internet', name: 'INTERNET', icon: '🌐' },
+  { id: 'ravi', name: 'RAVI', icon: '🤖' }
+];
+const correctNetworkOrder = ['pc', 'router', 'internet', 'ravi'];
+let currentNetworkOrder = ['ravi', 'pc', 'internet', 'router'];
+let task5Attempts = 0;
+
+function renderNetworkOrder() {
+  const container = document.getElementById('networkOrder');
+  container.innerHTML = '';
+
+  currentNetworkOrder.forEach((deviceId, index) => {
+    const device = networkDevices.find((item) => item.id === deviceId);
+    const node = document.createElement('div');
+    node.className = 'network-node';
+
+    node.innerHTML = `
+      <span class="network-icon">${device.icon}</span>
+      <span class="network-name">${device.name}</span>
+      <span class="network-controls">
+        <button class="move-btn network-left" type="button" aria-label="Premakni napravo levo" ${index === 0 ? 'disabled' : ''}>←</button>
+        <button class="move-btn network-right" type="button" aria-label="Premakni napravo desno" ${index === currentNetworkOrder.length - 1 ? 'disabled' : ''}>→</button>
+      </span>
+    `;
+
+    node.querySelector('.network-left').addEventListener('click', () => moveNetworkDevice(index, -1));
+    node.querySelector('.network-right').addEventListener('click', () => moveNetworkDevice(index, 1));
+    container.appendChild(node);
+  });
+}
+
+function moveNetworkDevice(index, direction) {
+  if (modules[4].status === 'complete') return;
+
+  const target = index + direction;
+  if (target < 0 || target >= currentNetworkOrder.length) return;
+
+  const temp = currentNetworkOrder[index];
+  currentNetworkOrder[index] = currentNetworkOrder[target];
+  currentNetworkOrder[target] = temp;
+
+  const feedback5 = document.getElementById('task5Feedback');
+  feedback5.textContent = '';
+  feedback5.className = 'feedback';
+  renderNetworkOrder();
+}
+
+function resetTask5() {
+  if (modules[4].status === 'complete') return;
+
+  const variants = [
+    ['ravi', 'pc', 'internet', 'router'],
+    ['internet', 'ravi', 'router', 'pc'],
+    ['router', 'ravi', 'pc', 'internet']
+  ];
+  const currentIndex = variants.findIndex((order) => order.join('|') === currentNetworkOrder.join('|'));
+  currentNetworkOrder = [...variants[(currentIndex + 1) % variants.length]];
+  renderNetworkOrder();
+
+  const feedback5 = document.getElementById('task5Feedback');
+  feedback5.textContent = 'Naprave so ponovno premešane.';
+  feedback5.className = 'feedback';
+}
+
+function checkTask5() {
+  if (modules[4].status === 'complete') return;
+
+  task5Attempts += 1;
+  const feedback5 = document.getElementById('task5Feedback');
+  const ravi5 = document.getElementById('raviTask5Text');
+  const isCorrect = currentNetworkOrder.every(
+    (deviceId, index) => deviceId === correctNetworkOrder[index]
+  );
+
+  if (isCorrect) {
+    document.querySelectorAll('#networkOrder .network-node').forEach((node) => node.classList.add('correct'));
+    modules[4].status = 'complete';
+    modules[5].status = 'ready';
+    completed = Math.max(completed, 5);
+
+    feedback5.textContent = 'MODUL 5 AKTIVIRAN ✓ Povezava je vzpostavljena.';
+    feedback5.className = 'feedback success';
+    ravi5.textContent = '»Povezava vzpostavljena. Spet sem na spletu. Digitalna samota preklicana.«';
+    document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnost in zaščita sta odklenjeni.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  feedback5.className = 'feedback error';
+
+  if (task5Attempts === 1) {
+    feedback5.textContent = 'Povezava še ni pravilna. Pomisli, skozi katero napravo gre računalnik na internet.';
+    ravi5.textContent = '»Ta povezava vodi nekam, ampak žal ne tja, kamor bi morala.«';
+  } else if (task5Attempts === 2) {
+    feedback5.textContent = 'Namig: računalnik se najprej poveže z usmerjevalnikom.';
+    ravi5.textContent = '»Začni z računalnikom in usmerjevalnikom. Od tam naprej bo lažje.«';
+  } else {
+    feedback5.textContent = 'Močan namig: RAČUNALNIK → USMERJEVALNIK → INTERNET → RAVI.';
+    ravi5.textContent = '»V redu, kabelska skrivnost je razkrita. Samo še pravilno razporedi.«';
+
+    document.querySelectorAll('#networkOrder .network-node').forEach((node, index) => {
+      if (currentNetworkOrder[index] === correctNetworkOrder[index]) node.classList.add('hint');
+    });
+  }
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
@@ -502,10 +621,14 @@ document.getElementById('backHub3').addEventListener('click', () => showScreen('
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', resetTask4);
 document.getElementById('backHub4').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('checkTask5').addEventListener('click', checkTask5);
+document.getElementById('resetTask5').addEventListener('click', resetTask5);
+document.getElementById('backHub5').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
 renderComponents();
 renderProgramOrder();
 renderDataRows();
+renderNetworkOrder();
 updateProgress();
