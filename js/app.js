@@ -258,8 +258,13 @@ const catchItems = [
   { label: 'OPEKAČ', icon: '🍞', good: false },
   { label: 'COPAT', icon: '👟', good: false },
   { label: 'LONČNICA', icon: '🪴', good: false },
-  { label: 'BATERIJA', icon: '🔋', good: false },
-  { label: 'MIKROVALOVKA', icon: '🍲', good: false }
+  { label: 'MIKROVALOVKA', icon: '🍲', good: false },
+  { label: 'KAVA', icon: '☕', good: false },
+  { label: 'KNJIGA', icon: '📘', good: false },
+  { label: 'ŽOGA', icon: '⚽', good: false },
+  { label: 'SLUŠALKE', icon: '🎧', good: false },
+  { label: 'TIPKOVNICA', icon: '⌨️', good: false },
+  { label: 'MIŠKA', icon: '🖱️', good: false }
 ];
 
 let catchRunning = false;
@@ -326,9 +331,9 @@ function spawnCatchItem() {
   if (!game) return;
 
   const elapsed = catchStartTime ? (performance.now() - catchStartTime) / 1000 : 0;
-  let goodChance = 0.42;
-  if (elapsed >= 18) goodChance = 0.62;
-  if (elapsed >= 26) goodChance = 0.82;
+  let goodChance = 0.30;
+  if (elapsed >= 18) goodChance = 0.45;
+  if (elapsed >= 26) goodChance = 0.68;
   if (elapsed >= 34) goodChance = 1;
 
   const goodItems = catchItems.filter((item) => item.good);
