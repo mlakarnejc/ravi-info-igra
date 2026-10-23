@@ -1999,7 +1999,7 @@ function runnerLoop(now) {
     firewallEl?.classList.add('open');
   }
 
-  if (runnerState.firewallOpen && runnerState.x < 2000) {
+  if (runnerState.firewallOpen && runnerState.x < 2000 && runnerState.collected.size < 3) {
     runnerState.firewallOpen = false;
     firewallEl?.classList.remove('open');
   }
@@ -2113,6 +2113,10 @@ function startRunnerExitSequence() {
 
   const player = document.getElementById('runnerPlayer');
   const goal = document.getElementById('runnerGoal');
+  const firewallEl = document.querySelector('.runner-final-wall');
+
+  runnerState.firewallOpen = true;
+  firewallEl?.classList.add('open');
   const feedback7 = document.getElementById('task7Feedback');
 
   if (feedback7) {
