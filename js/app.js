@@ -271,6 +271,8 @@ let catchKeys = { left: false, right: false };
 let catchObjects = [];
 let catchScoreValue = 0;
 let catchMistakeValue = 0;
+let catchStartTime = 0;
+const catchTargetScore = 10;
 
 function resetCatchGame() {
   stopCatchGame();
@@ -290,11 +292,11 @@ function resetCatchGame() {
   game.classList.remove('win', 'hit');
   player.style.left = '50%';
   overlay.classList.remove('hidden');
-  document.getElementById('catchScore').textContent = '0 / 3';
+  document.getElementById('catchScore').textContent = `0 / ${catchTargetScore}`;
   document.getElementById('catchMistakes').textContent = '0';
 
   const f = document.getElementById('taskFeedback');
-  f.textContent = 'Ujemi CPU, RAM in SSD. Napačen predmet te ne izloči – samo RAVI malo protestira.';
+  f.textContent = 'Zberi 10 točk. CPU, RAM in SSD prinesejo +1, napačen predmet pa −1. Točke ne morejo pasti pod 0.';
   f.className = 'feedback';
 }
 
@@ -306,7 +308,8 @@ function startCatchGame() {
   document.getElementById('catchGame').focus();
 
   catchRunning = true;
-  catchLastTime = performance.now();
+  catchStartTime = performance.now();
+  catchLastTime = catchStartTime;
   catchAnimationFrame = requestAnimationFrame(catchGameLoop);
 }
 
@@ -322,7 +325,16 @@ function spawnCatchItem() {
   const game = document.getElementById('catchGame');
   if (!game) return;
 
-  const item = catchItems[Math.floor(Math.random() * catchItems.length)];
+  const elapsed = catchStartTime ? (performance.now() - catchStartTime) / 1000 : 0;
+  let goodChance = 0.42;
+  if (elapsed >= 18) goodChance = 0.62;
+  if (elapsed >= 26) goodChance = 0.82;
+  if (elapsed >= 34) goodChance = 1;
+
+  const goodItems = catchItems.filter((item) => item.good);
+  const badItems = catchItems.filter((item) => !item.good);
+  const source = Math.random() < goodChance ? goodItems : badItems;
+  const item = source[Math.floor(Math.random() * source.length)];
   const el = document.createElement('div');
   el.className = `falling-item ${item.good ? 'good' : 'bad'}`;
   el.innerHTML = `<span class="fall-icon">${item.icon}</span><span class="fall-label">${item.label}</span>`;
@@ -386,21 +398,23 @@ function catchGameLoop(now) {
       if (obj.good) {
         obj.el.classList.add('caught-good');
         catchScoreValue += 1;
-        document.getElementById('catchScore').textContent = `${catchScoreValue} / 3`;
-        document.getElementById('taskFeedback').textContent = `Ujeto: ${obj.label}. Še ${Math.max(0, 3 - catchScoreValue)}.`;
+        document.getElementById('catchScore').textContent = `${catchScoreValue} / ${catchTargetScore}`;
+        document.getElementById('taskFeedback').textContent = `+1: ${obj.label}. Do cilja še ${Math.max(0, catchTargetScore - catchScoreValue)}.`;
         document.getElementById('taskFeedback').className = 'feedback success';
 
-        if (catchScoreValue >= 3) {
+        if (catchScoreValue >= catchTargetScore) {
           finishCatchGame();
         }
       } else {
         obj.el.classList.add('caught-bad');
         catchMistakeValue += 1;
+        catchScoreValue = Math.max(0, catchScoreValue - 1);
         document.getElementById('catchMistakes').textContent = String(catchMistakeValue);
+        document.getElementById('catchScore').textContent = `${catchScoreValue} / ${catchTargetScore}`;
         game.classList.remove('hit');
         void game.offsetWidth;
         game.classList.add('hit');
-        document.getElementById('taskFeedback').textContent = `${obj.label}? RAVI tega res ne potrebuje. Nadaljuj!`;
+        document.getElementById('taskFeedback').textContent = `−1: ${obj.label} ni računalniška komponenta. Nadaljuj!`;
         document.getElementById('taskFeedback').className = 'feedback error';
         document.getElementById('raviTaskText').textContent =
           catchMistakeValue === 1
@@ -433,7 +447,7 @@ function finishCatchGame() {
   const game = document.getElementById('catchGame');
   game.classList.add('win');
 
-  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Procesor, RAM in SSD so varno dostavljeni.';
+  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Zbral si 10 točk in dostavil dovolj pravih komponent.';
   document.getElementById('taskFeedback').className = 'feedback success';
   document.getElementById('raviTaskText').textContent = '»Odlično. Jedro ima vse, kar potrebuje. In niti enega opekača.«';
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
