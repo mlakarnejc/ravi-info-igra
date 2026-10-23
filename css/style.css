@@ -2551,3 +2551,24 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   border-color:#4a5d78;
   background:#111b2a;
 }
+
+.security-reason {
+  border-color:#61738f;
+  background:linear-gradient(180deg,#142033,#0f1927);
+  padding:14px 16px;
+}
+.security-reason strong,
+.security-reason span {
+  display:block;
+}
+.security-reason strong {
+  margin-bottom:6px;
+  color:var(--warning);
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.12em;
+}
+.security-reason span {
+  color:#eef3f8;
+  font-size:13px;
+  line-height:1.55;
+}
