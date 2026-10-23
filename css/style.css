@@ -1825,7 +1825,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 
 .data-filter-panel {
   display:grid;
-  grid-template-columns:1fr 1fr 140px;
+  grid-template-columns:1fr 1fr 1fr 140px;
   gap:14px;
   margin:26px 0 14px;
 }
@@ -1913,4 +1913,27 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 }
 @media (max-width:760px) {
   .data-filter-panel { grid-template-columns:1fr; }
+}
+
+.data-phase-hint {
+  margin:4px 0 10px;
+  color:var(--accent-2);
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.12em;
+}
+.sort-head-btn {
+  border:0;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+  padding:0;
+}
+.sort-head-btn.ready {
+  color:var(--warning);
+  text-shadow:0 0 10px rgba(244,185,66,.2);
+}
+.sort-head-btn.sorted {
+  color:#8ee9b6;
 }
