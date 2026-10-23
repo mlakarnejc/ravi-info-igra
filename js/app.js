@@ -1826,17 +1826,21 @@ const runnerState = {
 const runnerGroundY = 70;
 const runnerWorldWidth = 1800;
 const runnerPlatforms = [
-  { x:760, w:190, y:145 },
-  { x:1260, w:180, y:160 }
+  { x:760, w:230, y:145 },
+  { x:1280, w:190, y:160 }
+];
+
+const runnerPits = [
+  { x:995, w:205 }
 ];
 const runnerHazards = [
   { x:560, w:70 },
   { x:1080, w:82 }
 ];
 const runnerCodes = [
-  { x:390, y:120, checkpoint:330 },
-  { x:835, y:205, checkpoint:760 },
-  { x:1340, y:220, checkpoint:1260 }
+  { x:390, y:168, checkpoint:330 },
+  { x:845, y:226, checkpoint:760 },
+  { x:1360, y:240, checkpoint:1280 }
 ];
 
 function updateRunnerHud() {
@@ -1992,7 +1996,12 @@ function runnerLoop(now) {
 
   let landingY = null;
 
-  if (runnerState.y <= runnerGroundY) {
+  const overPit = runnerPits.some((pit) =>
+    runnerState.x + 16 > pit.x &&
+    runnerState.x - 16 < pit.x + pit.w
+  );
+
+  if (!overPit && runnerState.y <= runnerGroundY) {
     landingY = runnerGroundY;
   }
 
@@ -2015,6 +2024,10 @@ function runnerLoop(now) {
     runnerState.y = landingY;
     runnerState.vy = 0;
     runnerState.onGround = true;
+  }
+
+  if (runnerState.y < -95) {
+    runnerHit();
   }
 
   for (const hazard of runnerHazards) {
