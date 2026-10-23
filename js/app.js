@@ -1885,6 +1885,7 @@ function resetRunnerGame() {
 
   document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
   document.getElementById('runnerGoal')?.classList.remove('unlocked');
+  document.querySelector('.runner-final-wall')?.classList.remove('open', 'completed-open');
   document.getElementById('runnerOverlay')?.classList.remove('hidden');
 
   const feedback7 = document.getElementById('task7Feedback');
@@ -1996,7 +1997,13 @@ function runnerLoop(now) {
 
   if (!runnerState.firewallOpen && runnerState.x > 2145) {
     runnerState.firewallOpen = true;
-    firewallEl?.classList.add('open');
+
+    if (runnerState.collected.size === 3) {
+      firewallEl?.classList.remove('open');
+      firewallEl?.classList.add('completed-open');
+    } else {
+      firewallEl?.classList.add('open');
+    }
   }
 
   if (runnerState.firewallOpen && runnerState.x < 2000 && runnerState.collected.size < 3) {
@@ -2116,7 +2123,8 @@ function startRunnerExitSequence() {
   const firewallEl = document.querySelector('.runner-final-wall');
 
   runnerState.firewallOpen = true;
-  firewallEl?.classList.add('open');
+  firewallEl?.classList.remove('open');
+  firewallEl?.classList.add('completed-open');
   const feedback7 = document.getElementById('task7Feedback');
 
   if (feedback7) {
