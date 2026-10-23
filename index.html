@@ -411,30 +411,62 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask5Text">»Pošlji podatkovni paket od računalnika do mene. Na poti mora skozi usmerjevalnik in internet — drugače paket nima pojma, kam gre.«</p>
+            <p id="raviTask5Text">»Pošlji paket od računalnika do mene. Omrežje ima več naprav in niso vse prava pot. Izbiraj pametno.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 5</div>
           <h2>Usmeri podatkovni paket</h2>
-          <p>S puščicami <strong>↑ ↓ ← →</strong> vodi paket od računalnika do RAVI-ja. Paket mora po vrsti obiskati <strong>USMERJEVALNIK</strong> in <strong>INTERNET</strong>.</p>
+          <p>Začni pri <strong>RAČUNALNIKU</strong> in s klikom izbiraj naslednjo napravo. Cilj je dostaviti paket do <strong>RAVI-ja</strong>.</p>
 
-          <div class="network-game-hud">
-            <span>PAKET: <strong id="networkPacketStatus">RAČUNALNIK</strong></span>
-            <span>KORAKI: <strong id="networkSteps">0</strong></span>
-          </div>
+          <div class="network-topology-layout">
+            <div id="networkTopology" class="network-topology" aria-label="Shema računalniškega omrežja">
+              <svg class="network-links" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="90" y1="365" x2="320" y2="255"></line>
+                <line x1="90" y1="365" x2="300" y2="465"></line>
+                <line x1="320" y1="255" x2="590" y2="150"></line>
+                <line x1="320" y1="255" x2="555" y2="400"></line>
+                <line x1="590" y1="150" x2="875" y2="115"></line>
+                <line x1="590" y1="150" x2="845" y2="390"></line>
+                <line x1="555" y1="400" x2="845" y2="390"></line>
+              </svg>
 
-          <div class="network-game-layout">
-            <div id="networkMaze" class="network-maze" tabindex="0" aria-label="Omrežni labirint"></div>
+              <button class="topology-node node-pc current" data-node="pc" type="button" style="--x:9%;--y:65%">
+                <span class="topology-icon">💻</span><strong>RAČUNALNIK</strong>
+              </button>
+              <button class="topology-node node-router" data-node="router" type="button" style="--x:32%;--y:45%">
+                <span class="topology-icon">📡</span><strong>USMERJEVALNIK</strong>
+              </button>
+              <button class="topology-node" data-node="printer" type="button" style="--x:30%;--y:83%">
+                <span class="topology-icon">🖨️</span><strong>TISKALNIK</strong>
+              </button>
+              <button class="topology-node" data-node="internet" type="button" style="--x:59%;--y:27%">
+                <span class="topology-icon">🌐</span><strong>INTERNET</strong>
+              </button>
+              <button class="topology-node" data-node="server" type="button" style="--x:55.5%;--y:72%">
+                <span class="topology-icon">🗄️</span><strong>STREŽNIK</strong>
+              </button>
+              <button class="topology-node node-ravi" data-node="ravi" type="button" style="--x:87.5%;--y:20%">
+                <span class="topology-icon">🤖</span><strong>RAVI</strong>
+              </button>
+              <button class="topology-node" data-node="camera" type="button" style="--x:84.5%;--y:70%">
+                <span class="topology-icon">📷</span><strong>KAMERA</strong>
+              </button>
 
-            <div class="network-route-panel">
-              <span class="network-route-title">POT PAKETA</span>
-              <div class="route-check active" data-stage="pc"><b>1</b><span>RAČUNALNIK</span></div>
-              <div class="route-check" data-stage="router"><b>2</b><span>USMERJEVALNIK</span></div>
-              <div class="route-check" data-stage="internet"><b>3</b><span>INTERNET</span></div>
-              <div class="route-check" data-stage="ravi"><b>4</b><span>RAVI</span></div>
-              <small>Paket ne sme preskočiti nobene stopnje.</small>
+              <div id="networkPacketDot" class="topology-packet" style="--x:9%;--y:65%">P</div>
+            </div>
+
+            <div class="network-discovery-panel">
+              <span class="network-route-title">ODKRITA POT</span>
+              <div id="networkDiscoveredRoute" class="network-discovered-route">
+                <span class="route-chip">RAČUNALNIK</span>
+              </div>
+              <div class="network-discovery-status">
+                <small>TRENUTNO</small>
+                <strong id="networkCurrentNode">RAČUNALNIK</strong>
+              </div>
+              <p>Pravilna pot se bo prikazovala šele, ko jo odkriješ.</p>
             </div>
           </div>
 
