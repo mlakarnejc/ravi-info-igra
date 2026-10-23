@@ -1,3 +1,5 @@
+const TEST_MODE = true;
+
 const modules = [
   { name: 'Strojna in programska oprema', status: 'ready' },
   { name: 'Osnove programiranja', status: 'locked' },
@@ -91,14 +93,16 @@ function renderModules() {
     button.className = 'module-card';
 
     if (module.status === 'complete') button.classList.add('complete');
-    button.disabled = module.status === 'locked';
+    button.disabled = !TEST_MODE && module.status === 'locked';
 
     const statusText =
       module.status === 'complete'
         ? 'AKTIVIRAN ✓'
-        : module.status === 'locked'
-          ? 'ZAKLENJENO'
-          : 'PRIPRAVLJENO';
+        : TEST_MODE
+          ? 'TEST'
+          : module.status === 'locked'
+            ? 'ZAKLENJENO'
+            : 'PRIPRAVLJENO';
 
     button.innerHTML = `
       <span class="module-index">MODUL ${String(index + 1).padStart(2, '0')}</span>
