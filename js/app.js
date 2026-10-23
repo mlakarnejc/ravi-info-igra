@@ -7,7 +7,7 @@ const modules = [
   { name: 'Upravljanje s podatki', status: 'locked' },
   { name: 'Računalniška omrežja', status: 'locked' },
   { name: 'Varnost in zaščita', status: 'locked' },
-  { name: 'Računalniško oblikovanje', status: 'locked' },
+  { name: 'Programiranje aplikacij', status: 'locked' },
   { name: 'Umetna inteligenca', status: 'locked' }
 ];
 
@@ -73,7 +73,7 @@ function updateHubStage() {
     'Podatkovni sistem je aktiven. Pomnilnik se polni.',
     'Omrežje vzpostavljeno. RAVI je povezan.',
     'Varnostni ščit je aktiven.',
-    'Vizualni sistem je obnovljen. RAVI skoraj pripravljen.',
+    'Aplikacijski modul deluje. RAVI skoraj pripravljen.',
     'Vsi sistemi delujejo. RAVI je popolnoma aktiven.'
   ];
   document.getElementById('repairText').textContent = texts[completed];
@@ -1785,7 +1785,7 @@ function finishSecurityGame() {
   reason.innerHTML = '<strong>MODUL 6 AKTIVIRAN ✓</strong><span>Varnostni skener je očistil vseh 6 sporočil.</span>';
   reason.classList.remove('hidden');
   ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
-  document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
+  document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Programiranje aplikacij je odklenjeno.';
 
   updateProgress();
   renderModules();
@@ -1817,81 +1817,243 @@ function initSecurityScanner() {
   }
 }
 
-let selectedDesignChoice = null;
-let task7Attempts = 0;
+const runnerState = {
+  x:80, y:70, vx:0, vy:0, running:false, left:false, right:false,
+  onGround:true, collected:new Set(), hits:0, checkpoint:80,
+  lastTime:0, raf:null, invulnerableUntil:0
+};
 
-function selectDesignChoice(choice) {
-  if (modules[6].status === 'complete') return;
+const runnerGroundY = 70;
+const runnerWorldWidth = 1800;
+const runnerPlatforms = [
+  { x:760, w:190, y:145 },
+  { x:1260, w:180, y:160 }
+];
+const runnerHazards = [
+  { x:560, w:70 },
+  { x:1080, w:82 }
+];
+const runnerCodes = [
+  { x:390, y:120, checkpoint:330 },
+  { x:835, y:190, checkpoint:760 },
+  { x:1340, y:205, checkpoint:1260 }
+];
 
-  selectedDesignChoice = choice;
-  document.querySelectorAll('.design-option').forEach((button) => {
-    button.classList.toggle('selected', button.dataset.choice === choice);
-    button.classList.remove('wrong');
-  });
-
-  const feedback7 = document.getElementById('task7Feedback');
-  feedback7.textContent = `Izbran dizajn: ${choice.toUpperCase()}`;
-  feedback7.className = 'feedback';
+function updateRunnerHud() {
+  document.getElementById('runnerCodeCount').textContent = `${runnerState.collected.size} / 3`;
+  document.getElementById('runnerHits').textContent = String(runnerState.hits);
 }
 
-function checkTask7() {
-  if (modules[6].status === 'complete') return;
+function renderRunnerPosition() {
+  const player = document.getElementById('runnerPlayer');
+  const world = document.getElementById('runnerWorld');
+  const viewport = document.getElementById('runnerViewport');
+  if (!player || !world || !viewport) return;
+
+  player.style.setProperty('--x', runnerState.x + 'px');
+  player.style.setProperty('--y', runnerState.y + 'px');
+
+  const maxCamera = Math.max(0, runnerWorldWidth - viewport.clientWidth);
+  const cameraX = Math.max(0, Math.min(runnerState.x - viewport.clientWidth * 0.36, maxCamera));
+  world.style.transform = `translateX(${-cameraX}px)`;
+}
+
+function resetRunnerGame() {
+  if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
+
+  runnerState.x = 80;
+  runnerState.y = runnerGroundY;
+  runnerState.vx = 0;
+  runnerState.vy = 0;
+  runnerState.running = false;
+  runnerState.left = false;
+  runnerState.right = false;
+  runnerState.onGround = true;
+  runnerState.collected = new Set();
+  runnerState.hits = 0;
+  runnerState.checkpoint = 80;
+  runnerState.lastTime = 0;
+  runnerState.raf = null;
+  runnerState.invulnerableUntil = 0;
+
+  document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
+  document.getElementById('runnerGoal')?.classList.remove('unlocked');
+  document.getElementById('runnerOverlay')?.classList.remove('hidden');
 
   const feedback7 = document.getElementById('task7Feedback');
+  if (feedback7) {
+    feedback7.textContent = '';
+    feedback7.className = 'feedback';
+  }
+
   const ravi7 = document.getElementById('raviTask7Text');
+  if (ravi7) ravi7.textContent = '»Končno nekaj, kjer lahko tudi padeš v luknjo. Brez skrbi — tukaj imam shranjevanje.«';
 
-  if (!selectedDesignChoice) {
-    feedback7.textContent = 'Najprej izberi en plakat.';
-    feedback7.className = 'feedback error';
-    return;
+  updateRunnerHud();
+  requestAnimationFrame(renderRunnerPosition);
+}
+
+function startRunnerGame() {
+  if (modules[6].status === 'complete' || runnerState.running) return;
+  document.getElementById('runnerOverlay')?.classList.add('hidden');
+  runnerState.running = true;
+  runnerState.lastTime = performance.now();
+  document.getElementById('runnerViewport')?.focus();
+  runnerState.raf = requestAnimationFrame(runnerLoop);
+}
+
+function runnerJump() {
+  if (!runnerState.running || !runnerState.onGround) return;
+  runnerState.vy = 570;
+  runnerState.onGround = false;
+}
+
+function handleRunnerKeyDown(event) {
+  if (!document.getElementById('screenTask7')?.classList.contains('active')) return;
+
+  if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {
+    event.preventDefault();
+    runnerState.left = true;
   }
-
-  task7Attempts += 1;
-  const selectedButton = document.querySelector(`.design-option[data-choice="${selectedDesignChoice}"]`);
-
-  if (selectedDesignChoice === 'b') {
-    selectedButton.classList.add('correct');
-    modules[6].status = 'complete';
-    modules[7].status = 'ready';
-    completed = Math.max(completed, 7);
-
-    feedback7.textContent = 'MODUL 7 AKTIVIRAN ✓ Jasna hierarhija, dobra berljivost in dovolj prostora.';
-    feedback7.className = 'feedback success';
-    ravi7.textContent = '»Odlično. Oči so mi hvaležne. In prvič danes mi ni treba zmanjšati svetlosti zaslona.«';
-    document.getElementById('hubMessage').textContent = 'Oblikovalski modul je aktiven. Zadnji modul – Umetna inteligenca – je odklenjen.';
-
-    updateProgress();
-    renderModules();
-    setTimeout(() => showScreen('screenHub'), 1700);
-    return;
+  if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {
+    event.preventDefault();
+    runnerState.right = true;
   }
-
-  selectedButton.classList.add('wrong');
-  feedback7.className = 'feedback error';
-
-  if (task7Attempts === 1) {
-    feedback7.textContent = 'Ta različica ni najbolj pregledna. Poglej berljivost, količino besedila in poudarke.';
-    ravi7.textContent = '»Če ne vem, kam naj najprej pogledam, je dizajn verjetno malo preveč navdušen sam nad sabo.«';
-  } else if (task7Attempts === 2) {
-    feedback7.textContent = 'Namig: najboljši dizajn ima jasen naslov, malo besedila in dobro vizualno hierarhijo.';
-    ravi7.textContent = '»Manj je včasih več. Še posebej pri plakatih. In kablih.«';
-  } else {
-    feedback7.textContent = 'Močan namig: izberi plakat B.';
-    ravi7.textContent = '»B. Čist, pregleden, berljiv. Moj grafični modul glasuje za B.«';
+  if (event.code === 'Space') {
+    event.preventDefault();
+    runnerJump();
   }
 }
 
-function resetTask7() {
-  if (modules[6].status === 'complete') return;
+function handleRunnerKeyUp(event) {
+  if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') runnerState.left = false;
+  if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') runnerState.right = false;
+}
 
-  selectedDesignChoice = null;
-  document.querySelectorAll('.design-option').forEach((button) => {
-    button.classList.remove('selected', 'wrong', 'correct');
-  });
+function runnerHit() {
+  const now = performance.now();
+  if (now < runnerState.invulnerableUntil) return;
+
+  runnerState.hits += 1;
+  runnerState.invulnerableUntil = now + 900;
+  runnerState.x = runnerState.checkpoint;
+  runnerState.y = runnerGroundY;
+  runnerState.vx = 0;
+  runnerState.vy = 0;
+
+  const player = document.getElementById('runnerPlayer');
+  player?.classList.add('hit');
+  setTimeout(() => player?.classList.remove('hit'), 500);
+
+  document.getElementById('task7Feedback').textContent = 'BUG! RAVI se je vrnil na zadnjo varno točko.';
+  document.getElementById('task7Feedback').className = 'feedback error';
+  updateRunnerHud();
+}
+
+function collectRunnerCode(index) {
+  if (runnerState.collected.has(index)) return;
+  runnerState.collected.add(index);
+  runnerState.checkpoint = runnerCodes[index].checkpoint;
+
+  document.querySelector(`.runner-code[data-code="${index}"]`)?.classList.add('collected');
+  updateRunnerHud();
 
   const feedback7 = document.getElementById('task7Feedback');
-  feedback7.textContent = '';
-  feedback7.className = 'feedback';
+  feedback7.textContent = `Košček kode ${runnerState.collected.size}/3 zbran ✓`;
+  feedback7.className = 'feedback success';
+
+  if (runnerState.collected.size === 3) {
+    document.getElementById('runnerGoal')?.classList.add('unlocked');
+    document.getElementById('raviTask7Text').textContent = '»Vsa koda zbrana. Zdaj samo še do terminala — brez dramatičnega padca tik pred ciljem.«';
+  }
+}
+
+function runnerLoop(now) {
+  if (!runnerState.running) return;
+
+  const dt = Math.min((now - runnerState.lastTime) / 1000, 0.032);
+  runnerState.lastTime = now;
+
+  const accel = 1050;
+  const maxSpeed = 260;
+
+  if (runnerState.left) runnerState.vx -= accel * dt;
+  if (runnerState.right) runnerState.vx += accel * dt;
+  if (!runnerState.left && !runnerState.right) runnerState.vx *= 0.84;
+  runnerState.vx = Math.max(-maxSpeed, Math.min(maxSpeed, runnerState.vx));
+
+  const previousY = runnerState.y;
+  runnerState.vy -= 1500 * dt;
+  runnerState.x += runnerState.vx * dt;
+  runnerState.y += runnerState.vy * dt;
+  runnerState.x = Math.max(24, Math.min(runnerWorldWidth - 30, runnerState.x));
+
+  runnerState.onGround = false;
+
+  let floorY = runnerGroundY;
+  for (const platform of runnerPlatforms) {
+    const overPlatform = runnerState.x + 18 > platform.x && runnerState.x - 18 < platform.x + platform.w;
+    const crossedSurface = previousY >= platform.y && runnerState.y <= platform.y && runnerState.vy <= 0;
+    if (overPlatform && crossedSurface) {
+      floorY = Math.max(floorY, platform.y);
+    }
+  }
+
+  if (runnerState.y <= floorY) {
+    runnerState.y = floorY;
+    runnerState.vy = 0;
+    runnerState.onGround = true;
+  }
+
+  for (const hazard of runnerHazards) {
+    const overlapX = runnerState.x + 18 > hazard.x && runnerState.x - 18 < hazard.x + hazard.w;
+    if (overlapX && runnerState.y < 125) {
+      runnerHit();
+      break;
+    }
+  }
+
+  runnerCodes.forEach((code, index) => {
+    if (runnerState.collected.has(index)) return;
+    const dx = Math.abs(runnerState.x - code.x);
+    const dy = Math.abs((runnerState.y + 30) - code.y);
+    if (dx < 42 && dy < 55) collectRunnerCode(index);
+  });
+
+  if (runnerState.x > 1650) {
+    if (runnerState.collected.size === 3) {
+      finishRunnerGame();
+      return;
+    }
+
+    runnerState.x = 1580;
+    runnerState.vx = -90;
+    const feedback7 = document.getElementById('task7Feedback');
+    feedback7.textContent = `Terminal je zaklenjen. Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
+    feedback7.className = 'feedback error';
+  }
+
+  renderRunnerPosition();
+  runnerState.raf = requestAnimationFrame(runnerLoop);
+}
+
+function finishRunnerGame() {
+  runnerState.running = false;
+  if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
+
+  modules[6].status = 'complete';
+  modules[7].status = 'ready';
+  completed = Math.max(completed, 7);
+
+  const feedback7 = document.getElementById('task7Feedback');
+  feedback7.textContent = 'MODUL 7 AKTIVIRAN ✓ Aplikacija deluje, koda je zbrana in terminal odklenjen.';
+  feedback7.className = 'feedback success';
+  document.getElementById('raviTask7Text').textContent = '»To je že bolj podobno pravi aplikaciji: gibanje, dogodki, kolizije in cilj. In nič opekačev.«';
+  document.getElementById('hubMessage').textContent = 'Programiranje aplikacij je aktivno. Zadnji modul – Umetna inteligenca – je odklenjen.';
+
+  updateProgress();
+  renderModules();
+  setTimeout(() => showScreen('screenHub'), 1900);
 }
 
 
@@ -1998,12 +2160,15 @@ document.getElementById('backHub5').addEventListener('click', () => showScreen('
 document.getElementById('resetTask6').addEventListener('click', resetTask6);
 document.getElementById('backHub6').addEventListener('click', () => showScreen('screenHub'));
 document.addEventListener('keydown', handleSecurityKey);
-document.querySelectorAll('.design-option').forEach((button) => {
-  button.addEventListener('click', () => selectDesignChoice(button.dataset.choice));
+document.getElementById('startRunner').addEventListener('click', startRunnerGame);
+document.getElementById('resetTask7').addEventListener('click', resetRunnerGame);
+document.getElementById('backHub7').addEventListener('click', () => {
+  runnerState.running = false;
+  if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
+  showScreen('screenHub');
 });
-document.getElementById('checkTask7').addEventListener('click', checkTask7);
-document.getElementById('resetTask7').addEventListener('click', resetTask7);
-document.getElementById('backHub7').addEventListener('click', () => showScreen('screenHub'));
+document.addEventListener('keydown', handleRunnerKeyDown);
+document.addEventListener('keyup', handleRunnerKeyUp);
 document.querySelectorAll('.ai-btn').forEach((button) => {
   button.addEventListener('click', () => selectAIChoice(button.dataset.choice));
 });
