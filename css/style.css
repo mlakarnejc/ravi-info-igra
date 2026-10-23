@@ -3816,3 +3816,71 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   color:#8e9fb5;
   font:900 11px ui-monospace,monospace;
 }
+
+/* Make the misclassified test animal unmistakably a black cat */
+.test-cat-card,
+.final-cat-card {
+  background:
+    radial-gradient(circle at 50% 42%,rgba(145,174,220,.28),transparent 10rem),
+    linear-gradient(145deg,#263a56,#182538);
+}
+.ml-black-cat {
+  position:absolute;
+  inset:0;
+  display:block;
+  filter:drop-shadow(0 16px 18px rgba(0,0,0,.42));
+}
+.ml-black-cat .cat-head {
+  position:absolute;
+  left:50%;
+  top:66px;
+  width:92px;
+  height:82px;
+  transform:translateX(-50%);
+  border-radius:48% 48% 42% 42%;
+  background:#05070a;
+  box-shadow:inset 0 -8px 0 rgba(255,255,255,.015);
+}
+.ml-black-cat .cat-ear {
+  position:absolute;
+  top:38px;
+  width:48px;
+  height:52px;
+  background:#05070a;
+  clip-path:polygon(50% 0,100% 100%,0 100%);
+}
+.ml-black-cat .cat-ear.left { left:74px; transform:rotate(-10deg); }
+.ml-black-cat .cat-ear.right { right:74px; transform:rotate(10deg); }
+.ml-black-cat .cat-eye {
+  position:absolute;
+  top:98px;
+  width:8px;
+  height:12px;
+  border-radius:50%;
+  background:#9ee66f;
+  box-shadow:0 0 10px rgba(158,230,111,.8);
+  z-index:3;
+}
+.ml-black-cat .cat-eye.left { left:112px; }
+.ml-black-cat .cat-eye.right { right:112px; }
+.ml-black-cat .cat-body {
+  position:absolute;
+  left:50%;
+  top:140px;
+  width:118px;
+  height:96px;
+  transform:translateX(-50%);
+  border-radius:50% 50% 38% 38%;
+  background:#05070a;
+}
+.ml-black-cat .cat-tail {
+  position:absolute;
+  left:164px;
+  top:160px;
+  width:78px;
+  height:24px;
+  border-radius:20px;
+  background:#05070a;
+  transform:rotate(30deg);
+  transform-origin:left center;
+}
