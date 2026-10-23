@@ -1656,6 +1656,14 @@ const securityMessages = [
     extra: 'accounts.google.com',
     safe: true,
     reason: 'Uradna domena in tipično varnostno obvestilo brez zahteve po pošiljanju gesla.'
+  },
+  {
+    sender: 'Microsoft <security@micropoft.com>',
+    subject: 'Preverjanje varnosti računa',
+    body: 'Zaradi varnostnega pregleda prosimo, da preverite aktivnost v svojem računu.',
+    extra: 'https://micropoft.com/account/security',
+    safe: false,
+    reason: 'Skoraj vse izgleda pravilno, vendar je domena napačna: MICROPОFT namesto MICROSOFT. Ena sama napačna črka je lahko znak prevare.'
   }
 ];
 
@@ -1761,7 +1769,7 @@ function finishSecurityGame() {
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
 
-  feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Varnostni skener je očistil vseh 5 sporočil.';
+  feedback6.textContent = 'MODUL 6 AKTIVIRAN ✓ Varnostni skener je očistil vseh 6 sporočil.';
   feedback6.className = 'feedback success';
   ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Računalniško oblikovanje je odklenjeno.';
