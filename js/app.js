@@ -1827,11 +1827,12 @@ const runnerGroundY = 70;
 const runnerWorldWidth = 1800;
 const runnerPlatforms = [
   { x:760, w:230, y:145 },
-  { x:1280, w:190, y:160 }
+  { x:1280, w:190, y:160 },
+  { x:1440, w:110, y:205 }
 ];
 
 const runnerPits = [
-  { x:995, w:205 }
+  { x:1495, w:155 }
 ];
 const runnerHazards = [
   { x:560, w:70 },
