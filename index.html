@@ -672,39 +672,96 @@
     </section>
 
     <section id="screenTask8" class="screen">
-      <div class="task-layout">
-        <aside class="ravi-side">
-          <div class="mini-ravi" aria-hidden="true">
-            <div class="mini-head"><span></span><span></span></div>
-            <div class="mini-body">R</div>
+      <div class="ai-control-shell">
+        <div class="ai-control-top">
+          <div>
+            <p class="eyebrow">MODUL 8 // AI CONTROL ROOM</p>
+            <h2>RAVI VISION</h2>
+            <p>AI analizira prizor. Ti odločiš, ali lahko rezultat <strong>sprejmemo</strong> ali ga moramo <strong>preveriti</strong>.</p>
           </div>
-          <div class="speech-box">
-            <strong>RAVI</strong>
-            <p id="raviTask8Text">»Prepričan sem, da je Python operacijski sistem. Zelo prepričan. Skoraj sumljivo prepričan.«</p>
+          <div class="ai-control-status">
+            <span>ANALIZA</span>
+            <strong id="aiScenarioCount">1 / 3</strong>
           </div>
-        </aside>
+        </div>
 
-        <div class="task-card">
-          <div class="task-number">MODUL 8</div>
-          <h2>Preveri umetno inteligenco</h2>
-          <p>RAVI poda odgovor. Odloči, ali trditev <strong>drži</strong> ali <strong>ne drži</strong>.</p>
+        <div class="ai-control-grid">
+          <aside class="ai-ravi-console">
+            <div class="ai-ravi-core">
+              <div class="ai-core-ring ring-a"></div>
+              <div class="ai-core-ring ring-b"></div>
+              <div class="ai-core-face">
+                <span></span><span></span>
+              </div>
+              <div class="ai-core-letter">R</div>
+            </div>
+            <div class="ai-ravi-dialog">
+              <span>RAVI // AI CORE</span>
+              <p id="raviTask8Text">»Začenjam analizo. Tokrat preverjaš mene, ne obratno.«</p>
+            </div>
+            <div class="ai-system-lines">
+              <span>VISION MODEL <b>ONLINE</b></span>
+              <span>CONFIDENCE <b id="aiConfidenceSide">96 %</b></span>
+              <span>HUMAN CHECK <b>REQUIRED</b></span>
+            </div>
+          </aside>
 
-          <div class="ai-answer-card">
-            <span class="ai-label">RAVI ODGOVARJA</span>
-            <blockquote>»Python je operacijski sistem, podobno kot Windows ali Linux.«</blockquote>
-          </div>
+          <div class="ai-vision-panel">
+            <div class="ai-vision-header">
+              <span>LIVE ANALYSIS // CAM_08</span>
+              <div class="ai-live-dot"><i></i> LIVE</div>
+            </div>
 
-          <div class="ai-choice">
-            <button class="ai-btn" data-choice="true" type="button">✓ DRŽI</button>
-            <button class="ai-btn" data-choice="false" type="button">✕ NE DRŽI</button>
-          </div>
+            <div id="aiScene" class="ai-scene scene-0">
+              <div class="ai-grid-overlay"></div>
+              <div class="ai-scan-line"></div>
+              <div class="ai-corner tl"></div><div class="ai-corner tr"></div>
+              <div class="ai-corner bl"></div><div class="ai-corner br"></div>
 
-          <div class="task-actions">
-            <button id="checkTask8" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask8" class="ghost-btn" type="button">POČISTI IZBOR</button>
-            <button id="backHub8" class="ghost-btn" type="button">NAZAJ</button>
+              <div class="ai-scene-art">
+                <div class="scene-object object-monitor"><span></span></div>
+                <div class="scene-object object-keyboard"></div>
+                <div class="scene-object object-cup"></div>
+                <div class="scene-object object-shadow"></div>
+              </div>
+
+              <div id="aiDetectionBox" class="ai-detection-box">
+                <span id="aiDetectionLabel">RAČUNALNIŠKI ZASLON</span>
+                <b id="aiDetectionConfidence">96 %</b>
+              </div>
+
+              <div class="ai-analysis-result">
+                <span>AI REZULTAT</span>
+                <strong id="aiResultTitle">Računalniški zaslon</strong>
+                <p id="aiResultText">Na sliki je računalniški zaslon.</p>
+              </div>
+            </div>
+
+            <div class="ai-confidence-row">
+              <span>ZAUPANJE MODELA</span>
+              <div class="ai-confidence-track"><div id="aiConfidenceBar"></div></div>
+              <strong id="aiConfidenceText">96 %</strong>
+            </div>
+
+            <div id="aiDecisionResult" class="ai-decision-result hidden"></div>
+
+            <div class="ai-decision-buttons">
+              <button id="aiAcceptBtn" class="ai-decision-btn accept" type="button">
+                <span>✓</span><strong>SPREJMI REZULTAT</strong><small>AI ima dovolj dokazov</small>
+              </button>
+              <button id="aiVerifyBtn" class="ai-decision-btn verify" type="button">
+                <span>◎</span><strong>PREVERI AI</strong><small>Rezultat potrebuje človeka</small>
+              </button>
+            </div>
           </div>
-          <div id="task8Feedback" class="feedback" aria-live="polite"></div>
+        </div>
+
+        <div class="ai-control-footer">
+          <div class="ai-progress-dots">
+            <span class="active"></span><span></span><span></span>
+          </div>
+          <button id="resetTask8" class="ghost-btn" type="button">PONOVI ANALIZO</button>
+          <button id="backHub8" class="ghost-btn" type="button">NAZAJ</button>
           <div class="subject-label">Predmet: <strong>Umetna inteligenca</strong></div>
         </div>
       </div>
