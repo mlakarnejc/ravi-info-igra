@@ -2368,12 +2368,22 @@ document.getElementById('backHub8').addEventListener('click', () => showScreen('
 document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
-initHtmlRepairGame();
-initDataFilterGame();
-initNetworkTopologyGame();
-initSecurityScanner();
+// Critical shell first: the hub must render even if one mini-game initialization fails.
 renderModules();
-renderComponents();
-renderProgramOrder();
-renderDataRows();
 updateProgress();
+
+function safeInit(name, initFn) {
+  try {
+    initFn();
+  } catch (error) {
+    console.error(`RAVI init error: ${name}`, error);
+  }
+}
+
+safeInit('HTML repair', initHtmlRepairGame);
+safeInit('Data filter', initDataFilterGame);
+safeInit('Network topology', initNetworkTopologyGame);
+safeInit('Security scanner', initSecurityScanner);
+safeInit('Legacy components', renderComponents);
+safeInit('Program order', renderProgramOrder);
+safeInit('Data rows', renderDataRows);
