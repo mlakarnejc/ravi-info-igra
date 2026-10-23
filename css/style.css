@@ -2572,3 +2572,14 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   font-size:13px;
   line-height:1.55;
 }
+
+/* Security scanner spacing cleanup */
+#screenTask6 .task-actions {
+  margin-top:28px;
+}
+#screenTask6 .security-key-help {
+  margin-bottom:6px;
+}
+#screenTask6 #task6Feedback.hidden {
+  display:none !important;
+}
