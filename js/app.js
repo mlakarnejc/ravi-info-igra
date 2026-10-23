@@ -98,6 +98,12 @@ function openModule(index) {
     return;
   }
 
+  if (index === 3) {
+    renderDataRows();
+    showScreen('screenTask4');
+    return;
+  }
+
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
 }
@@ -371,6 +377,119 @@ function resetTask3() {
   feedback3.className = 'feedback';
 }
 
+
+const dataRecords = [
+  { id: 'ana', ime: 'Ana', program: 'Računalništvo', letnik: '1.' },
+  { id: 'miha', ime: 'Miha', program: 'Elektrotehnika', letnik: '2.' },
+  { id: 'luka', ime: 'Luka', program: 'Računalništvo', letnik: '3.' },
+  { id: 'eva', ime: 'Eva', program: 'Strojništvo', letnik: '1.' }
+];
+let selectedDataRow = null;
+let task4Attempts = 0;
+
+function renderDataRows() {
+  const tbody = document.getElementById('dataRows');
+  tbody.innerHTML = '';
+
+  dataRecords.forEach((record) => {
+    const row = document.createElement('tr');
+    row.className = 'data-row';
+    row.dataset.id = record.id;
+    row.tabIndex = 0;
+    row.innerHTML = `
+      <td>${record.ime}</td>
+      <td>${record.program}</td>
+      <td>${record.letnik}</td>
+    `;
+
+    const choose = () => {
+      if (modules[3].status === 'complete') return;
+      selectedDataRow = record.id;
+      document.querySelectorAll('.data-row').forEach((item) => {
+        item.classList.remove('selected', 'wrong');
+      });
+      row.classList.add('selected');
+      const feedback4 = document.getElementById('task4Feedback');
+      feedback4.textContent = `Izbran zapis: ${record.ime}`;
+      feedback4.className = 'feedback';
+    };
+
+    row.addEventListener('click', choose);
+    row.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        choose();
+      }
+    });
+
+    tbody.appendChild(row);
+  });
+}
+
+function checkTask4() {
+  if (modules[3].status === 'complete') return;
+
+  const feedback4 = document.getElementById('task4Feedback');
+  const ravi4 = document.getElementById('raviTask4Text');
+
+  if (!selectedDataRow) {
+    feedback4.textContent = 'Najprej izberi en zapis v tabeli.';
+    feedback4.className = 'feedback error';
+    return;
+  }
+
+  task4Attempts += 1;
+  const selectedRecord = dataRecords.find((record) => record.id === selectedDataRow);
+  const isCorrect = selectedRecord.program === 'Računalništvo' && selectedRecord.letnik === '3.';
+
+  const selectedRow = document.querySelector(`.data-row[data-id="${selectedDataRow}"]`);
+  selectedRow.classList.remove('selected');
+
+  if (isCorrect) {
+    selectedRow.classList.add('correct');
+    modules[3].status = 'complete';
+    modules[4].status = 'ready';
+    completed = Math.max(completed, 4);
+
+    feedback4.textContent = 'MODUL 4 AKTIVIRAN ✓ Našel si pravi zapis.';
+    feedback4.className = 'feedback success';
+    ravi4.textContent = '»To je to. Podatki niso uporabni, če jih ne znaš pravilno poiskati.«';
+    document.getElementById('hubMessage').textContent = 'Podatkovni modul je aktiven. Računalniška omrežja so odklenjena.';
+
+    updateProgress();
+    renderModules();
+    setTimeout(() => showScreen('screenHub'), 1700);
+    return;
+  }
+
+  selectedRow.classList.add('wrong');
+  feedback4.className = 'feedback error';
+
+  if (task4Attempts === 1) {
+    feedback4.textContent = 'To ni pravi zapis. Preveri oba pogoja.';
+    ravi4.textContent = '»Podatek sem našel. Samo napačnega. To je pri podatkih kar pomembna podrobnost.«';
+  } else if (task4Attempts === 2) {
+    feedback4.textContent = 'Namig: iščeš program Računalništvo IN 3. letnik.';
+    ravi4.textContent = '»Ne zadostuje samo pravi program. Tudi letnik mora biti pravi.«';
+  } else {
+    feedback4.textContent = 'Močan namig: poišči Luka – Računalništvo – 3. letnik.';
+    ravi4.textContent = '»V redu: Luka. Računalništvo. Tretji letnik. Zdaj sva res blizu.«';
+  }
+}
+
+function resetTask4() {
+  if (modules[3].status === 'complete') return;
+
+  selectedDataRow = null;
+  document.querySelectorAll('.data-row').forEach((row) => {
+    row.classList.remove('selected', 'wrong', 'correct');
+  });
+
+  const feedback4 = document.getElementById('task4Feedback');
+  feedback4.textContent = '';
+  feedback4.className = 'feedback';
+}
+
 document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('checkTask1').addEventListener('click', checkTask1);
 document.getElementById('backHub1').addEventListener('click', () => showScreen('screenHub'));
@@ -380,9 +499,13 @@ document.getElementById('backHub2').addEventListener('click', () => showScreen('
 document.getElementById('checkTask3').addEventListener('click', checkTask3);
 document.getElementById('resetTask3').addEventListener('click', resetTask3);
 document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('checkTask4').addEventListener('click', checkTask4);
+document.getElementById('resetTask4').addEventListener('click', resetTask4);
+document.getElementById('backHub4').addEventListener('click', () => showScreen('screenHub'));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 renderModules();
 renderComponents();
 renderProgramOrder();
+renderDataRows();
 updateProgress();
