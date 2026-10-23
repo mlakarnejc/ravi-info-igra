@@ -2201,7 +2201,9 @@ function renderMLTrainingCards() {
   if (!container) return;
   container.innerHTML = '';
 
-  mlTrainingItems.forEach((item,index) => {
+  const shuffledItems = [...mlTrainingItems].sort(() => Math.random() - 0.5);
+
+  shuffledItems.forEach((item,index) => {
     const card = document.createElement('button');
     card.type = 'button';
     card.className = 'ml-training-card';
@@ -2243,31 +2245,68 @@ function placeMLItem(itemId, targetClass) {
   const card = document.querySelector(`.ml-training-card[data-id="${itemId}"]`);
   if (!card) return;
 
-  if (item.type !== targetClass) {
-    card.classList.add('wrong');
-    document.getElementById('raviTask8Text').textContent = '»Ta primer je v napačni skupini. Poskusi še enkrat.«';
-    setTimeout(() => card.classList.remove('wrong'), 550);
-    return;
-  }
+  mlBusy = true;
+  const analysis = document.getElementById('mlSampleAnalysis');
+  const analysisText = document.getElementById('mlSampleAnalysisText');
+  const focus = document.getElementById('mlFocusMessage');
 
-  mlPlaced.set(itemId, targetClass);
-  card.classList.add('placed', targetClass);
-  card.draggable = false;
+  analysis.classList.remove('hidden','correct','wrong');
+  analysisText.textContent = `${item.icon}  ${item.label.toUpperCase()} // ANALIZA`;
+  focus.querySelector('strong').textContent = 'RAVI analizira izbrani primer ...';
 
-  const cats = [...mlPlaced.values()].filter((value) => value === 'cat').length;
-  const dogs = [...mlPlaced.values()].filter((value) => value === 'dog').length;
-  const total = mlPlaced.size;
+  setTimeout(() => {
+    const correct = item.type === targetClass;
 
-  document.getElementById('mlTrainCount').textContent = `${total} / 8`;
-  document.getElementById('mlDatasetStatus').textContent = `${total} / 8`;
-  document.getElementById('mlCatCount').textContent = `${cats} primerov`;
-  document.getElementById('mlDogCount').textContent = `${dogs} primerov`;
+    if (!correct) {
+      analysis.classList.add('wrong');
+      analysisText.textContent = 'NAPAČNA SKUPINA ✕';
+      card.classList.add('wrong');
+      focus.querySelector('strong').textContent =
+        item.type === 'cat'
+          ? 'To je mačka. Premakni jo v skupino MAČKA.'
+          : 'To je pes. Premakni ga v skupino PES.';
 
-  if (total === 8) {
-    mlBusy = true;
-    document.getElementById('raviTask8Text').textContent = '»Dataset pripravljen. Začenjam trening modela.«';
-    setTimeout(startMLTraining, 650);
-  }
+      setTimeout(() => {
+        analysis.classList.add('hidden');
+        analysis.classList.remove('wrong');
+        card.classList.remove('wrong');
+        mlBusy = false;
+      }, 700);
+      return;
+    }
+
+    mlPlaced.set(itemId, targetClass);
+    card.classList.add('placed', targetClass);
+    card.draggable = false;
+    analysis.classList.add('correct');
+    analysisText.textContent = 'PRIMER DODAN ✓';
+
+    const cats = [...mlPlaced.values()].filter((value) => value === 'cat').length;
+    const dogs = [...mlPlaced.values()].filter((value) => value === 'dog').length;
+    const total = mlPlaced.size;
+
+    document.getElementById('mlTrainCount').textContent = `${total} / 8`;
+    document.getElementById('mlDatasetStatus').textContent = `${total} / 8`;
+    document.getElementById('mlCatCount').textContent = `${cats} primerov`;
+    document.getElementById('mlDogCount').textContent = `${dogs} primerov`;
+
+    focus.querySelector('strong').textContent =
+      total < 8
+        ? `Pravilno. Primer ${total}/8 je dodan v trening podatke.`
+        : 'Vseh 8 primerov je pripravljenih. Začenjam trening modela.';
+
+    setTimeout(() => {
+      analysis.classList.add('hidden');
+      analysis.classList.remove('correct');
+
+      if (total === 8) {
+        document.getElementById('raviTask8Text').textContent = '»Dataset pripravljen. Začenjam trening modela.«';
+        startMLTraining();
+      } else {
+        mlBusy = false;
+      }
+    }, 650);
+  }, 900);
 }
 
 function initMLDropzones() {
@@ -2290,6 +2329,7 @@ function initMLDropzones() {
 function startMLTraining() {
   updateMLStage(1);
   setMLPhase('mlTrainingAnimation');
+  document.querySelector('#mlFocusMessage strong').textContent = 'Trening je avtomatski. Opazuj, kako model išče vzorce v podatkih.';
   document.getElementById('mlModelStatus').textContent = 'TRAINING';
   document.getElementById('mlAccuracyStatus').textContent = '--';
 
@@ -2321,6 +2361,7 @@ function startMLTraining() {
     document.getElementById('raviTask8Text').textContent = '»Model je pripravljen. Zdaj bom poskusil sam.«';
     updateMLStage(2);
     setMLPhase('mlTestPhase');
+    document.querySelector('#mlFocusMessage strong').textContent = 'Nov primer: črna mačka. Poglej, kaj bo napovedal RAVI.';
     mlBusy = false;
     setTimeout(runMLBadPrediction, 420);
   }, 3900);
@@ -2345,6 +2386,7 @@ function runMLBadPrediction() {
     setTimeout(() => {
       updateMLStage(2);
       setMLPhase('mlRetrainPhase');
+      document.querySelector('#mlFocusMessage strong').textContent = 'RAVI se je zmotil. Izberi EN paket podatkov, ki bi model najbolje izboljšal.';
     }, 2200);
   }, 1450);
 }
@@ -2382,6 +2424,7 @@ function chooseMLPackage(packageId) {
 function startMLRetraining() {
   updateMLStage(3);
   setMLPhase('mlTrainingAnimation');
+  document.querySelector('#mlFocusMessage strong').textContent = 'Dobri podatki izbrani. RAVI ponovno trenira isti model.';
 
   document.getElementById('mlTrainingPercent').textContent = '0 %';
   document.getElementById('mlTrainingBar').style.width = '0%';
@@ -2408,6 +2451,7 @@ function startMLRetraining() {
     document.getElementById('mlAccuracyStatus').textContent = '97 %';
     document.getElementById('raviTask8Text').textContent = '»Model posodobljen. Ponoviva isti primer.«';
     setMLPhase('mlFinalPhase');
+    document.querySelector('#mlFocusMessage strong').textContent = 'Isti primer še enkrat: model zdaj pravilno prepozna črno mačko.';
     mlBusy = false;
   }, 3200);
 }
@@ -2465,6 +2509,8 @@ function resetTask8() {
 
   document.getElementById('raviTask8Text').textContent =
     '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«';
+  document.querySelector('#mlFocusMessage strong').textContent =
+    'Razvrsti prvi primer. Po vsakem izboru ga bo RAVI na hitro analiziral.';
 
   renderMLTrainingCards();
 }
