@@ -1378,18 +1378,18 @@ function initDataFilterGame() {
 
 
 const topologyNodes = {
-  pc:       { label: 'RAČUNALNIK', x: 9, y: 59 },
-  switch:   { label: 'STIKALO', x: 26.5, y: 26 },
-  router:   { label: 'USMERJEVALNIK', x: 28, y: 56 },
-  printer:  { label: 'TISKALNIK', x: 25, y: 86 },
-  nas:      { label: 'NAS', x: 50, y: 19 },
-  server:   { label: 'STREŽNIK', x: 50, y: 51 },
-  ap:       { label: 'DOSTOPNA TOČKA', x: 49, y: 85 },
-  internet: { label: 'INTERNET', x: 73.5, y: 30 },
-  camera:   { label: 'KAMERA', x: 74.5, y: 64 },
-  ravi:     { label: 'RAVI', x: 91, y: 17 },
-  cloud:    { label: 'OBLAK', x: 91, y: 51 },
-  phone:    { label: 'TELEFON', x: 90, y: 86 }
+  pc:       { label: 'RAČUNALNIK', x: 8, y: 58 },
+  switch:   { label: 'STIKALO', x: 25, y: 24 },
+  router:   { label: 'USMERJEVALNIK', x: 29, y: 55 },
+  printer:  { label: 'TISKALNIK', x: 23, y: 86 },
+  nas:      { label: 'NAS', x: 49, y: 18 },
+  server:   { label: 'STREŽNIK', x: 47, y: 63 },
+  ap:       { label: 'DOSTOPNA TOČKA', x: 49, y: 88 },
+  internet: { label: 'INTERNET', x: 69, y: 30 },
+  camera:   { label: 'KAMERA', x: 73, y: 70 },
+  ravi:     { label: 'RAVI', x: 91, y: 18 },
+  cloud:    { label: 'OBLAK', x: 90, y: 49 },
+  phone:    { label: 'TELEFON', x: 90, y: 84 }
 };
 
 const topologyLinks = {
