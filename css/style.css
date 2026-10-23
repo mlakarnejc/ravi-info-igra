@@ -2878,3 +2878,42 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   color:#eef3f8;
   font:800 11px ui-monospace,monospace;
 }
+
+/* RAVI RUN level polish */
+.runner-overlay .primary-btn {
+  align-self:center;
+  margin:12px auto 0;
+  min-width:180px;
+}
+.runner-platform {
+  transform:translateY(16px);
+}
+.runner-pit {
+  position:absolute;
+  left:var(--x);
+  bottom:0;
+  width:var(--w);
+  height:78px;
+  z-index:2;
+  display:grid;
+  place-items:end center;
+  padding-bottom:10px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(239,51,64,.20),transparent 46%),
+    linear-gradient(180deg,#03070d,#000);
+  border-left:3px solid #26364d;
+  border-right:3px solid #26364d;
+  box-shadow:inset 0 14px 22px rgba(0,0,0,.9),0 -5px 18px rgba(239,51,64,.08);
+  color:#6d2630;
+  font:900 9px ui-monospace,monospace;
+  letter-spacing:.16em;
+}
+.runner-pit::before {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:-10px;
+  height:10px;
+  background:#02050a;
+}
