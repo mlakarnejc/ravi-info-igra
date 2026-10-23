@@ -43,10 +43,59 @@
     <section id="screenHub" class="screen">
       <div class="section-head">
         <div>
-          <p class="eyebrow">RAVI SYSTEM MAP</p>
-          <h2>Aktiviraj module</h2>
+          <p class="eyebrow">RAVI LAB // SYSTEM RECOVERY</p>
+          <h2>Obnovi RAVI-ja</h2>
         </div>
         <p id="hubMessage" class="hub-message">Začni pri prvem modulu.</p>
+      </div>
+
+      <div id="hubStage" class="hub-stage progress-0">
+        <div class="lab-grid"></div>
+
+        <div class="lab-screen lab-screen-left">
+          <span class="lab-screen-label">NAPAJANJE</span>
+          <strong id="labPower">OFFLINE</strong>
+        </div>
+
+        <div class="lab-screen lab-screen-right">
+          <span class="lab-screen-label">OMREŽJE</span>
+          <strong id="labNetwork">OFFLINE</strong>
+        </div>
+
+        <div class="data-tower">
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="shield-ring" aria-hidden="true"></div>
+
+        <div class="hub-ravi" aria-label="RAVI se postopoma obnavlja">
+          <div class="hub-ravi-glow"></div>
+          <div class="hub-ravi-antenna"></div>
+          <div class="hub-ravi-head">
+            <span class="hub-eye hub-eye-left"></span>
+            <span class="hub-eye hub-eye-right"></span>
+            <span class="hub-mouth"></span>
+          </div>
+          <div class="hub-ravi-body">
+            <span class="hub-core">R</span>
+            <span class="hub-panel-line line-a"></span>
+            <span class="hub-panel-line line-b"></span>
+          </div>
+          <div class="hub-ravi-arm arm-left"></div>
+          <div class="hub-ravi-arm arm-right"></div>
+        </div>
+
+        <div class="repair-status">
+          <span>SYSTEM RECOVERY</span>
+          <strong id="repairPercent">0 %</strong>
+          <div class="repair-track"><div id="repairBar"></div></div>
+          <small id="repairText">RAVI čaka na prvi aktivni modul.</small>
+        </div>
+      </div>
+
+      <div class="hub-modules-head">
+        <span>MODULI</span>
+        <small>Vsak uspešno opravljen modul popravi del sistema.</small>
       </div>
       <div id="moduleGrid" class="module-grid"></div>
     </section>
