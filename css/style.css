@@ -3884,3 +3884,91 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   transform:rotate(30deg);
   transform-origin:left center;
 }
+
+/* Unified RAVI guidance system */
+.ravi-message-panel,
+.ml-ravi-speech.ravi-message-panel {
+  display:block !important;
+  position:relative;
+  padding:15px 16px 16px;
+  border:2px solid rgba(239,51,64,.72);
+  border-radius:15px;
+  background:
+    linear-gradient(180deg,rgba(239,51,64,.075),rgba(11,20,33,.96));
+  box-shadow:
+    0 0 0 1px rgba(239,51,64,.08),
+    0 0 24px rgba(239,51,64,.12),
+    inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.ravi-message-panel::before {
+  content:"";
+  position:absolute;
+  left:-2px;
+  top:14px;
+  bottom:14px;
+  width:3px;
+  border-radius:4px;
+  background:#ef3340;
+  box-shadow:0 0 12px rgba(239,51,64,.7);
+}
+
+.ravi-message-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+.ravi-message-head strong {
+  color:#fff;
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.12em;
+}
+
+.ravi-message-head span {
+  padding:4px 7px;
+  border-radius:6px;
+  background:rgba(239,51,64,.16);
+  color:#ff9098;
+  font:900 8px ui-monospace,monospace;
+  letter-spacing:.12em;
+}
+
+.ravi-message-panel p {
+  margin:0 !important;
+  color:#f3f6fa !important;
+  font-size:14px !important;
+  line-height:1.55 !important;
+  font-weight:700;
+}
+
+.ravi-message-panel.message-hint {
+  border-color:rgba(244,185,66,.75);
+}
+.ravi-message-panel.message-hint::before { background:#f4b942;box-shadow:0 0 12px rgba(244,185,66,.7); }
+.ravi-message-panel.message-hint .ravi-message-head span { background:rgba(244,185,66,.16);color:#ffd777; }
+
+.ravi-message-panel.message-error {
+  border-color:rgba(239,51,64,.9);
+}
+.ravi-message-panel.message-success {
+  border-color:rgba(56,193,114,.78);
+}
+.ravi-message-panel.message-success::before { background:#38c172;box-shadow:0 0 12px rgba(56,193,114,.65); }
+.ravi-message-panel.message-success .ravi-message-head span { background:rgba(56,193,114,.14);color:#8ee9b6; }
+
+.ravi-message-panel.message-flash {
+  animation:raviMessageFlash .62s ease;
+}
+@keyframes raviMessageFlash {
+  0% { transform:scale(.985); box-shadow:0 0 0 rgba(239,51,64,0); }
+  40% { transform:scale(1.01); box-shadow:0 0 30px rgba(239,51,64,.32); }
+  100% { transform:none; }
+}
+
+/* AI module: guidance lives only beside RAVI */
+.ml-focus-message { display:none !important; }
+.ml-ravi-console { opacity:1; }
+.ml-ravi-speech { margin-top:2px; }
