@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAVI – Informativni dan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">RAVI // INFO MISIJA</div>
+      <div class="progress-wrap" aria-label="Napredek">
+        <div class="progress-label"><span id="progressText">0 / 8 modulov</span><strong id="progressPercent">0 %</strong></div>
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      </div>
+    </header>
+
+    <section id="screenIntro" class="screen active">
+      <div class="hero-grid">
+        <div class="ravi-panel">
+          <div class="ravi-avatar" aria-label="Začasni prikaz RAVI-ja">
+            <div class="antenna"></div>
+            <div class="head">
+              <span class="eye"></span><span class="eye"></span>
+              <span class="mouth"></span>
+            </div>
+            <div class="body"><span class="core">R</span></div>
+          </div>
+          <div class="status-chip">SYSTEM BOOTING... <span>18 %</span></div>
+        </div>
+
+        <div class="dialog-panel">
+          <p class="eyebrow">INFORMATIVNI DAN // MISIJA 01</p>
+          <h1>Pomagaj RAVI-ju zagnati vseh 8 sistemov.</h1>
+          <p class="ravi-speech">»Živjo. Sem RAVI. Nekaj mojih sistemov še ni aktivnih. Sam tega ne morem dokončati. Potrebujem nekoga, ki razume računalništvo.«</p>
+          <p class="muted">Vsaka uspešno rešena naloga aktivira en modul. Napačen odgovor te ne ustavi – RAVI ti po potrebi pomaga.</p>
+          <button id="startBtn" class="primary-btn" type="button">ZAČNI MISIJO</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenHub" class="screen">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">RAVI SYSTEM MAP</p>
+          <h2>Aktiviraj module</h2>
+        </div>
+        <p id="hubMessage" class="hub-message">Začni pri prvem modulu.</p>
+      </div>
+      <div id="moduleGrid" class="module-grid"></div>
+    </section>
+
+    <section id="screenTask1" class="screen">
+      <div class="task-layout">
+        <aside class="ravi-side">
+          <div class="mini-ravi" aria-hidden="true">
+            <div class="mini-head"><span></span><span></span></div>
+            <div class="mini-body">R</div>
+          </div>
+          <div class="speech-box">
+            <strong>RAVI</strong>
+            <p id="raviTaskText">»Zagon sistema ... 42 %. Nekaj mi manjka. In ne, mikrovalovna pečica verjetno ni prava rešitev.«</p>
+          </div>
+        </aside>
+
+        <div class="task-card">
+          <div class="task-number">MODUL 1</div>
+          <h2>Spravi RAVI-ja v pogon</h2>
+          <p>Izberi <strong>3 komponente</strong>, ki sodijo v računalnik in jih RAVI potrebuje za delovanje.</p>
+          <div id="componentGrid" class="component-grid"></div>
+          <div class="task-actions">
+            <button id="checkTask1" class="primary-btn" type="button">PREVERI</button>
+            <button id="backHub1" class="ghost-btn" type="button">NAZAJ</button>
+          </div>
+          <div id="taskFeedback" class="feedback" aria-live="polite"></div>
+          <div class="subject-label">Predmet: <strong>Strojna in programska oprema</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenPlaceholder" class="screen">
+      <div class="placeholder-card">
+        <div class="mini-ravi centered" aria-hidden="true">
+          <div class="mini-head"><span></span><span></span></div>
+          <div class="mini-body">R</div>
+        </div>
+        <p class="eyebrow">NASLEDNJI MODUL</p>
+        <h2 id="placeholderTitle">Modul</h2>
+        <p>Ta naloga v prototipu še ni izdelana. Ogrodje, zaklepanje modulov in napredovanje že delujejo.</p>
+        <button id="placeholderBack" class="primary-btn" type="button">NAZAJ NA MODULE</button>
+      </div>
+    </section>
+  </main>
+  <script src="js/app.js"></script>
+</body>
+</html>
