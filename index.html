@@ -208,67 +208,63 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask3Text">»Moja spletna stran je skoraj prava. Samo nekdo je zamešal HTML oznake. Če bo šlo tako naprej, bo moja slika postala naslov.«</p>
+            <p id="raviTask3Text">»Moja spletna stran je razpadla na štiri dele. Povleci pravo HTML oznako na pravi element in jo sestavi nazaj.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 3</div>
-          <h2>Popravi mojo spletno stran</h2>
-          <p>Poveži vsak del spletne strani s pravo <strong>HTML oznako</strong>.</p>
+          <h2>Popravi spletno stran</h2>
+          <p>Povleci oznake <strong>&lt;h1&gt;, &lt;img&gt;, &lt;p&gt;, &lt;button&gt;</strong> na pravi del strani. Vsaka pravilna oznaka se takoj prikaže v predogledu.</p>
 
-          <div class="web-preview">
-            <div class="browser-bar"><span></span><span></span><span></span><b>ravi.local</b></div>
-            <div class="web-page">
-              <div class="web-item">
-                <div class="preview-title">Živjo, jaz sem RAVI!</div>
-                <select class="html-select" data-answer="h1" aria-label="Oznaka za naslov">
-                  <option value="">Izberi oznako</option>
-                  <option value="p">&lt;p&gt;</option>
-                  <option value="img">&lt;img&gt;</option>
-                  <option value="h1">&lt;h1&gt;</option>
-                  <option value="button">&lt;button&gt;</option>
-                </select>
+          <div class="html-repair-layout">
+            <div class="html-preview-shell">
+              <div class="browser-bar"><span></span><span></span><span></span><b>ravi.local</b></div>
+              <div id="htmlLivePage" class="html-live-page">
+                <div class="repair-zone zone-title" data-answer="h1">
+                  <span class="repair-zone-label">NASLOV</span>
+                  <div class="repair-placeholder">Živjo, jaz sem RAVI!</div>
+                </div>
+
+                <div class="repair-zone zone-image" data-answer="img">
+                  <span class="repair-zone-label">SLIKA</span>
+                  <div class="repair-placeholder repair-image-placeholder">?</div>
+                </div>
+
+                <div class="repair-zone zone-text" data-answer="p">
+                  <span class="repair-zone-label">BESEDILO</span>
+                  <div class="repair-placeholder">Pomagam ti raziskovati računalništvo.</div>
+                </div>
+
+                <div class="repair-zone zone-button" data-answer="button">
+                  <span class="repair-zone-label">GUMB</span>
+                  <div class="repair-placeholder">ZAČNI</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="html-toolbox">
+              <div class="html-toolbox-head">
+                <span>HTML ORODJARNA</span>
+                <strong id="htmlRepairCount">0 / 4</strong>
               </div>
 
-              <div class="web-item">
-                <div class="preview-image">🤖</div>
-                <select class="html-select" data-answer="img" aria-label="Oznaka za sliko">
-                  <option value="">Izberi oznako</option>
-                  <option value="p">&lt;p&gt;</option>
-                  <option value="img">&lt;img&gt;</option>
-                  <option value="h1">&lt;h1&gt;</option>
-                  <option value="button">&lt;button&gt;</option>
-                </select>
+              <div id="htmlTags" class="html-tags">
+                <button class="html-tag" draggable="true" data-tag="p" type="button">&lt;p&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="button" type="button">&lt;button&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="h1" type="button">&lt;h1&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="img" type="button">&lt;img&gt;</button>
               </div>
 
-              <div class="web-item">
-                <div class="preview-text">Pomagam ti raziskovati računalništvo.</div>
-                <select class="html-select" data-answer="p" aria-label="Oznaka za odstavek">
-                  <option value="">Izberi oznako</option>
-                  <option value="p">&lt;p&gt;</option>
-                  <option value="img">&lt;img&gt;</option>
-                  <option value="h1">&lt;h1&gt;</option>
-                  <option value="button">&lt;button&gt;</option>
-                </select>
-              </div>
-
-              <div class="web-item">
-                <div class="preview-button">ZAČNI</div>
-                <select class="html-select" data-answer="button" aria-label="Oznaka za gumb">
-                  <option value="">Izberi oznako</option>
-                  <option value="p">&lt;p&gt;</option>
-                  <option value="img">&lt;img&gt;</option>
-                  <option value="h1">&lt;h1&gt;</option>
-                  <option value="button">&lt;button&gt;</option>
-                </select>
+              <div class="html-tip">
+                <strong>NAMIG</strong>
+                <span>Naslov, slika, odstavek in gumb imajo vsak svojo HTML oznako.</span>
               </div>
             </div>
           </div>
 
           <div class="task-actions">
-            <button id="checkTask3" class="primary-btn" type="button">PREVERI</button>
-            <button id="resetTask3" class="ghost-btn" type="button">POČISTI</button>
+            <button id="resetTask3" class="ghost-btn" type="button">PONASTAVI STRAN</button>
             <button id="backHub3" class="ghost-btn" type="button">NAZAJ</button>
           </div>
           <div id="task3Feedback" class="feedback" aria-live="polite"></div>
