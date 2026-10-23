@@ -208,19 +208,25 @@
           </div>
           <div class="speech-box">
             <strong>RAVI</strong>
-            <p id="raviTask3Text">»Moja spletna stran je razpadla na štiri dele. Povleci pravo HTML oznako na pravi element in jo sestavi nazaj.«</p>
+            <p id="raviTask3Text">»Moja spletna stran je razpadla. Sestavi jo nazaj iz pravih HTML elementov — nekaj oznak v orodjarni pa sem očitno pustil samo zato, da te zmedem.«</p>
           </div>
         </aside>
 
         <div class="task-card">
           <div class="task-number">MODUL 3</div>
           <h2>Popravi spletno stran</h2>
-          <p>Povleci oznake <strong>&lt;h1&gt;, &lt;img&gt;, &lt;p&gt;, &lt;button&gt;</strong> na pravi del strani. Vsaka pravilna oznaka se takoj prikaže v predogledu.</p>
+          <p>Povleci prave HTML oznake na <strong>6 delov strani</strong>. V orodjarni so tudi napačne oznake, ki jih ne potrebuješ.</p>
 
           <div class="html-repair-layout">
             <div class="html-preview-shell">
               <div class="browser-bar"><span></span><span></span><span></span><b>ravi.local</b></div>
+
               <div id="htmlLivePage" class="html-live-page">
+                <div class="repair-zone zone-nav" data-answer="nav">
+                  <span class="repair-zone-label">NAVIGACIJA</span>
+                  <div class="repair-placeholder">DOMOV · PROGRAMI · KONTAKT</div>
+                </div>
+
                 <div class="repair-zone zone-title" data-answer="h1">
                   <span class="repair-zone-label">NASLOV</span>
                   <div class="repair-placeholder">Živjo, jaz sem RAVI!</div>
@@ -228,43 +234,76 @@
 
                 <div class="repair-zone zone-image" data-answer="img">
                   <span class="repair-zone-label">SLIKA</span>
-                  <div class="repair-placeholder repair-image-placeholder">?</div>
+                  <div class="repair-placeholder repair-image-placeholder">
+                    <span>SLIKA MANJKA</span>
+                  </div>
                 </div>
 
                 <div class="repair-zone zone-text" data-answer="p">
                   <span class="repair-zone-label">BESEDILO</span>
-                  <div class="repair-placeholder">Pomagam ti raziskovati računalništvo.</div>
+                  <div class="repair-placeholder">Pomagam ti raziskovati računalništvo in tehnologijo.</div>
                 </div>
 
                 <div class="repair-zone zone-button" data-answer="button">
                   <span class="repair-zone-label">GUMB</span>
-                  <div class="repair-placeholder">ZAČNI</div>
+                  <div class="repair-placeholder">SPOZNAJ PROGRAM</div>
                 </div>
+
+                <div class="repair-zone zone-footer" data-answer="footer">
+                  <span class="repair-zone-label">NOGA STRANI</span>
+                  <div class="repair-placeholder">Srednja šola Ravne · 2026</div>
+                </div>
+              </div>
+
+              <div id="htmlFinalPreview" class="html-final-preview hidden" aria-live="polite">
+                <nav class="final-web-nav">
+                  <strong>RAVI</strong>
+                  <span>Domov</span><span>Programi</span><span>Kontakt</span>
+                </nav>
+                <div class="final-web-hero">
+                  <div>
+                    <span class="final-web-kicker">SREDNJA ŠOLA RAVNE</span>
+                    <h3>Živjo, jaz sem RAVI!</h3>
+                    <p>Pomagam ti raziskovati računalništvo, tehnologijo in svet, ki ga lahko ustvariš s kodo.</p>
+                    <button type="button">SPOZNAJ PROGRAM</button>
+                  </div>
+                  <img
+                    alt="RAVI robot"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 320'%3E%3Crect width='320' height='320' rx='42' fill='%23111a28'/%3E%3Ccircle cx='160' cy='154' r='102' fill='%23283852'/%3E%3Crect x='82' y='70' width='156' height='104' rx='34' fill='%23c7d0dd' stroke='%2353637b' stroke-width='10'/%3E%3Ccircle cx='128' cy='120' r='13' fill='%23ef3340'/%3E%3Ccircle cx='192' cy='120' r='13' fill='%23ef3340'/%3E%3Cpath d='M126 149 Q160 170 194 149' fill='none' stroke='%23313b4b' stroke-width='8' stroke-linecap='round'/%3E%3Crect x='96' y='180' width='128' height='92' rx='28' fill='%23213045' stroke='%2353637b' stroke-width='10'/%3E%3Ccircle cx='160' cy='225' r='28' fill='%23ef3340'/%3E%3Ctext x='160' y='236' text-anchor='middle' font-family='Arial' font-weight='700' font-size='30' fill='white'%3ER%3C/text%3E%3Cline x1='160' y1='70' x2='160' y2='43' stroke='%2353637b' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='160' cy='35' r='10' fill='%23ef3340'/%3E%3C/svg%3E"
+                  >
+                </div>
+                <footer class="final-web-footer">Srednja šola Ravne · Informativni dan 2026</footer>
               </div>
             </div>
 
-            <div class="html-toolbox">
+            <div id="htmlToolbox" class="html-toolbox">
               <div class="html-toolbox-head">
                 <span>HTML ORODJARNA</span>
-                <strong id="htmlRepairCount">0 / 4</strong>
+                <strong id="htmlRepairCount">0 / 6</strong>
               </div>
 
               <div id="htmlTags" class="html-tags">
+                <button class="html-tag" draggable="true" data-tag="div" type="button">&lt;div&gt;</button>
                 <button class="html-tag" draggable="true" data-tag="p" type="button">&lt;p&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="nav" type="button">&lt;nav&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="table" type="button">&lt;table&gt;</button>
                 <button class="html-tag" draggable="true" data-tag="button" type="button">&lt;button&gt;</button>
                 <button class="html-tag" draggable="true" data-tag="h1" type="button">&lt;h1&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="span" type="button">&lt;span&gt;</button>
                 <button class="html-tag" draggable="true" data-tag="img" type="button">&lt;img&gt;</button>
+                <button class="html-tag" draggable="true" data-tag="footer" type="button">&lt;footer&gt;</button>
               </div>
 
               <div class="html-tip">
                 <strong>NAMIG</strong>
-                <span>Naslov, slika, odstavek in gumb imajo vsak svojo HTML oznako.</span>
+                <span>Ne potrebuješ vseh oznak. Pomisli, katera oznaka najbolje opiše posamezen del strani.</span>
               </div>
             </div>
           </div>
 
           <div class="task-actions">
             <button id="resetTask3" class="ghost-btn" type="button">PONASTAVI STRAN</button>
+            <button id="finishTask3" class="primary-btn hidden" type="button">NADALJUJ</button>
             <button id="backHub3" class="ghost-btn" type="button">NAZAJ</button>
           </div>
           <div id="task3Feedback" class="feedback" aria-live="polite"></div>
