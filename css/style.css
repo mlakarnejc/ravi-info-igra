@@ -456,3 +456,126 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .security-choice { grid-template-columns: 1fr; }
   .phishing-head { flex-direction: column; }
 }
+
+.design-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+  margin: 28px 0 22px;
+}
+.design-option {
+  min-height: 270px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: transform .15s ease, outline-color .15s ease;
+}
+.design-option:hover {
+  transform: translateY(-2px);
+}
+.design-option.selected {
+  outline: 3px solid var(--accent);
+}
+.design-option.correct {
+  outline: 3px solid var(--good);
+}
+.design-option.wrong {
+  outline: 3px solid var(--accent);
+}
+.design-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 900;
+}
+.design-chaos {
+  background: linear-gradient(135deg, #f2d31c, #ff6a3d 45%, #6d35ff);
+  color: #101010;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  transform: rotate(-1deg);
+}
+.design-chaos strong {
+  display: block;
+  font-size: 31px;
+  line-height: .95;
+  margin: 34px 0 18px;
+}
+.design-jumble {
+  display: block;
+  font-size: 18px;
+  line-height: 1.15;
+  transform: rotate(2deg);
+}
+.design-tiny {
+  display: block;
+  margin-top: 20px;
+  font: 10px/1.1 Arial, sans-serif;
+}
+.design-chaos .design-tag {
+  background: #111;
+  color: #fff;
+}
+.design-clean {
+  background: #f7f8fb;
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 9px;
+}
+.design-clean .design-tag {
+  background: #111827;
+  color: white;
+}
+.design-clean .design-kicker {
+  color: #687386;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+.design-clean strong {
+  font-size: 30px;
+  line-height: 1;
+}
+.design-clean .design-time {
+  font-weight: 900;
+  margin-top: 12px;
+}
+.design-clean .design-cta {
+  margin-top: 10px;
+  display: inline-flex;
+  width: fit-content;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: #111827;
+  color: white;
+  font-weight: 800;
+}
+.design-flat {
+  background: #dfe4ea;
+  color: #303844;
+  font-family: "Times New Roman", serif;
+}
+.design-flat .design-tag {
+  background: #788392;
+  color: white;
+}
+.design-flat strong {
+  display: block;
+  margin: 34px 0 12px;
+  font-size: 23px;
+}
+.design-flat span:last-child {
+  line-height: 1.35;
+}
+@media (max-width: 760px) {
+  .design-grid { grid-template-columns: 1fr; }
+}
