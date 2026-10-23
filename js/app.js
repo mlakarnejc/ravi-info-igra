@@ -1379,32 +1379,32 @@ function initDataFilterGame() {
 
 const topologyNodes = {
   pc:       { label: 'RAČUNALNIK', x: 8, y: 58 },
-  switch:   { label: 'STIKALO', x: 25, y: 24 },
-  router:   { label: 'USMERJEVALNIK', x: 29, y: 55 },
+  switch:   { label: 'STIKALO', x: 29, y: 55 },
+  router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
   printer:  { label: 'TISKALNIK', x: 23, y: 86 },
   nas:      { label: 'NAS', x: 49, y: 18 },
   server:   { label: 'STREŽNIK', x: 47, y: 63 },
   ap:       { label: 'DOSTOPNA TOČKA', x: 49, y: 88 },
-  internet: { label: 'INTERNET', x: 69, y: 30 },
+  internet: { label: 'INTERNET', x: 90, y: 49 },
   camera:   { label: 'KAMERA', x: 73, y: 70 },
   ravi:     { label: 'RAVI', x: 91, y: 18 },
-  cloud:    { label: 'OBLAK', x: 90, y: 49 },
+  cloud:    { label: 'OBLAK', x: 69, y: 30 },
   phone:    { label: 'TELEFON', x: 90, y: 84 }
 };
 
 const topologyLinks = {
-  pc: ['switch', 'router', 'printer'],
-  switch: ['pc', 'nas', 'server'],
-  router: ['pc', 'nas', 'server', 'ap'],
+  pc: ['router', 'switch', 'printer'],
+  router: ['pc', 'nas', 'server'],
+  switch: ['pc', 'server', 'ap'],
   printer: ['pc', 'server', 'ap'],
-  nas: ['switch', 'router', 'internet', 'camera'],
-  server: ['switch', 'router', 'printer', 'internet', 'camera'],
-  ap: ['router', 'printer', 'camera'],
-  internet: ['nas', 'server', 'ravi', 'cloud'],
-  camera: ['nas', 'server', 'ap', 'cloud', 'phone'],
-  ravi: ['internet'],
-  cloud: ['internet', 'camera'],
-  phone: ['camera']
+  nas: ['router', 'cloud', 'camera'],
+  server: ['router', 'switch', 'printer', 'internet', 'camera'],
+  ap: ['switch', 'printer', 'camera'],
+  cloud: ['nas', 'internet', 'ravi'],
+  camera: ['nas', 'server', 'ap', 'internet', 'phone'],
+  internet: ['server', 'cloud', 'camera', 'ravi', 'phone'],
+  ravi: ['cloud', 'internet'],
+  phone: ['camera', 'internet']
 };
 
 const correctTopologyRoute = ['pc', 'router', 'server', 'internet', 'ravi'];
