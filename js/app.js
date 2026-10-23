@@ -2078,11 +2078,12 @@ function runnerLoop(now) {
       return;
     }
 
-    runnerState.x = 2185;
-    runnerState.vx = -90;
+    runnerHit(1575);
+
     const feedback7 = document.getElementById('task7Feedback');
-    feedback7.textContent = `Terminal je zaklenjen. Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
+    feedback7.textContent = `TERMINAL ZAKLENJEN ✕ Manjka še ${3 - runnerState.collected.size} košček/koščki kode.`;
     feedback7.className = 'feedback error';
+    document.getElementById('raviTask7Text').textContent = '»Brez vse kode terminal ne odpre vrat. Nazaj po manjkajoči košček.«';
   }
 
   renderRunnerPosition();
