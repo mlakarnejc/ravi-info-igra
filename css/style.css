@@ -2906,3 +2906,18 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     linear-gradient(180deg,#28151a,#15121a);
   box-shadow:0 0 28px rgba(239,51,64,.2);
 }
+
+.runner-player.entering-terminal {
+  transition:left .52s ease-in, bottom .52s ease-in, transform .52s ease-in, opacity .38s ease .45s;
+  left:2290px !important;
+  bottom:78px !important;
+  transform:translateX(-50%) scale(.72);
+}
+.runner-player.inside-terminal {
+  opacity:0;
+  transform:translateX(-50%) scale(.34);
+}
+.runner-goal.entering {
+  border-color:#38c172;
+  box-shadow:0 0 34px rgba(56,193,114,.38), inset 0 0 0 4px #0b121d;
+}
