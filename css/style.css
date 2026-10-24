@@ -6093,3 +6093,90 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .network-links line {
   vector-effect:non-scaling-stroke;
 }
+
+/* ===== Stronger visual pass after screenshot review ===== */
+
+/* Airlock: put status cards clearly below the room markers. */
+#screenStory .story-path {
+  top:52px !important;
+}
+#screenStory .airlock-status-grid {
+  top:132px !important;
+  width:min(720px,62%) !important;
+  gap:10px !important;
+}
+#screenStory .airlock-status {
+  min-height:48px;
+  padding:11px 12px !important;
+}
+#screenStory .airlock-status span {
+  margin-bottom:5px;
+}
+
+/* Make the game-window texture unmistakable, not barely visible. */
+.unified-game-surface {
+  background:
+    radial-gradient(circle at 12% 18%,rgba(66,118,205,.13),transparent 180px),
+    radial-gradient(circle at 88% 82%,rgba(239,51,64,.07),transparent 210px),
+    linear-gradient(135deg,rgba(13,26,43,.98),rgba(6,14,24,.99)) !important;
+}
+.unified-game-surface::before {
+  background:
+    linear-gradient(90deg,rgba(96,143,214,.075) 1px,transparent 1px),
+    linear-gradient(rgba(96,143,214,.065) 1px,transparent 1px) !important;
+  background-size:28px 28px !important;
+  opacity:.7;
+}
+.unified-game-surface::after {
+  height:2px !important;
+  background:linear-gradient(90deg,transparent,rgba(108,169,255,.62),transparent) !important;
+  box-shadow:0 0 20px rgba(108,169,255,.28) !important;
+}
+
+/* Inner game panels inherit the same tech language so they don't hide the outer texture. */
+.program-board-wrap,
+.program-panel,
+.html-preview-shell,
+.html-toolbox,
+.data-stage-inner,
+.security-card-stage,
+.security-message-card,
+.runner-world {
+  background-color:transparent !important;
+}
+
+.program-board-wrap,
+.program-panel,
+.html-toolbox,
+.security-message-card {
+  background:
+    linear-gradient(180deg,rgba(9,18,31,.84),rgba(7,14,24,.78)) !important;
+}
+
+.html-preview-shell,
+.data-stage-inner,
+.security-card-stage {
+  background:
+    linear-gradient(180deg,rgba(10,20,34,.52),rgba(6,13,23,.38)) !important;
+}
+
+/* More visible corner radar and blinking indicators. */
+.game-tech-rings {
+  opacity:.55 !important;
+}
+.game-tech-dot {
+  width:6px !important;
+  height:6px !important;
+  box-shadow:0 0 12px rgba(88,160,255,.95) !important;
+}
+.game-tech-corner {
+  opacity:.5 !important;
+}
+
+/* Network: make direct PC -> server connection obvious. */
+.network-links .direct-link {
+  stroke:#83b6ff !important;
+  stroke-width:4.5 !important;
+  opacity:.95 !important;
+  filter:drop-shadow(0 0 3px rgba(100,165,255,.5));
+}
