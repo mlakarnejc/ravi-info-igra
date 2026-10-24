@@ -5115,3 +5115,45 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   padding-top:0;
   border-top:0;
 }
+
+/* Task 8 keeps its special AI-lab layout, but navigation aligns under the main workbench. */
+#screenTask8 .ml-footer {
+  display:grid !important;
+  grid-template-columns:244px minmax(0,1fr);
+  column-gap:18px;
+  row-gap:14px;
+  align-items:start;
+  margin-top:18px !important;
+}
+
+#screenTask8 .ml-progress-dots {
+  grid-column:1;
+  justify-self:start;
+  align-self:center;
+}
+
+#screenTask8 #resetTask8,
+#screenTask8 #backHub8 {
+  grid-row:1;
+}
+
+#screenTask8 #resetTask8 {
+  grid-column:2;
+  justify-self:start;
+  margin-left:0;
+}
+
+#screenTask8 #backHub8 {
+  grid-column:2;
+  justify-self:start;
+  margin-left:186px;
+}
+
+#screenTask8 .subject-label {
+  grid-column:2;
+  justify-self:end;
+  width:100%;
+  margin-top:4px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+}
