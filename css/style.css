@@ -7125,3 +7125,80 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     width:min(520px,92%);
   }
 }
+
+
+/* ===== Intro left-column layout correction ===== */
+
+/* Keep the original intro height; only reflow the left-side contents. */
+.intro-mission {
+  min-height:720px !important;
+}
+
+.intro-ravi-zone {
+  position:relative;
+  min-height:720px;
+  display:block !important;
+}
+
+/* Diagnostics stay at the top, exactly as a separate system strip. */
+.intro-diagnostics {
+  top:48px !important;
+  left:28px !important;
+  right:28px !important;
+  z-index:6 !important;
+}
+
+/* Move RAVI below the diagnostics instead of letting him overlap them. */
+.intro-radar {
+  top:205px !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+}
+
+.intro-ravi-avatar {
+  position:absolute !important;
+  left:50% !important;
+  top:175px !important;
+  transform:translateX(-50%) !important;
+  margin:0 !important;
+  z-index:5 !important;
+}
+
+/* Speech sits below RAVI and above the recovery bar. */
+.intro-ravi-line-left {
+  position:absolute !important;
+  left:50% !important;
+  bottom:112px !important;
+  transform:translateX(-50%) !important;
+  width:min(330px,86%) !important;
+  margin:0 !important;
+}
+
+/* Keep recovery bar at the bottom as before. */
+.intro-bootbar {
+  position:absolute !important;
+  left:28px !important;
+  right:28px !important;
+  bottom:26px !important;
+  width:auto !important;
+  margin:0 !important;
+}
+
+@media (max-width:900px) {
+  .intro-ravi-zone {
+    min-height:640px;
+  }
+
+  .intro-ravi-avatar {
+    top:165px !important;
+  }
+
+  .intro-radar {
+    top:195px !important;
+  }
+
+  .intro-ravi-line-left {
+    bottom:110px !important;
+    width:min(520px,90%) !important;
+  }
+}
