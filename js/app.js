@@ -113,6 +113,8 @@ function renderStoryRoom(index = storyRoomIndex) {
   document.getElementById('storySubject').textContent = room.subject;
   document.getElementById('storyTitle').textContent = room.title;
   document.getElementById('storyDescription').textContent = room.description;
+  const storySubjectSummary = document.getElementById('storySubjectSummary');
+  if (storySubjectSummary) storySubjectSummary.textContent = room.description;
 
   const storyPercent = Math.round((storyRoomIndex / storyRooms.length) * 100);
   document.getElementById('airlockAccess').textContent = `${String(storyRoomIndex + 1).padStart(2,'0')} / 08`;
