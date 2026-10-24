@@ -432,11 +432,12 @@
         <strong>FILTRIRAJ PODATKE</strong>
         <div class="start-instruction-list">
           <span>Nastavi pravilne <b>filtre</b></span>
-          <span>Poišči <b>Računalništvo · 3. letnik</b></span>
+          <span>Poišči <b>Računalništvo, 3. letnik</b></span>
           <span>Nato uredi po <b>točkah</b> in izberi najboljšega</span>
         </div>
         <button id="startTask4Game" class="primary-btn" type="button">ZAČNI</button>
       </div>
+            <div class="data-stage-inner">
             <div class="data-filter-panel">
             <div class="data-filter">
               <label for="filterSpol">SPOL</label>
@@ -499,8 +500,8 @@
           <div class="in-game-actions data-confirm-actions">
             <button id="checkTask4" class="primary-btn" type="button">POTRDI REZULTAT</button>
           </div>
+          </div>
 
-          
           </div>
 
           <div class="task-actions">
@@ -545,42 +546,42 @@
       </div>
 
               <svg class="network-links" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
-                <line x1="80" y1="325" x2="250" y2="135"></line>
-                <line x1="80" y1="325" x2="290" y2="310"></line>
-                <line x1="80" y1="325" x2="230" y2="482"></line>
+                <!-- PC connections -->
+                <line x1="110" y1="325" x2="250" y2="135"></line>
+                <line x1="110" y1="325" x2="360" y2="246"></line>
+                <line x1="110" y1="325" x2="230" y2="482"></line>
 
+                <!-- Router / switch / server -->
                 <line x1="250" y1="135" x2="490" y2="100"></line>
-                <line x1="250" y1="135" x2="470" y2="353"></line>
+                <line x1="250" y1="135" x2="360" y2="246"></line>
+                <line x1="360" y1="246" x2="470" y2="353"></line>
 
-                <line x1="290" y1="310" x2="470" y2="353"></line>
-                <line x1="290" y1="310" x2="490" y2="493"></line>
-
-                <line x1="230" y1="482" x2="490" y2="493"></line>
+                <!-- Printer / AP / server -->
                 <line x1="230" y1="482" x2="470" y2="353"></line>
-
-                <line x1="490" y1="100" x2="690" y2="168"></line>
-                <line x1="490" y1="100" x2="730" y2="392"></line>
-
-                <line x1="470" y1="353" x2="900" y2="274"></line>
-                <line x1="470" y1="353" x2="690" y2="168"></line>
-                <line x1="470" y1="353" x2="730" y2="392"></line>
-
+                <line x1="230" y1="482" x2="490" y2="493"></line>
                 <line x1="490" y1="493" x2="730" y2="392"></line>
 
-                <line x1="690" y1="168" x2="910" y2="100"></line>
-                <line x1="690" y1="168" x2="900" y2="274"></line>
+                <!-- Core network -->
+                <line x1="490" y1="100" x2="690" y2="168"></line>
+                <line x1="490" y1="100" x2="730" y2="392"></line>
+                <line x1="470" y1="353" x2="690" y2="168"></line>
+                <line x1="470" y1="353" x2="900" y2="274"></line>
+                <line x1="470" y1="353" x2="730" y2="392"></line>
 
+                <!-- Outer devices -->
+                <line x1="690" y1="168" x2="860" y2="100"></line>
+                <line x1="690" y1="168" x2="900" y2="274"></line>
                 <line x1="730" y1="392" x2="900" y2="274"></line>
                 <line x1="730" y1="392" x2="900" y2="470"></line>
-
-                <line x1="900" y1="274" x2="910" y2="100"></line>
+                <line x1="900" y1="274" x2="860" y2="100"></line>
+                <line x1="900" y1="274" x2="900" y2="470"></line>
               </svg>
 
               <button class="topology-node node-pc current" data-node="pc" type="button" style="--x:11%;--y:58%">
                 <span class="topology-icon">💻</span><strong>RAČUNALNIK</strong>
               </button>
 
-              <button class="topology-node" data-node="switch" type="button" style="--x:29%;--y:49%">
+              <button class="topology-node" data-node="switch" type="button" style="--x:36%;--y:44%">
                 <span class="topology-icon">🔀</span><strong>STIKALO</strong>
               </button>
               <button class="topology-node node-router" data-node="router" type="button" style="--x:25%;--y:24%">
@@ -942,7 +943,7 @@
                 </div>
               </div>
               <div class="ml-test-actions">
-                <button id="mlContinueAfterError" class="primary-btn hidden" type="button">NADALJUJ</button>
+                <button id="mlContinueAfterError" class="primary-btn hidden" type="button" disabled>NADALJUJ</button>
               </div>
             </div>
 
@@ -1028,7 +1029,7 @@
                   <span>MODEL IMPROVED</span>
                   <strong>AI se uči iz podatkov.</strong>
                   <p>Bolj raznoliki in kakovostni podatki lahko pomagajo zmanjšati napake modela.</p>
-                  <button id="mlFinishBtn" class="primary-btn" type="button">AKTIVIRAJ AI CORE</button>
+                  <button id="mlFinishBtn" class="primary-btn" type="button" disabled>AKTIVIRAJ AI CORE</button>
                 </div>
               </div>
             </div>
