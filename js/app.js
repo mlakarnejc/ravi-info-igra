@@ -114,6 +114,13 @@ function renderStoryRoom(index = storyRoomIndex) {
   document.getElementById('storyTitle').textContent = room.title;
   document.getElementById('storyDescription').textContent = room.description;
 
+  const storyPercent = Math.round((storyRoomIndex / storyRooms.length) * 100);
+  document.getElementById('airlockAccess').textContent = `${String(storyRoomIndex + 1).padStart(2,'0')} / 08`;
+  document.getElementById('airlockStatus').textContent = storyRoomIndex === 7 ? 'CORE READY' : 'READY';
+  document.getElementById('airlockPower').textContent = `${storyPercent} %`;
+  document.getElementById('airlockDoor').textContent = 'SECURED';
+  document.getElementById('airlockConsoleRoom').textContent = `LAB ${String(storyRoomIndex + 1).padStart(2,'0')}`;
+
   setRaviMessage('storyRaviText', room.ravi, 'instruction');
 
   document.querySelectorAll('.story-room-marker').forEach((marker, markerIndex) => {
@@ -133,9 +140,16 @@ function showStoryRoom(index) {
 
 function enterStoryRoom() {
   const door = document.getElementById('storyDoor');
+  const doorStatus = document.getElementById('airlockDoor');
+  const moduleStatus = document.getElementById('airlockStatus');
+  if (doorStatus) doorStatus.textContent = 'UNLOCKING';
+  if (moduleStatus) moduleStatus.textContent = 'ACCESSING';
   door.classList.add('door-open');
 
   setTimeout(() => {
+    if (doorStatus) doorStatus.textContent = 'OPEN';
+    if (moduleStatus) moduleStatus.textContent = 'ENTER';
+
     openModule(storyRoomIndex);
   }, 620);
 }
@@ -1618,9 +1632,8 @@ function initDataFilterGame() {
 
 const topologyNodes = {
   pc:       { label: 'RAČUNALNIK', x: 11, y: 58 },
-  switch:   { label: 'STIKALO', x: 29, y: 60 },
+  switch:   { label: 'STIKALO', x: 23, y: 86 },
   router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
-  printer:  { label: 'TISKALNIK', x: 23, y: 86 },
   nas:      { label: 'NAS', x: 49, y: 18 },
   server:   { label: 'STREŽNIK', x: 47, y: 63 },
   ap:       { label: 'DOSTOPNA TOČKA', x: 49, y: 88 },
@@ -1632,13 +1645,12 @@ const topologyNodes = {
 };
 
 const topologyLinks = {
-  pc: ['router', 'switch', 'printer'],
+  pc: ['router', 'switch'],
   router: ['pc', 'nas', 'server'],
   switch: ['pc', 'server'],
-  printer: ['pc', 'server', 'ap'],
   nas: ['router', 'cloud', 'camera'],
-  server: ['router', 'switch', 'printer', 'cloud', 'internet', 'camera'],
-  ap: ['printer', 'camera'],
+  server: ['router', 'switch', 'cloud', 'internet', 'camera'],
+  ap: ['camera'],
   cloud: ['nas', 'server', 'internet', 'ravi'],
   camera: ['nas', 'server', 'ap', 'internet', 'phone'],
   internet: ['server', 'cloud', 'camera', 'ravi', 'phone'],
