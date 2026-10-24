@@ -7343,3 +7343,9 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenStory .story-enter-btn {
   margin-top:24px !important;
 }
+
+
+/* ===== Restart buttons appear only after task start ===== */
+.task-restart-btn[hidden] {
+  display:none !important;
+}
