@@ -4882,3 +4882,53 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .feedback:empty {
   display:none;
 }
+
+/* ===== Final global button typography ===== */
+.primary-btn,
+.ghost-btn,
+.in-game-actions button,
+.in-game-continue button,
+.ml-footer button,
+.task-actions button {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:48px !important;
+  padding:0 20px !important;
+  border-radius:12px !important;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  letter-spacing:.02em !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+}
+
+/* Recovery always centered in the available app area. */
+#screenRecovery.active {
+  display:grid !important;
+  place-items:center !important;
+  min-height:calc(100vh - 120px);
+}
+#screenRecovery .recovery-shell {
+  margin:0 auto !important;
+  width:min(900px,94%) !important;
+  min-height:620px;
+}
+
+/* Consistent completion feedback. */
+.feedback.success {
+  display:block !important;
+  width:100%;
+  background:rgba(56,193,114,.08) !important;
+  color:#8ee9b6 !important;
+  border:1px solid rgba(56,193,114,.28) !important;
+  font-size:14px;
+  line-height:1.45;
+}
+
+/* No separate success/continue UI inside the web task. */
+#finishTask3 {
+  display:none !important;
+}
