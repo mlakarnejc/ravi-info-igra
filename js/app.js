@@ -499,6 +499,16 @@ let catchMistakeValue = 0;
 let catchStartTime = 0;
 const catchTargetScore = 10;
 
+
+function setTechHudValue(type, label, value) {
+  const hud = document.querySelector(`[data-tech-hud="${type}"]`);
+  if (!hud) return;
+  const items = [...hud.querySelectorAll('span')];
+  const item = items.find((el) => el.textContent.trim().startsWith(label));
+  const valueEl = item?.querySelector('b');
+  if (valueEl) valueEl.textContent = value;
+}
+
 function resetCatchGame() {
   stopCatchGame();
   catchObjects.forEach((obj) => obj.el.remove());
@@ -518,6 +528,8 @@ function resetCatchGame() {
   player.style.left = '50%';
   overlay.classList.remove('hidden');
   document.getElementById('catchScore').textContent = `0 / ${catchTargetScore}`;
+  setTechHudValue('hardware', 'CPU', '36%');
+  setTechHudValue('hardware', 'RAM', '4.2 GB');
   document.getElementById('catchMistakes').textContent = '0';
 
   const f = document.getElementById('taskFeedback');
@@ -624,6 +636,7 @@ function catchGameLoop(now) {
         obj.el.classList.add('caught-good');
         catchScoreValue += 1;
         document.getElementById('catchScore').textContent = `${catchScoreValue} / ${catchTargetScore}`;
+        setTechHudValue('hardware', 'CPU', `${36 + catchScoreValue * 4}%`);
         document.getElementById('taskFeedback').textContent = `+1: ${obj.label}. Do cilja še ${Math.max(0, catchTargetScore - catchScoreValue)}.`;
         document.getElementById('taskFeedback').className = 'feedback success';
 
@@ -768,6 +781,7 @@ function resetProgramGame() {
   programRobot = { ...programStart };
   renderProgramBoard();
   renderProgramSequence();
+  setTechHudValue('code', 'STEPS', `${programCommands.length}/10`);
 
   const feedback2 = document.getElementById('task2Feedback');
   if (feedback2) {
@@ -869,6 +883,8 @@ async function runProgramGame() {
   }
 
   programRunning = true;
+  setTechHudValue('code', 'STATUS', 'EXECUTING');
+  setTechHudValue('code', 'EXECUTION', 'RUNNING');
   programRobot = { ...programStart };
   renderProgramBoard();
 
@@ -906,6 +922,8 @@ async function runProgramGame() {
     document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
 
     programRunning = false;
+    setTechHudValue('code', 'STATUS', 'SUCCESS');
+    setTechHudValue('code', 'EXECUTION', 'DONE');
     completeTaskFlow(1, 'task2Feedback', 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.', 1600);
     return;
   }
@@ -1416,6 +1434,8 @@ function renderDataRows() {
 
   const count = document.getElementById('dataResultCount');
   if (count) count.textContent = String(filtered.length);
+  setTechHudValue('data', 'ROWS', String(filtered.length));
+  setTechHudValue('data', 'FILTER', filtered.length === dataRecords.length ? 'OFF' : 'ACTIVE');
 
   const phase = document.getElementById('dataPhaseHint');
   const sortBtn = document.getElementById('sortPointsBtn');
@@ -1598,7 +1618,7 @@ function initDataFilterGame() {
 
 const topologyNodes = {
   pc:       { label: 'RAČUNALNIK', x: 11, y: 58 },
-  switch:   { label: 'STIKALO', x: 36, y: 44 },
+  switch:   { label: 'STIKALO', x: 29, y: 60 },
   router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
   printer:  { label: 'TISKALNIK', x: 23, y: 86 },
   nas:      { label: 'NAS', x: 49, y: 18 },
@@ -1613,11 +1633,11 @@ const topologyNodes = {
 
 const topologyLinks = {
   pc: ['router', 'switch', 'printer'],
-  router: ['pc', 'nas', 'switch'],
-  switch: ['pc', 'router', 'server'],
+  router: ['pc', 'nas', 'server'],
+  switch: ['pc', 'server'],
   printer: ['pc', 'server', 'ap'],
   nas: ['router', 'cloud', 'camera'],
-  server: ['switch', 'printer', 'cloud', 'internet', 'camera'],
+  server: ['router', 'switch', 'printer', 'cloud', 'internet', 'camera'],
   ap: ['printer', 'camera'],
   cloud: ['nas', 'server', 'internet', 'ravi'],
   camera: ['nas', 'server', 'ap', 'internet', 'phone'],
@@ -1626,7 +1646,7 @@ const topologyLinks = {
   phone: ['camera', 'internet']
 };
 
-const correctTopologyRoute = ['pc', 'router', 'switch', 'server', 'internet', 'ravi'];
+const correctTopologyRoute = ['pc', 'router', 'server', 'internet', 'ravi'];
 let topologyCurrent = 'pc';
 let topologyStage = 0;
 let topologyWrongAttempts = 0;
@@ -1764,6 +1784,8 @@ function chooseTopologyNode(targetId) {
     }
 
     renderDiscoveredRoute();
+    setTechHudValue('network', 'ROUTE', `${topologyStage + 1} HOPS`);
+    setTechHudValue('network', 'PACKET', targetId === 'ravi' ? 'DELIVERED' : 'MOVING');
 
     if (targetId === 'ravi') {
       finishNetworkGame();
@@ -1774,9 +1796,7 @@ function chooseTopologyNode(targetId) {
     feedback5.className = 'feedback success';
 
     if (targetId === 'router') {
-      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer. Zdaj poišči napravo, ki povezuje omrežne naprave.«';
-    } else if (targetId === 'switch') {
-      ravi5.textContent = '»Pravilno. Stikalo je vmesna povezava do strežnika.«';
+      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer, ampak pot še ni končana.«';
     } else if (targetId === 'server') {
       ravi5.textContent = '»Pravilno. Paket je prišel do vmesnega strežnika. Kam naprej?«';
     } else if (targetId === 'internet') {
@@ -1915,6 +1935,7 @@ function renderSecurityMessage() {
   document.getElementById('securityBadge').textContent = `${securityIndex + 1} / ${activeSecurityMessages.length}`;
   document.getElementById('securityProgress').textContent = `${securityIndex} / ${activeSecurityMessages.length}`;
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
+  setTechHudValue('security', 'SAFE', `${securityIndex}/${activeSecurityMessages.length}`);
 
   const card = document.getElementById('securityMessageCard');
   card.classList.remove('swipe-left','swipe-right','wrong-answer','vault-left','vault-right');
@@ -2067,6 +2088,8 @@ const runnerCodes = [
 function updateRunnerHud() {
   document.getElementById('runnerCodeCount').textContent = `${runnerState.collected.size} / 3`;
   document.getElementById('runnerHits').textContent = String(runnerState.hits);
+  setTechHudValue('runner', 'CHECKPOINT', String(runnerState.collected.size + 1).padStart(2,'0'));
+  setTechHudValue('runner', 'EVENTS', runnerState.running ? 'LIVE' : 'READY');
 }
 
 function renderRunnerPosition() {
