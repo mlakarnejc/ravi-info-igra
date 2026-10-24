@@ -1917,7 +1917,7 @@ function renderSecurityMessage() {
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
 
   const card = document.getElementById('securityMessageCard');
-  card.classList.remove('swipe-left','swipe-right','wrong-answer');
+  card.classList.remove('swipe-left','swipe-right','wrong-answer','vault-left','vault-right');
   document.getElementById('securityReason').className = 'security-reason hidden';
 }
 
