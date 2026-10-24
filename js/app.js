@@ -371,7 +371,7 @@ function checkTask1() {
 
     updateProgress();
     renderModules();
-    setTimeout(() => showRecoveryAfterModule(4), 1600);
+    setTimeout(() => showRecoveryAfterModule(0), 1600);
     return;
   }
 
@@ -1002,7 +1002,7 @@ function checkTask3() {
 
     updateProgress();
     renderModules();
-    setTimeout(() => showScreen('screenHub'), 1700);
+    setTimeout(() => showRecoveryAfterModule(2), 1700);
     return;
   }
 
@@ -1461,7 +1461,7 @@ function checkTask4() {
 
     updateProgress();
     renderModules();
-    setTimeout(() => showScreen('screenHub'), 1850);
+    setTimeout(() => showRecoveryAfterModule(3), 1850);
     return;
   }
 
@@ -1744,7 +1744,7 @@ function finishNetworkGame() {
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1900);
+  setTimeout(() => showRecoveryAfterModule(4), 1900);
 }
 
 function initNetworkTopologyGame() {
@@ -1929,7 +1929,7 @@ function finishSecurityGame() {
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1900);
+  setTimeout(() => showRecoveryAfterModule(5), 1900);
 }
 
 function handleSecurityKey(event) {
@@ -2301,7 +2301,7 @@ function finishRunnerGame() {
 
   updateProgress();
   renderModules();
-  setTimeout(() => showScreen('screenHub'), 1900);
+  setTimeout(() => showRecoveryAfterModule(6), 1900);
 }
 
 
@@ -2780,7 +2780,7 @@ document.getElementById('backHub8').addEventListener('click', () => showStoryRoo
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
 document.getElementById('continueStory').addEventListener('click', continueStoryPath);
 document.getElementById('finalHub').addEventListener('click', () => showStoryRoom(0));
-document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('placeholderBack').addEventListener('click', () => showStoryRoom(storyRoomIndex));
 
 
 document.querySelectorAll('.ravi-message-panel').forEach((panel) => {
