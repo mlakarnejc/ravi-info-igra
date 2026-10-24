@@ -136,28 +136,10 @@ function enterStoryRoom() {
   door.classList.add('door-open');
 
   setTimeout(() => {
-    showRoomBriefing(storyRoomIndex);
+    openModule(storyRoomIndex);
   }, 620);
 }
 
-function showRoomBriefing(index) {
-  const room = storyRooms[index];
-
-  document.getElementById('briefingCode').textContent = `${room.code} // ${room.room}`;
-  document.getElementById('briefingSubject').textContent = room.subject;
-  document.getElementById('briefingRaviText').textContent = room.ravi;
-
-  document.getElementById('briefingInstructions').innerHTML = room.instructions
-    .map((instruction, instructionIndex) => `
-      <div class="briefing-instruction-row">
-        <span>${instructionIndex + 1}</span>
-        <strong>${instruction}</strong>
-      </div>
-    `)
-    .join('');
-
-  showScreen('screenBriefing');
-}
 
 
 function showRecoveryAfterModule(moduleIndex) {
@@ -370,6 +352,9 @@ function openModule(index) {
 
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
+
+  const introOverlay = document.getElementById(`task${index + 1}StartOverlay`);
+  if (introOverlay) introOverlay.classList.remove('hidden');
 }
 
 function renderComponents() {
@@ -2893,7 +2878,27 @@ document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule)
 document.getElementById('resetTask8').addEventListener('click', resetTask8);
 document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
-document.getElementById('startBriefingTask').addEventListener('click', () => openModule(storyRoomIndex));
+
+function dismissTaskStartOverlay(taskNumber) {
+  const overlay = document.getElementById(`task${taskNumber}StartOverlay`);
+  if (overlay) overlay.classList.add('hidden');
+}
+
+[2,3,4,5,6,8].forEach((taskNumber) => {
+  const button = document.getElementById(`startTask${taskNumber}Game`);
+  if (button) {
+    button.addEventListener('click', () => dismissTaskStartOverlay(taskNumber));
+  }
+});
+
+const startTask7Game = document.getElementById('startTask7Game');
+if (startTask7Game) {
+  startTask7Game.addEventListener('click', () => {
+    dismissTaskStartOverlay(7);
+    startRunnerGame();
+  });
+}
+
 document.getElementById('continueStory').addEventListener('click', continueStoryPath);
 document.getElementById('finalHub').addEventListener('click', () => showStoryRoom(0));
 document.getElementById('placeholderBack').addEventListener('click', () => showStoryRoom(storyRoomIndex));
