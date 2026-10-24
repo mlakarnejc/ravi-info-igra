@@ -7250,3 +7250,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenIntro .intro-ravi-line-left {
   bottom:96px !important;
 }
+
+
+/* ===== Intro spacing refinement v2: more breathing room around RAVI ===== */
+#screenIntro .intro-radar {
+  top:275px !important;
+}
+
+#screenIntro .intro-ravi-avatar {
+  top:245px !important;
+}
+
+#screenIntro .intro-ravi-line-left {
+  bottom:70px !important;
+}
