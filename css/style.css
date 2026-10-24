@@ -5157,3 +5157,50 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   padding-top:14px;
   border-top:1px solid var(--line);
 }
+
+/* Task 4: keep controls and phase labels away from the frame edge. */
+#screenTask4 .data-stage-inner {
+  padding:22px 18px 18px;
+}
+#screenTask4 .data-filter-panel {
+  margin:0 0 14px;
+}
+#screenTask4 .data-query-line {
+  margin:0 0 14px;
+}
+#screenTask4 .data-phase-hint {
+  margin:0 0 16px;
+  padding:0 2px;
+}
+#screenTask4 .data-table-wrap {
+  border-radius:16px;
+  overflow:hidden;
+}
+
+/* Disabled AI actions must look unavailable and ignore interaction. */
+#mlContinueAfterError:disabled,
+#mlFinishBtn:disabled {
+  opacity:.35 !important;
+  cursor:not-allowed !important;
+  pointer-events:none !important;
+  filter:saturate(.35);
+}
+
+/* Security card visibly disappears into the selected vault after a correct decision. */
+.security-message-card {
+  transform-origin:center center;
+}
+.security-message-card.vault-left {
+  animation:securityVaultLeft .7s cubic-bezier(.2,.75,.2,1) forwards;
+}
+.security-message-card.vault-right {
+  animation:securityVaultRight .7s cubic-bezier(.2,.75,.2,1) forwards;
+}
+@keyframes securityVaultLeft {
+  0% { transform:translateX(-120px) scale(.96); opacity:1; }
+  100% { transform:translateX(-260px) scale(.18); opacity:0; }
+}
+@keyframes securityVaultRight {
+  0% { transform:translateX(120px) scale(.96); opacity:1; }
+  100% { transform:translateX(260px) scale(.18); opacity:0; }
+}
