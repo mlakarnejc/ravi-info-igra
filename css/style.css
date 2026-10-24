@@ -7305,3 +7305,41 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     min-height:760px !important;
   }
 }
+
+
+/* ===== Story screen simplification: subject title + one description ===== */
+#screenStory .story-copy {
+  width:350px;
+}
+
+#screenStory .story-subject-kicker {
+  display:block;
+  margin-bottom:9px;
+  color:#ff7a83;
+  font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;
+}
+
+#screenStory .story-copy #storySubject {
+  display:block !important;
+  margin:0;
+  color:#f2f6fb;
+  font-size:32px;
+  line-height:1.08;
+  letter-spacing:-.02em;
+}
+
+#screenStory .story-copy #storyDescription {
+  margin:14px 0 0;
+  color:#a9b8ca;
+  font-size:16px;
+  line-height:1.55;
+}
+
+#screenStory .story-subject-summary {
+  display:none !important;
+}
+
+#screenStory .story-enter-btn {
+  margin-top:24px !important;
+}
