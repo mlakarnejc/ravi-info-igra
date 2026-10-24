@@ -7236,3 +7236,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenStory .story-enter-btn {
   margin-top:14px !important;
 }
+
+
+/* ===== Intro spacing refinement: more air above RAVI ===== */
+#screenIntro .intro-radar {
+  top:245px !important;
+}
+
+#screenIntro .intro-ravi-avatar {
+  top:215px !important;
+}
+
+#screenIntro .intro-ravi-line-left {
+  bottom:96px !important;
+}
