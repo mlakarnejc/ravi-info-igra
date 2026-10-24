@@ -194,6 +194,12 @@
           </div>
 
           <div id="catchGame" class="catch-game unified-game-surface" tabindex="0" aria-label="Igra lovljenja komponent">
+            <div class="tech-hud tech-hud-hardware" data-tech-hud="hardware">
+              <span><i></i>POWER <b>ONLINE</b></span>
+              <span>CPU <b>36%</b></span>
+              <span>RAM <b>4.2 GB</b></span>
+              <span>TEMP <b>42°C</b></span>
+            </div>
             <div class="catch-grid"></div>
             <div id="catchStartOverlay" class="catch-overlay catch-overlay-instructions">
               <span class="catch-overlay-kicker">KAKO IGRAŠ</span>
@@ -240,6 +246,12 @@
           <p><strong>TIPKE:</strong> ↑ naprej | ↶ levo | ↷ desno | ENTER zaženi</p>
 
           <div class="program-game-layout unified-game-surface">
+            <div class="tech-hud tech-hud-code" data-tech-hud="code">
+              <span><i></i>COMMAND BUFFER <b>READY</b></span>
+              <span>EXECUTION <b>MANUAL</b></span>
+              <span>STEPS <b>0/10</b></span>
+              <span>STATUS <b>WAITING</b></span>
+            </div>
             <div id="task2StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>PROGRAMIRAJ RAVI-JA</strong>
@@ -302,6 +314,12 @@
           <p><strong>MIŠKA:</strong> povleci HTML oznake na prava mesta</p>
 
           <div class="html-repair-layout unified-game-surface">
+            <div class="tech-hud tech-hud-web" data-tech-hud="web">
+              <span><i></i>DOM <b>UNSTABLE</b></span>
+              <span>HTML <b>6 NODES</b></span>
+              <span>ASSETS <b>LOADED</b></span>
+              <span>RENDER <b>PENDING</b></span>
+            </div>
             <div id="task3StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>POPRAVI SPLETNO STRAN</strong>
@@ -427,6 +445,12 @@
           <p><strong>MIŠKA:</strong> izberi filtre | klikni TOČKE | potrdi rezultat</p>
 
           <div class="data-game-stage unified-game-surface">
+            <div class="tech-hud tech-hud-data" data-tech-hud="data">
+              <span><i></i>QUERY <b>READY</b></span>
+              <span>ROWS <b>12</b></span>
+              <span>FILTER <b>OFF</b></span>
+              <span>INDEX <b>ACTIVE</b></span>
+            </div>
             <div id="task4StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>FILTRIRAJ PODATKE</strong>
@@ -534,6 +558,12 @@
 
           <div class="network-topology-layout">
             <div id="networkTopology" class="network-topology unified-game-surface" aria-label="Shema računalniškega omrežja">
+            <div class="tech-hud tech-hud-network" data-tech-hud="network">
+              <span><i></i>PACKET <b>READY</b></span>
+              <span>ROUTE <b>UNKNOWN</b></span>
+              <span>LINK <b>ACTIVE</b></span>
+              <span>LATENCY <b>12 ms</b></span>
+            </div>
             <div id="task5StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>USMERI PODATKOVNI PAKET</strong>
@@ -546,34 +576,28 @@
       </div>
 
               <svg class="network-links" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
-                <!-- PC connections -->
-                <line x1="110" y1="325" x2="250" y2="135"></line>
-                <line x1="110" y1="325" x2="360" y2="246"></line>
+                <!-- Main route: PC -> router -> server -> internet -> RAVI -->
+                <line class="route-link" x1="110" y1="325" x2="250" y2="135"></line>
+                <line class="route-link" x1="250" y1="135" x2="470" y2="353"></line>
+                <line class="route-link" x1="470" y1="353" x2="900" y2="274"></line>
+                <line class="route-link" x1="900" y1="274" x2="860" y2="100"></line>
+
+                <!-- Local / alternative devices -->
+                <line x1="110" y1="325" x2="290" y2="336"></line>
+                <line x1="290" y1="336" x2="470" y2="353"></line>
                 <line x1="110" y1="325" x2="230" y2="482"></line>
-
-                <!-- Router / switch / server -->
                 <line x1="250" y1="135" x2="490" y2="100"></line>
-                <line x1="250" y1="135" x2="360" y2="246"></line>
-                <line x1="360" y1="246" x2="470" y2="353"></line>
-
-                <!-- Printer / AP / server -->
                 <line x1="230" y1="482" x2="470" y2="353"></line>
                 <line x1="230" y1="482" x2="490" y2="493"></line>
                 <line x1="490" y1="493" x2="730" y2="392"></line>
-
-                <!-- Core network -->
                 <line x1="490" y1="100" x2="690" y2="168"></line>
                 <line x1="490" y1="100" x2="730" y2="392"></line>
                 <line x1="470" y1="353" x2="690" y2="168"></line>
-                <line x1="470" y1="353" x2="900" y2="274"></line>
                 <line x1="470" y1="353" x2="730" y2="392"></line>
-
-                <!-- Outer devices -->
                 <line x1="690" y1="168" x2="860" y2="100"></line>
                 <line x1="690" y1="168" x2="900" y2="274"></line>
                 <line x1="730" y1="392" x2="900" y2="274"></line>
                 <line x1="730" y1="392" x2="900" y2="470"></line>
-                <line x1="900" y1="274" x2="860" y2="100"></line>
                 <line x1="900" y1="274" x2="900" y2="470"></line>
               </svg>
 
@@ -581,7 +605,7 @@
                 <span class="topology-icon">💻</span><strong>RAČUNALNIK</strong>
               </button>
 
-              <button class="topology-node" data-node="switch" type="button" style="--x:36%;--y:44%">
+              <button class="topology-node" data-node="switch" type="button" style="--x:29%;--y:60%">
                 <span class="topology-icon">🔀</span><strong>STIKALO</strong>
               </button>
               <button class="topology-node node-router" data-node="router" type="button" style="--x:25%;--y:24%">
@@ -618,7 +642,7 @@
                 <span class="topology-icon">📱</span><strong>TELEFON</strong>
               </button>
 
-              <div id="networkPacketDot" class="topology-packet" style="--x:8%;--y:58%">P</div>
+              <div id="networkPacketDot" class="topology-packet" style="--x:11%;--y:58%">P</div>
             </div>
 
             <div class="network-discovery-panel">
@@ -668,6 +692,12 @@
           </div>
 
           <div id="securityScanner" class="security-scanner unified-game-surface" tabindex="0" aria-label="Varnostni skener sporočil">
+            <div class="tech-hud tech-hud-security" data-tech-hud="security">
+              <span><i></i>THREAT SCAN <b>ACTIVE</b></span>
+              <span>SAFE <b>--</b></span>
+              <span>QUARANTINE <b>--</b></span>
+              <span>ENGINE <b>ONLINE</b></span>
+            </div>
             <div id="task6StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>VARNOSTNI SKENER</strong>
@@ -744,6 +774,12 @@
           </div>
 
           <div id="runnerViewport" class="runner-viewport unified-game-surface" tabindex="0" aria-label="RAVI RUN platformna igra">
+            <div class="tech-hud tech-hud-runner" data-tech-hud="runner">
+              <span><i></i>BUILD <b>RUNNING</b></span>
+              <span>CHECKPOINT <b>01</b></span>
+              <span>EVENTS <b>LIVE</b></span>
+              <span>COLLISION <b>ON</b></span>
+            </div>
             <div id="task7StartOverlay" class="task-start-overlay catch-overlay-instructions">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>RAVI RUN</strong>
