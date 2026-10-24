@@ -6062,11 +6062,6 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   border-bottom:1px solid #5f86be;
 }
 
-/* make actual gameplay content sit above decorative layer */
-.unified-game-surface > *:not(.game-tech-layer):not(.task-start-overlay):not(.catch-overlay) {
-  position:relative;
-  z-index:8;
-}
 .task-start-overlay,
 .catch-overlay {
   z-index:90 !important;
@@ -6393,4 +6388,84 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .security-message-card,
 .runner-world {
   background-color:initial;
+}
+
+/* ===== Gameplay geometry recovery ===== */
+
+/* Game windows stay simple; tech styling belongs to the OUTER task card. */
+.unified-game-surface {
+  position:relative !important;
+  overflow:hidden !important;
+  background:#09111c !important;
+  border:1px solid #34475f !important;
+  border-radius:18px !important;
+  box-shadow:none !important;
+}
+.unified-game-surface::before,
+.unified-game-surface::after {
+  display:none !important;
+}
+
+/* No internal tech layers/HUDs inside gameplay. */
+.game-tech-layer,
+.tech-hud {
+  display:none !important;
+}
+
+/* Restore required game positioning explicitly. */
+#catchPlayer {
+  position:absolute !important;
+  bottom:18px !important;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:3 !important;
+}
+#networkTopology .topology-node {
+  position:absolute !important;
+  left:var(--x) !important;
+  top:var(--y) !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:3 !important;
+}
+#networkTopology .network-links {
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  z-index:1 !important;
+}
+#networkPacketDot {
+  position:absolute !important;
+  left:var(--x) !important;
+  top:var(--y) !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:4 !important;
+}
+#runnerWorld {
+  position:absolute !important;
+  inset:0 auto 0 0 !important;
+  width:2360px !important;
+}
+#runnerPlayer {
+  position:absolute !important;
+}
+
+/* Restore native game backgrounds where needed. */
+#catchGame {
+  height:430px !important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(72,113,255,.08),transparent 20rem),
+    linear-gradient(180deg,#0b1320,#09101a) !important;
+}
+#runnerViewport {
+  background:#09111c !important;
+}
+
+/* Navigation should sit close to the game, as before. */
+.task-actions {
+  margin-top:14px !important;
+}
+#screenTask4 .task-actions,
+#screenTask7 .task-actions {
+  margin-top:14px !important;
 }
