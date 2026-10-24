@@ -16,48 +16,88 @@ const storyRooms = [
     code:'SOBA 01', room:'HARDWARE LAB', subject:'Strojna in programska oprema',
     title:'Kaj je znotraj računalnika?',
     description:'Spoznamo dele računalnika in kako skupaj tvorijo sistem.',
+    instructions:[
+      '<b>← →</b> premikaj lovilec',
+      'Zberi <b>10 točk</b>',
+      '<b>+1</b> računalniška oprema · <b>−1</b> napačen predmet'
+    ],
     ravi:'»Najprej morava skozi strojni laboratorij. Brez osnovnega sistema ne pridem daleč.«'
   },
   {
     code:'SOBA 02', room:'CODE ROOM', subject:'Osnove programiranja',
     title:'Računalnik potrebuje natančna navodila.',
     description:'Z ukazi računalniku povemo, kaj naj naredi. Iz zaporedja ukazov nastane program.',
+    instructions:[
+      'S tipkami <b>↑ ↶ ↷</b> sestavi program',
+      '<b>↑</b> naprej · <b>↶</b> levo · <b>↷</b> desno',
+      '<b>ENTER</b> zažene program · pripelji RAVI-ja do cilja'
+    ],
     ravi:'»Tukaj ne smeva ugibati. Program naredi točno to, kar mu poveš.«'
   },
   {
     code:'SOBA 03', room:'WEB LAB', subject:'Spletne aplikacije',
     title:'Iz kode nastane splet.',
     description:'Iz HTML elementov, vsebine in oblikovanja nastanejo spletne strani in aplikacije.',
+    instructions:[
+      'Povleci HTML oznake na prava mesta',
+      'Popravi vseh <b>6 delov strani</b>',
+      'V orodjarni so tudi oznake, ki jih <b>ne potrebuješ</b>'
+    ],
     ravi:'»Moja spletna stran je razpadla. Sestaviva jo, preden naju kdo vidi.«'
   },
   {
     code:'SOBA 04', room:'DATA VAULT', subject:'Upravljanje s podatki',
     title:'Podatki so uporabni samo, če jih znamo najti.',
     description:'Podatkovne baze hranijo, urejajo in omogočajo hitro iskanje velike količine podatkov.',
+    instructions:[
+      'Nastavi pravilne <b>filtre</b>',
+      'Poišči dijaka programa <b>Računalništvo, 3. letnik</b>',
+      'Nato uredi po <b>točkah</b> in izberi najboljšega'
+    ],
     ravi:'»V podatkovnem trezorju je pravi zapis. Najdiva ga, preden se vrata zaprejo.«'
   },
   {
     code:'SOBA 05', room:'NETWORK CONTROL', subject:'Računalniške komunikacije in omrežja',
     title:'Podatki morajo najti pravo pot.',
     description:'Naprave komunicirajo prek omrežij, podatki pa potujejo skozi različne povezave in naprave.',
+    instructions:[
+      'Začni pri <b>RAČUNALNIKU</b>',
+      'Klikaj naprave po pravilni poti paketa',
+      'Cilj je dostaviti paket do <b>RAVI-ja</b>'
+    ],
     ravi:'»Pošlji paket do cilja. Napačna pot pomeni slepo ulico.«'
   },
   {
     code:'SOBA 06', room:'SECURITY ZONE', subject:'Varnost in zaščita v informatiki',
     title:'Vsakemu sporočilu ne smemo zaupati.',
     description:'Prepoznavamo nevarnosti ter ščitimo naprave, uporabnike in podatke.',
+    instructions:[
+      'Preberi sporočilo in poišči sumljive znake',
+      '<b>←</b> SUMljivo · <b>→</b> VARNO',
+      'Razvrsti vseh <b>6 sporočil</b>'
+    ],
     ravi:'»Varnostni sistem je strog. Ločiti morava varno od sumljivega.«'
   },
   {
     code:'SOBA 07', room:'APP DEVELOPMENT LAB', subject:'Programiranje aplikacij',
     title:'Iz kode nastanejo prave aplikacije.',
     description:'Programerji iz idej in kode ustvarjajo igre, aplikacije in uporabne sisteme.',
+    instructions:[
+      '<b>← →</b> premikanje · <b>SPACE</b> skok',
+      'Poberi vse <b>3 koščke kode</b>',
+      'Pridi do terminala in dokončaj aplikacijo'
+    ],
     ravi:'»Čaka naju testna aplikacija. Tokrat ne govoriva o igri — igrala jo bova.«'
   },
   {
     code:'SOBA 08', room:'AI CORE', subject:'Umetna inteligenca',
     title:'Umetna inteligenca se uči iz podatkov.',
     description:'AI išče vzorce v podatkih, kakovost podatkov in človeško preverjanje pa odločata o rezultatu.',
+    instructions:[
+      'Razvrsti primere na <b>MAČKE</b> in <b>PSE</b>',
+      'Opazuj, kako se model iz podatkov <b>uči</b>',
+      'Ko se zmoti, izberi podatke, ki ga bodo najbolje <b>izboljšali</b>'
+    ],
     ravi:'»Zadnja soba. Tokrat boš moral naučiti mene.«'
   }
 ];
@@ -73,6 +113,17 @@ function renderStoryRoom(index = storyRoomIndex) {
   document.getElementById('storySubject').textContent = room.subject;
   document.getElementById('storyTitle').textContent = room.title;
   document.getElementById('storyDescription').textContent = room.description;
+
+  const instructions = document.getElementById('storyInstructions');
+  instructions.innerHTML = room.instructions
+    .map((instruction, index) => `
+      <div class="story-instruction-row">
+        <span>${index + 1}</span>
+        <strong>${instruction}</strong>
+      </div>
+    `)
+    .join('');
+
   setRaviMessage('storyRaviText', room.ravi, 'instruction');
 
   document.querySelectorAll('.story-room-marker').forEach((marker, markerIndex) => {
