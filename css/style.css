@@ -4636,3 +4636,148 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .feedback {
   margin-top:14px;
 }
+
+/* ===== Unified game surface + start overlay ===== */
+.unified-game-surface {
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid #34475f !important;
+  border-radius: 18px !important;
+  background: #09111c;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.015),
+    0 10px 28px rgba(0,0,0,.16);
+}
+
+/* The instruction overlay is always part of the game surface itself */
+.unified-game-surface > .task-start-overlay,
+.unified-game-surface > .catch-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 90 !important;
+  display: grid;
+  place-content: center;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 34px;
+  border-radius: inherit !important;
+  background: rgba(5,12,21,.86) !important;
+  backdrop-filter: blur(1px);
+  text-align: center;
+}
+
+.unified-game-surface > .task-start-overlay.hidden,
+.unified-game-surface > .catch-overlay.hidden {
+  display: none !important;
+}
+
+.task-start-kicker,
+.catch-overlay-kicker {
+  display: block;
+  margin: 0 0 4px;
+  color: #ff8d96 !important;
+  font: 900 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.task-start-overlay > strong,
+.catch-overlay-instructions > strong {
+  display: block;
+  margin: 0;
+  color: #f5f7fb;
+  font-size: clamp(26px, 2.8vw, 34px) !important;
+  line-height: 1.1 !important;
+  letter-spacing: .025em !important;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-weight: 900 !important;
+}
+
+.task-start-rules,
+.catch-start-rules {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: min(620px, 92%) !important;
+  margin: 6px auto 4px !important;
+}
+
+.task-start-rules span,
+.catch-start-rules span {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px !important;
+  padding: 11px 14px !important;
+  border: 1px solid #415572 !important;
+  border-radius: 11px !important;
+  background: rgba(16,28,44,.94) !important;
+  color: #e7edf4 !important;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+  text-align: center;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+
+.task-start-rules b,
+.catch-start-rules b {
+  color: #fff !important;
+  font-size: inherit !important;
+  font-weight: 900 !important;
+}
+
+.task-start-overlay .primary-btn,
+.catch-overlay-instructions .primary-btn {
+  justify-self: center;
+  min-width: 150px;
+  margin-top: 4px !important;
+  font-size: 16px !important;
+}
+
+/* Remove any residual nested-card visual styling */
+.task-start-card {
+  display: contents !important;
+  width: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Keep one concise instruction line under each title during play */
+.task-card > h2 + p,
+.ml-topline h2 + p {
+  margin: 8px 0 18px !important;
+  color: #aebdce !important;
+  font-size: 15px !important;
+  line-height: 1.5 !important;
+}
+
+/* Feedback area is visually distinct from static instructions */
+.feedback {
+  margin-top: 16px !important;
+  min-height: 42px;
+}
+
+/* Make the game visible only subtly behind the overlay */
+.unified-game-surface > .task-start-overlay ~ *,
+.unified-game-surface > .catch-overlay ~ * {
+  transition: filter .2s ease, opacity .2s ease;
+}
+
+@media (max-width: 780px) {
+  .task-start-rules,
+  .catch-start-rules {
+    grid-template-columns: 1fr !important;
+    width: min(520px, 92%) !important;
+  }
+
+  .unified-game-surface > .task-start-overlay,
+  .unified-game-surface > .catch-overlay {
+    padding: 22px 18px;
+  }
+}
