@@ -142,6 +142,20 @@ function enterStoryRoom() {
 
 
 
+function completeTaskFlow(moduleIndex, feedbackId, message, delay = 1600) {
+  const feedback = document.getElementById(feedbackId);
+  if (feedback) {
+    feedback.textContent = message;
+    feedback.className = 'feedback success';
+  }
+
+  updateProgress();
+
+  setTimeout(() => {
+    showRecoveryAfterModule(moduleIndex);
+  }, delay);
+}
+
 function showRecoveryAfterModule(moduleIndex) {
   const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
   document.getElementById('recoveryPercent').textContent = `${percent} %`;
@@ -658,12 +672,10 @@ function finishCatchGame() {
   const game = document.getElementById('catchGame');
   game.classList.add('win');
 
-  document.getElementById('taskFeedback').textContent = 'MODUL 1 AKTIVIRAN ✓ Zbral si 10 točk in dostavil dovolj računalniške opreme.';
+  document.getElementById('taskFeedback').textContent = 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.';
   document.getElementById('taskFeedback').className = 'feedback success';
   document.getElementById('raviTaskText').textContent = '»Odlično. Računalnik ima vse, kar potrebuje. Akvarij pa je ostal tam, kjer mora biti.«';
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
-
-  updateProgress();
 
   if (game) {
     let victory = game.querySelector('.catch-victory');
@@ -681,15 +693,7 @@ function finishCatchGame() {
 
   setRaviMessage('raviTaskText', '»Odlično. Prvi sistem je spet pripravljen.«', 'success');
 
-  setTimeout(() => {
-    showRecoveryAfterModule(0);
-
-    try {
-      renderModules();
-    } catch (error) {
-      console.error('RAVI hub render error after Task 1:', error);
-    }
-  }, 1200);
+  completeTaskFlow(0, 'taskFeedback', 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.', 1400);
 }
 
 function handleCatchKeyDown(event) {
@@ -896,15 +900,13 @@ async function runProgramGame() {
     modules[2].status = 'ready';
     completed = Math.max(completed, 2);
 
-    feedback2.textContent = 'MODUL 2 AKTIVIRAN ✓ Program je RAVI-ja uspešno pripeljal do cilja.';
+    feedback2.textContent = 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.';
     feedback2.className = 'feedback success';
     ravi2.textContent = '»Program izveden. Prišel sem do cilja in niti enkrat nisem improviziral. Skoraj.«';
     document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
 
-    updateProgress();
-    renderModules();
     programRunning = false;
-    setTimeout(() => showRecoveryAfterModule(1), 1900);
+    completeTaskFlow(1, 'task2Feedback', 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.', 1600);
     return;
   }
 
@@ -1142,7 +1144,7 @@ function resetHtmlRepairGame() {
   const live = document.getElementById('htmlLivePage');
   const finalPreview = document.getElementById('htmlFinalPreview');
   const toolbox = document.getElementById('htmlToolbox');
-  const finishBtn = document.getElementById('finishTask3');
+  const finishBtn = null;
   if (live) live.classList.remove('hidden');
   if (finalPreview) {
     finalPreview.classList.add('hidden');
@@ -1267,7 +1269,6 @@ function finishHtmlRepairGame() {
 
   setTimeout(() => {
     if (shell) shell.classList.remove('magic-build');
-    if (finishBtn) finishBtn.classList.remove('hidden');
   }, 2400);
 
   modules[2].status = 'complete';
@@ -1277,13 +1278,12 @@ function finishHtmlRepairGame() {
   const feedback3 = document.getElementById('task3Feedback');
   const ravi3 = document.getElementById('raviTask3Text');
 
-  feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Stran je sestavljena. Zdaj jo vidiš kot pravo končno spletno stran.';
+  feedback3.textContent = 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.';
   feedback3.className = 'feedback success';
   ravi3.textContent = '»Odlično. Šest elementov, ena prava stran. Tako je videti, ko se HTML končno ne prepira sam s sabo.«';
   document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
 
-  updateProgress();
-  renderModules();
+  completeTaskFlow(2, 'task3Feedback', 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.', 3000);
 }
 
 function initHtmlRepairGame() {
@@ -1534,14 +1534,12 @@ function checkTask4() {
     modules[4].status = 'ready';
     completed = Math.max(completed, 4);
 
-    feedback4.textContent = 'MODUL 4 AKTIVIRAN ✓ Filtriral si podatke in nato izbral najboljši rezultat.';
+    feedback4.textContent = 'NALOGA KONČANA ✓ Našel si pravilen zapis.';
     feedback4.className = 'feedback success';
     ravi4.textContent = '»Filtriranje in razvrščanje. Dvanajst zapisov je postalo en uporaben podatek.«';
     document.getElementById('hubMessage').textContent = 'Podatkovni modul je aktiven. Računalniška omrežja so odklenjena.';
 
-    updateProgress();
-    renderModules();
-    setTimeout(() => showRecoveryAfterModule(3), 1850);
+    completeTaskFlow(3, 'task4Feedback', 'NALOGA KONČANA ✓ Našel si pravilen zapis.', 1600);
     return;
   }
 
@@ -1817,14 +1815,12 @@ function finishNetworkGame() {
   const feedback5 = document.getElementById('task5Feedback');
   const ravi5 = document.getElementById('raviTask5Text');
 
-  feedback5.textContent = 'MODUL 5 AKTIVIRAN ✓ Paket je uspešno prišel do RAVI-ja.';
+  feedback5.textContent = 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.';
   feedback5.className = 'feedback success';
   ravi5.textContent = '»Paket dostavljen. Pot si odkril sam — tako omrežje dobi smisel.«';
   document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnostni sistem je odklenjen.';
 
-  updateProgress();
-  renderModules();
-  setTimeout(() => showRecoveryAfterModule(4), 1900);
+  completeTaskFlow(4, 'task5Feedback', 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.', 1600);
 }
 
 function initNetworkTopologyGame() {
@@ -1999,17 +1995,14 @@ function finishSecurityGame() {
   const feedback6 = document.getElementById('task6Feedback');
   const ravi6 = document.getElementById('raviTask6Text');
 
-  feedback6.textContent = '';
-  feedback6.className = 'feedback hidden';
+  feedback6.textContent = 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.';
+  feedback6.className = 'feedback success';
   const reason = document.getElementById('securityReason');
-  reason.innerHTML = '<strong>MODUL 6 AKTIVIRAN ✓</strong><span>Varnostni skener je očistil vseh 6 sporočil.</span>';
-  reason.classList.remove('hidden');
+  reason.classList.add('hidden');
   ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Programiranje aplikacij je odklenjeno.';
 
-  updateProgress();
-  renderModules();
-  setTimeout(() => showRecoveryAfterModule(5), 1900);
+  completeTaskFlow(5, 'task6Feedback', 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.', 1600);
 }
 
 function handleSecurityKey(event) {
@@ -2374,14 +2367,12 @@ function finishRunnerGame() {
   completed = Math.max(completed, 7);
 
   const feedback7 = document.getElementById('task7Feedback');
-  feedback7.textContent = 'MODUL 7 AKTIVIRAN ✓ Aplikacija deluje, koda je zbrana in terminal odklenjen.';
+  feedback7.textContent = 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.';
   feedback7.className = 'feedback success';
   document.getElementById('raviTask7Text').textContent = '»To je že bolj podobno pravi aplikaciji: gibanje, dogodki, kolizije in cilj. In nič opekačev.«';
   document.getElementById('hubMessage').textContent = 'Programiranje aplikacij je aktivno. Zadnji modul – Umetna inteligenca – je odklenjen.';
 
-  updateProgress();
-  renderModules();
-  setTimeout(() => showRecoveryAfterModule(6), 1900);
+  completeTaskFlow(6, 'task7Feedback', 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.', 1600);
 }
 
 
@@ -2766,13 +2757,16 @@ function finishMLModule() {
   modules[7].status = 'complete';
   completed = 8;
   document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
-  updateProgress();
-  renderModules();
+  const feedback8 = document.getElementById('task8Feedback');
+  if (feedback8) {
+    feedback8.textContent = 'NALOGA KONČANA ✓ AI model je izboljšan in pravilno prepozna nov primer.';
+    feedback8.className = 'feedback success';
+  }
+  completeTaskFlow(7, 'task8Feedback', 'NALOGA KONČANA ✓ AI model je izboljšan in pravilno prepozna nov primer.', 1800);
 
   setTimeout(() => {
-    showScreen('screenFinal');
     shell?.classList.remove('ml-complete');
-  }, 3600);
+  }, 1800);
 }
 
 function resetTask8() {
@@ -2796,6 +2790,11 @@ function resetTask8() {
   const feedback = document.getElementById('mlPackageFeedback');
   feedback.className = 'ml-package-feedback hidden';
   feedback.textContent = '';
+  const task8Feedback = document.getElementById('task8Feedback');
+  if (task8Feedback) {
+    task8Feedback.textContent = '';
+    task8Feedback.className = 'feedback';
+  }
 
   document.querySelectorAll('.ml-data-package').forEach((button) => {
     button.disabled = false;
@@ -2858,10 +2857,6 @@ document.getElementById('backHub2').addEventListener('click', () => {
 });
 document.addEventListener('keydown', handleProgramKey);
 document.getElementById('resetTask3').addEventListener('click', () => { resetHtmlRepairGame(); showTaskStartOverlay(3); });
-document.getElementById('finishTask3').addEventListener('click', () => {
-  if (modules[2].status === 'complete') showRecoveryAfterModule(2);
-  else showStoryRoom(2);
-});
 document.getElementById('backHub3').addEventListener('click', () => showStoryRoom(2));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', () => { resetTask4(); showTaskStartOverlay(4); });
