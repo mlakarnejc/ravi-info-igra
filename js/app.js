@@ -305,12 +305,14 @@ function openModule(index) {
   if (index === 0) {
     if (modules[0].status !== 'complete') resetCatchGame();
     showScreen('screenTask1');
+    showTaskStartOverlay(1);
     return;
   }
 
   if (index === 1) {
     if (modules[1].status !== 'complete') resetProgramGame();
     showScreen('screenTask2');
+    showTaskStartOverlay(2);
     setTimeout(() => document.getElementById('programBoard').focus(), 50);
     return;
   }
@@ -318,43 +320,46 @@ function openModule(index) {
   if (index === 2) {
     if (modules[2].status !== 'complete') resetHtmlRepairGame();
     showScreen('screenTask3');
+    showTaskStartOverlay(3);
     return;
   }
 
   if (index === 3) {
     if (modules[3].status !== 'complete') resetTask4();
     showScreen('screenTask4');
+    showTaskStartOverlay(4);
     return;
   }
 
   if (index === 4) {
     showScreen('screenTask5');
+    showTaskStartOverlay(5);
     if (modules[4].status !== 'complete') resetNetworkGame();
     return;
   }
 
   if (index === 5) {
     showScreen('screenTask6');
+    showTaskStartOverlay(6);
     if (modules[5].status !== 'complete') resetTask6();
     return;
   }
 
   if (index === 6) {
     showScreen('screenTask7');
+    showTaskStartOverlay(7);
     return;
   }
 
   if (index === 7) {
     showScreen('screenTask8');
+    showTaskStartOverlay(8);
     if (modules[7].status !== 'complete') resetTask8();
     return;
   }
 
   document.getElementById('placeholderTitle').textContent = modules[index].name;
   showScreen('screenPlaceholder');
-
-  const introOverlay = document.getElementById(`task${index + 1}StartOverlay`);
-  if (introOverlay) introOverlay.classList.remove('hidden');
 }
 
 function renderComponents() {
@@ -2101,7 +2106,7 @@ function resetRunnerGame() {
   document.querySelectorAll('.runner-code').forEach((el) => el.classList.remove('collected'));
   document.getElementById('runnerGoal')?.classList.remove('unlocked');
   document.querySelector('.runner-final-wall')?.classList.remove('open', 'completed-open');
-  document.getElementById('runnerOverlay')?.classList.remove('hidden');
+  document.getElementById('runnerOverlay')?.classList.add('hidden');
 
   const feedback7 = document.getElementById('task7Feedback');
   if (feedback7) {
@@ -2834,7 +2839,7 @@ function initTestRoomJump() {
 
 initTestRoomJump();
 document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
-document.getElementById('restartCatchGame').addEventListener('click', resetCatchGame);
+document.getElementById('restartCatchGame').addEventListener('click', () => { resetCatchGame(); showTaskStartOverlay(1); });
 document.getElementById('backHub1').addEventListener('click', () => {
   stopCatchGame();
   showStoryRoom(0);
@@ -2843,27 +2848,31 @@ document.addEventListener('keydown', handleCatchKeyDown);
 document.addEventListener('keyup', handleCatchKeyUp);
 document.getElementById('runProgramGame').addEventListener('click', runProgramGame);
 document.getElementById('clearProgramGame').addEventListener('click', clearProgramGame);
+document.getElementById('restartTask2').addEventListener('click', () => {
+  resetProgramGame();
+  showTaskStartOverlay(2);
+});
 document.getElementById('backHub2').addEventListener('click', () => {
   programRunning = false;
   showStoryRoom(1);
 });
 document.addEventListener('keydown', handleProgramKey);
-document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
+document.getElementById('resetTask3').addEventListener('click', () => { resetHtmlRepairGame(); showTaskStartOverlay(3); });
 document.getElementById('finishTask3').addEventListener('click', () => {
   if (modules[2].status === 'complete') showRecoveryAfterModule(2);
   else showStoryRoom(2);
 });
 document.getElementById('backHub3').addEventListener('click', () => showStoryRoom(2));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
-document.getElementById('resetTask4').addEventListener('click', resetTask4);
+document.getElementById('resetTask4').addEventListener('click', () => { resetTask4(); showTaskStartOverlay(4); });
 document.getElementById('backHub4').addEventListener('click', () => showStoryRoom(3));
-document.getElementById('resetTask5').addEventListener('click', resetNetworkGame);
+document.getElementById('resetTask5').addEventListener('click', () => { resetNetworkGame(); showTaskStartOverlay(5); });
 document.getElementById('backHub5').addEventListener('click', () => showStoryRoom(4));
-document.getElementById('resetTask6').addEventListener('click', resetTask6);
+document.getElementById('resetTask6').addEventListener('click', () => { resetTask6(); showTaskStartOverlay(6); });
 document.getElementById('backHub6').addEventListener('click', () => showStoryRoom(5));
 document.addEventListener('keydown', handleSecurityKey);
 document.getElementById('startRunner').addEventListener('click', startRunnerGame);
-document.getElementById('resetTask7').addEventListener('click', resetRunnerGame);
+document.getElementById('resetTask7').addEventListener('click', () => { resetRunnerGame(); showTaskStartOverlay(7); });
 document.getElementById('backHub7').addEventListener('click', () => {
   runnerState.running = false;
   if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
@@ -2875,9 +2884,17 @@ document.querySelectorAll('.ml-data-package').forEach((button) => {
   button.addEventListener('click', () => chooseMLPackage(button.dataset.package));
 });
 document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule);
-document.getElementById('resetTask8').addEventListener('click', resetTask8);
+document.getElementById('resetTask8').addEventListener('click', () => { resetTask8(); showTaskStartOverlay(8); });
 document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
+
+function showTaskStartOverlay(taskNumber) {
+  if (taskNumber === 1) {
+    document.getElementById('catchStartOverlay')?.classList.remove('hidden');
+    return;
+  }
+  document.getElementById(`task${taskNumber}StartOverlay`)?.classList.remove('hidden');
+}
 
 function dismissTaskStartOverlay(taskNumber) {
   const overlay = document.getElementById(`task${taskNumber}StartOverlay`);
