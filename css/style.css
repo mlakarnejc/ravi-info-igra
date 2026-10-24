@@ -6180,3 +6180,217 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   opacity:.95 !important;
   filter:drop-shadow(0 0 3px rgba(100,165,255,.5));
 }
+
+/* ===== Corrected tech treatment: outer task frame, NOT the game mechanics ===== */
+
+/* Undo the gameplay-space changes that shifted real game geometry. */
+#catchGame,
+.program-game-layout,
+.html-repair-layout,
+.data-game-stage,
+.network-topology,
+.security-scanner,
+.runner-viewport {
+  padding-top:0 !important;
+}
+
+/* Remove decorative layers from inside the actual games. */
+.tech-hud,
+.game-tech-layer {
+  display:none !important;
+}
+.unified-game-surface::before,
+.unified-game-surface::after {
+  display:none !important;
+}
+
+/* Restore the catch-game geometry exactly where the game expects it. */
+#catchGame {
+  height:430px !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(72,113,255,.08), transparent 20rem),
+    linear-gradient(180deg,#0b1320,#09101a) !important;
+}
+#catchPlayer {
+  bottom:18px !important;
+  z-index:3 !important;
+}
+
+/* The whole task card now carries the technical atmosphere. */
+#screenTask1 .task-card,
+#screenTask2 .task-card,
+#screenTask3 .task-card,
+#screenTask4 .task-card,
+#screenTask5 .task-card,
+#screenTask6 .task-card,
+#screenTask7 .task-card {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 8% 12%,rgba(66,119,207,.12),transparent 240px),
+    radial-gradient(circle at 92% 88%,rgba(239,51,64,.055),transparent 280px),
+    linear-gradient(145deg,rgba(18,29,46,.98),rgba(10,18,30,.99)) !important;
+  border-color:#354c69 !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.018),
+    inset 0 0 60px rgba(48,84,139,.035),
+    0 18px 48px rgba(0,0,0,.18);
+}
+
+/* Grid texture across title + controls + game, like the airlock. */
+#screenTask1 .task-card::before,
+#screenTask2 .task-card::before,
+#screenTask3 .task-card::before,
+#screenTask4 .task-card::before,
+#screenTask5 .task-card::before,
+#screenTask6 .task-card::before,
+#screenTask7 .task-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(91,137,207,.05) 1px,transparent 1px),
+    linear-gradient(rgba(91,137,207,.045) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.86),rgba(0,0,0,.25));
+}
+
+/* Slow scan line over the full card, not inside the game. */
+#screenTask1 .task-card::after,
+#screenTask2 .task-card::after,
+#screenTask3 .task-card::after,
+#screenTask4 .task-card::after,
+#screenTask5 .task-card::after,
+#screenTask6 .task-card::after,
+#screenTask7 .task-card::after {
+  content:"";
+  position:absolute;
+  left:2%;
+  right:2%;
+  top:0;
+  height:1px;
+  z-index:1;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(105,166,255,.48),transparent);
+  box-shadow:0 0 16px rgba(105,166,255,.2);
+  animation:taskShellScan 8s linear infinite;
+}
+@keyframes taskShellScan {
+  0% { transform:translateY(44px); opacity:0; }
+  10% { opacity:.65; }
+  92% { opacity:.25; }
+  100% { transform:translateY(760px); opacity:0; }
+}
+
+#screenTask1 .task-card > *,
+#screenTask2 .task-card > *,
+#screenTask3 .task-card > *,
+#screenTask4 .task-card > *,
+#screenTask5 .task-card > *,
+#screenTask6 .task-card > *,
+#screenTask7 .task-card > * {
+  position:relative;
+  z-index:3;
+}
+
+/* Small animated radar in the top-right of the task frame. */
+.task-shell-tech {
+  position:absolute !important;
+  inset:0;
+  z-index:2 !important;
+  pointer-events:none;
+}
+.task-shell-radar {
+  position:absolute;
+  right:34px;
+  top:28px;
+  width:100px;
+  height:100px;
+  opacity:.46;
+}
+.task-shell-radar i {
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+.task-shell-radar i:nth-child(1) {
+  width:92px;height:92px;
+  border:1px dashed rgba(91,148,235,.42);
+  animation:taskRadarSpin 15s linear infinite;
+}
+.task-shell-radar i:nth-child(2) {
+  width:64px;height:64px;
+  border:1px solid rgba(91,148,235,.5);
+  animation:taskRadarSpinReverse 10s linear infinite;
+}
+.task-shell-radar i:nth-child(3) {
+  width:36px;height:36px;
+  border:1px solid rgba(239,51,64,.35);
+  animation:taskRadarPulse 2.6s ease-in-out infinite;
+}
+.task-shell-radar b {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:45px;
+  height:1px;
+  transform-origin:left;
+  background:linear-gradient(90deg,rgba(101,165,255,.75),transparent);
+  animation:taskRadarSweep 4.2s linear infinite;
+}
+@keyframes taskRadarSpin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes taskRadarSpinReverse { to { transform:translate(-50%,-50%) rotate(-360deg); } }
+@keyframes taskRadarSweep { to { transform:rotate(360deg); } }
+@keyframes taskRadarPulse {
+  0%,100% { opacity:.3; transform:translate(-50%,-50%) scale(.92); }
+  50% { opacity:1; transform:translate(-50%,-50%) scale(1.08); }
+}
+
+.task-shell-dot {
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#67a7ff;
+  box-shadow:0 0 10px rgba(103,167,255,.85);
+  animation:taskDotPulse 1.7s ease-in-out infinite;
+}
+.task-shell-dot.d1 { right:46px; top:142px; }
+.task-shell-dot.d2 { right:62px; top:142px; animation-delay:.25s; }
+.task-shell-dot.d3 { right:78px; top:142px; animation-delay:.5s; }
+@keyframes taskDotPulse {
+  0%,100% { opacity:.2; transform:scale(.8); }
+  50% { opacity:1; transform:scale(1.2); }
+}
+.task-shell-code {
+  position:absolute;
+  right:36px;
+  top:158px;
+  color:#5d7391;
+  font:800 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;
+}
+
+/* Keep title/readability above the decoration. */
+.task-number,
+.task-card h2,
+.task-card > p {
+  max-width:calc(100% - 145px);
+}
+
+/* Keep the real gameplay windows simple and mechanically stable. */
+.program-board-wrap,
+.program-panel,
+.html-preview-shell,
+.html-toolbox,
+.data-stage-inner,
+.security-card-stage,
+.security-message-card,
+.runner-world {
+  background-color:initial;
+}
