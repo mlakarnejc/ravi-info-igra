@@ -4443,3 +4443,72 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   font-size:17px;
   min-height:52px;
 }
+
+/* In-game instruction overlay: game stays visible behind it */
+.task-card,
+.ml-lab-shell {
+  position:relative;
+}
+.task-start-overlay {
+  position:absolute;
+  inset:0;
+  z-index:80;
+  display:grid;
+  place-items:center;
+  padding:28px;
+  border-radius:24px;
+  background:rgba(5,12,21,.68);
+  backdrop-filter:blur(2px);
+}
+.task-start-overlay.hidden {
+  display:none !important;
+}
+.task-start-card {
+  width:min(620px,82%);
+  padding:26px 28px;
+  border:1px solid #455b77;
+  border-radius:18px;
+  background:rgba(12,23,37,.9);
+  box-shadow:0 22px 60px rgba(0,0,0,.42);
+  text-align:center;
+}
+.task-start-kicker {
+  display:block;
+  margin-bottom:8px;
+  color:#ff8e96;
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.15em;
+}
+.task-start-card > strong {
+  display:block;
+  margin-bottom:18px;
+  font-size:30px;
+  letter-spacing:.04em;
+}
+.task-start-rules {
+  display:grid;
+  gap:10px;
+  margin-bottom:18px;
+}
+.task-start-rules span {
+  display:block;
+  padding:11px 14px;
+  border:1px solid #384c65;
+  border-radius:10px;
+  background:rgba(6,14,24,.7);
+  color:#e4ebf2;
+  font-size:15px;
+  line-height:1.45;
+}
+.task-start-rules b {
+  color:#fff;
+}
+.task-start-card .primary-btn {
+  min-width:150px;
+  font-size:16px;
+}
+
+/* Hide the older duplicated RAVI RUN start overlay; new unified overlay handles start. */
+#screenTask7 #runnerOverlay {
+  display:none !important;
+}
