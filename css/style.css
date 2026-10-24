@@ -4512,3 +4512,53 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenTask7 #runnerOverlay {
   display:none !important;
 }
+
+/* All room instructions now behave like Task 1: inside the actual game area */
+.program-game-layout,
+.html-repair-layout,
+.data-game-stage,
+.network-topology,
+.security-scanner,
+.runner-viewport,
+.ml-workbench {
+  position:relative;
+}
+
+.program-game-layout > .task-start-overlay,
+.html-repair-layout > .task-start-overlay,
+.data-game-stage > .task-start-overlay,
+.network-topology > .task-start-overlay,
+.security-scanner > .task-start-overlay,
+.runner-viewport > .task-start-overlay,
+.ml-workbench > .task-start-overlay {
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  z-index:80;
+}
+
+.data-game-stage {
+  position:relative;
+}
+
+#screenTask2 .task-start-overlay,
+#screenTask3 .task-start-overlay,
+#screenTask4 .task-start-overlay,
+#screenTask5 .task-start-overlay,
+#screenTask6 .task-start-overlay,
+#screenTask7 .task-start-overlay,
+#screenTask8 .task-start-overlay {
+  background:rgba(5,12,21,.66);
+  backdrop-filter:blur(1.5px);
+}
+
+#screenTask2 .task-start-card,
+#screenTask3 .task-start-card,
+#screenTask4 .task-start-card,
+#screenTask5 .task-start-card,
+#screenTask6 .task-start-card,
+#screenTask7 .task-start-card,
+#screenTask8 .task-start-card {
+  width:min(560px,84%);
+  padding:22px 24px;
+}
