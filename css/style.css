@@ -4161,3 +4161,44 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .story-ravi-placeholder{display:none}
   .story-path{left:30px;right:30px}
 }
+
+/* Consolidated task guidance under RAVI */
+.ravi-task-hints {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px 8px;
+  margin-top:12px;
+  padding-top:11px;
+  border-top:1px solid rgba(239,51,64,.24);
+}
+.ravi-task-hints span {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:30px;
+  padding:6px 8px;
+  border:1px solid rgba(91,111,142,.35);
+  border-radius:8px;
+  background:rgba(10,18,30,.6);
+  color:#c8d2df;
+  font:800 9px ui-monospace,monospace;
+  letter-spacing:.04em;
+}
+.ravi-task-hints b {
+  color:#fff;
+  font-size:10px;
+}
+
+/* Give Task 1 controls more breathing room below the game */
+#screenTask1 .task-actions {
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid #2a394f;
+}
+#screenTask1 .catch-game + .task-actions {
+  margin-top:28px;
+}
+#screenTask1 .task-card > p {
+  margin-bottom:10px;
+  color:#9baabd;
+}
