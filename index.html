@@ -17,9 +17,20 @@
     </header>
 
     <section id="screenIntro" class="screen active">
-      <div class="hero-grid">
-        <div class="ravi-panel">
-          <div class="ravi-avatar" aria-label="Začasni prikaz RAVI-ja">
+      <div class="intro-mission">
+        <div class="intro-scan-line"></div>
+        <div class="intro-corner-code intro-code-a">RAVI_BOOT // 18%</div>
+        <div class="intro-corner-code intro-code-b">MISSION_PATH // 08 LABS</div>
+
+        <div class="intro-ravi-zone">
+          <div class="intro-radar" aria-hidden="true">
+            <span class="intro-ring ring-1"></span>
+            <span class="intro-ring ring-2"></span>
+            <span class="intro-ring ring-3"></span>
+            <span class="intro-sweep"></span>
+          </div>
+
+          <div class="ravi-avatar intro-ravi-avatar" aria-label="Začasni prikaz RAVI-ja">
             <div class="antenna"></div>
             <div class="head">
               <span class="eye"></span><span class="eye"></span>
@@ -27,15 +38,59 @@
             </div>
             <div class="body"><span class="core">R</span></div>
           </div>
-          <div class="status-chip">SYSTEM BOOTING... <span>18 %</span></div>
+
+          <div class="intro-diagnostics">
+            <div><span>POWER</span><strong>LOW</strong></div>
+            <div><span>CORE</span><strong>PARTIAL</strong></div>
+            <div><span>NETWORK</span><strong>OFFLINE</strong></div>
+            <div><span>AI CORE</span><strong>LOCKED</strong></div>
+          </div>
+
+          <div class="intro-bootbar">
+            <span>SYSTEM RECOVERY</span>
+            <div><i></i></div>
+            <strong>18 %</strong>
+          </div>
         </div>
 
-        <div class="dialog-panel">
-          <p class="eyebrow">INFORMATIVNI DAN // MISIJA 01</p>
-          <h1>Pomagaj RAVI-ju zagnati vseh 8 sistemov.</h1>
-          <p class="ravi-speech">»Živjo. Sem RAVI. Nekaj mojih sistemov še ni aktivnih. Sam tega ne morem dokončati. Potrebujem nekoga, ki razume računalništvo.«</p>
-          <p class="muted">Vsaka uspešno rešena naloga aktivira en modul. Napačen odgovor te ne ustavi – RAVI ti po potrebi pomaga.</p>
-          <button id="startBtn" class="primary-btn" type="button">ZAČNI MISIJO</button>
+        <div class="intro-briefing">
+          <p class="eyebrow">RAVI // MISSION BRIEFING</p>
+          <h1>Obnovi RAVI-ja.<br>Prebij se skozi 8 laboratorijev.</h1>
+
+          <p class="intro-lead">RAVI-jevi sistemi so delno izpadli. Pot do popolnega zagona vodi skozi osem področij računalništva — od strojne opreme in programiranja do omrežij, varnosti in umetne inteligence.</p>
+
+          <div class="intro-mission-flow" aria-label="Potek misije">
+            <div class="intro-flow-step">
+              <span>01</span>
+              <div><strong>VSTOPI V LABORATORIJ</strong><small>Vsaka soba predstavlja eno področje računalništva.</small></div>
+            </div>
+            <div class="intro-flow-step">
+              <span>02</span>
+              <div><strong>OPRAVI KRATKO NALOGO</strong><small>Navodila dobiš pred začetkom. Napačen poskus te ne ustavi.</small></div>
+            </div>
+            <div class="intro-flow-step">
+              <span>03</span>
+              <div><strong>OBNOVI MODUL</strong><small>Po vsaki nalogi se del RAVI-jevega sistema ponovno aktivira.</small></div>
+            </div>
+            <div class="intro-flow-step final-step">
+              <span>08</span>
+              <div><strong>ODKLENI AI CORE</strong><small>Končni cilj je popoln zagon RAVI-ja.</small></div>
+            </div>
+          </div>
+
+          <div class="intro-route">
+            <span class="active">HW</span><i></i><span>CODE</span><i></i><span>WEB</span><i></i><span>DATA</span><i></i><span>NET</span><i></i><span>SEC</span><i></i><span>APP</span><i></i><span>AI</span>
+          </div>
+
+          <div class="intro-ravi-line">
+            <strong>RAVI</strong>
+            <p>»Sam tega ne morem dokončati. Potrebujem nekoga, ki razume, kako sistemi delujejo. Če si pripravljen, greva od prve sobe do AI CORE.«</p>
+          </div>
+
+          <button id="startBtn" class="primary-btn intro-start-btn" type="button">
+            <span>ZAČNI MISIJO</span>
+            <small>ENTER LAB 01</small>
+          </button>
         </div>
       </div>
     </section>
