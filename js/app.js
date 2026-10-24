@@ -110,7 +110,11 @@ function showRecoveryAfterModule(moduleIndex) {
     ? `RAVI je obnovil del sistema. Naslednja postaja: ${nextRoom.room}.`
     : 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
 
-  showScreen('screenRecovery');
+  const recoveryScreen = document.getElementById('screenRecovery');
+  document.querySelectorAll('.screen').forEach((screen) => {
+    screen.classList.toggle('active', screen === recoveryScreen);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function continueStoryPath() {
@@ -611,9 +615,7 @@ function finishCatchGame() {
   updateProgress();
   renderModules();
 
-  setTimeout(() => {
-    showRecoveryAfterModule(0);
-  }, 1400);
+  showRecoveryAfterModule(0);
 }
 
 function handleCatchKeyDown(event) {
