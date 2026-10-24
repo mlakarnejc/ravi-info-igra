@@ -614,7 +614,6 @@ function finishCatchGame() {
 
   updateProgress();
 
-  const game = document.getElementById('catchGame');
   if (game) {
     let victory = game.querySelector('.catch-victory');
     if (!victory) {
