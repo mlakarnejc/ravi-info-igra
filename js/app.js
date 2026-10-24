@@ -2813,6 +2813,28 @@ function resetTask8() {
 }
 
 document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
+
+const testRoomJump = document.getElementById('testRoomJump');
+if (testRoomJump) {
+  testRoomJump.hidden = !TEST_MODE;
+
+  testRoomJump.querySelectorAll('[data-test-room]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const roomIndex = Number(button.dataset.testRoom);
+
+      // Developer jump: unlock enough state for the selected room
+      // without requiring previous tasks to be completed.
+      completed = Math.max(completed, roomIndex);
+      modules.forEach((module, index) => {
+        if (index < roomIndex) module.status = 'complete';
+        else if (index === roomIndex) module.status = 'ready';
+      });
+
+      updateProgress();
+      showStoryRoom(roomIndex);
+    });
+  });
+}
 document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
 document.getElementById('restartCatchGame').addEventListener('click', resetCatchGame);
 document.getElementById('backHub1').addEventListener('click', () => {
