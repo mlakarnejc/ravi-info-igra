@@ -4562,3 +4562,77 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   width:min(560px,84%);
   padding:22px 24px;
 }
+
+/* Unified start-overlay UX: all rooms follow Task 1 */
+.task-start-overlay {
+  display:grid;
+  place-content:center;
+  gap:16px;
+  padding:30px;
+  text-align:center;
+  background:rgba(5,12,21,.74);
+  backdrop-filter:blur(2px);
+}
+.task-start-overlay.hidden {
+  display:none !important;
+}
+.task-start-overlay .task-start-kicker {
+  display:block;
+  color:#ff8f97;
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.16em;
+}
+.task-start-overlay > strong {
+  display:block;
+  font-size:32px;
+  line-height:1.1;
+  letter-spacing:.04em;
+}
+.task-start-overlay .task-start-rules {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(180px,1fr));
+  gap:10px;
+  width:min(560px,88%);
+  margin:4px auto 2px;
+}
+.task-start-overlay .task-start-rules span {
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:10px 14px;
+  border:1px solid #3c4d66;
+  border-radius:10px;
+  background:rgba(16,28,44,.88);
+  color:#d9e2ed;
+  font:800 13px ui-monospace,monospace;
+}
+.task-start-overlay .task-start-rules b {
+  color:#fff;
+  font-size:14px;
+}
+.task-start-overlay .primary-btn {
+  margin:4px auto 0;
+  min-width:150px;
+  font-size:16px;
+}
+
+/* Kill the old nested-card look completely */
+.task-start-card {
+  display:contents !important;
+}
+
+/* Persistent one-line instructions under each task title */
+.task-card > h2 + p,
+.ml-topline h2 + p {
+  margin:8px 0 18px;
+  color:#aebdce;
+  font-size:15px;
+  line-height:1.5;
+}
+
+/* Feedback stays under the controls and is the place for live progress/result messages */
+.feedback {
+  margin-top:14px;
+}
