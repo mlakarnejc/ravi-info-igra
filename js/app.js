@@ -114,16 +114,6 @@ function renderStoryRoom(index = storyRoomIndex) {
   document.getElementById('storyTitle').textContent = room.title;
   document.getElementById('storyDescription').textContent = room.description;
 
-  const instructions = document.getElementById('storyInstructions');
-  instructions.innerHTML = room.instructions
-    .map((instruction, index) => `
-      <div class="story-instruction-row">
-        <span>${index + 1}</span>
-        <strong>${instruction}</strong>
-      </div>
-    `)
-    .join('');
-
   setRaviMessage('storyRaviText', room.ravi, 'instruction');
 
   document.querySelectorAll('.story-room-marker').forEach((marker, markerIndex) => {
@@ -146,9 +136,29 @@ function enterStoryRoom() {
   door.classList.add('door-open');
 
   setTimeout(() => {
-    openModule(storyRoomIndex);
+    showRoomBriefing(storyRoomIndex);
   }, 620);
 }
+
+function showRoomBriefing(index) {
+  const room = storyRooms[index];
+
+  document.getElementById('briefingCode').textContent = `${room.code} // ${room.room}`;
+  document.getElementById('briefingSubject').textContent = room.subject;
+  document.getElementById('briefingRaviText').textContent = room.ravi;
+
+  document.getElementById('briefingInstructions').innerHTML = room.instructions
+    .map((instruction, instructionIndex) => `
+      <div class="briefing-instruction-row">
+        <span>${instructionIndex + 1}</span>
+        <strong>${instruction}</strong>
+      </div>
+    `)
+    .join('');
+
+  showScreen('screenBriefing');
+}
+
 
 function showRecoveryAfterModule(moduleIndex) {
   const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
@@ -2814,16 +2824,17 @@ function resetTask8() {
 
 document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
 
-const testRoomJump = document.getElementById('testRoomJump');
-if (testRoomJump) {
+function initTestRoomJump() {
+  const testRoomJump = document.getElementById('testRoomJump');
+  if (!testRoomJump) return;
+
   testRoomJump.hidden = !TEST_MODE;
+  if (!TEST_MODE) return;
 
   testRoomJump.querySelectorAll('[data-test-room]').forEach((button) => {
     button.addEventListener('click', () => {
       const roomIndex = Number(button.dataset.testRoom);
 
-      // Developer jump: unlock enough state for the selected room
-      // without requiring previous tasks to be completed.
       completed = Math.max(completed, roomIndex);
       modules.forEach((module, index) => {
         if (index < roomIndex) module.status = 'complete';
@@ -2835,6 +2846,8 @@ if (testRoomJump) {
     });
   });
 }
+
+initTestRoomJump();
 document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
 document.getElementById('restartCatchGame').addEventListener('click', resetCatchGame);
 document.getElementById('backHub1').addEventListener('click', () => {
@@ -2880,6 +2893,7 @@ document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule)
 document.getElementById('resetTask8').addEventListener('click', resetTask8);
 document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
+document.getElementById('startBriefingTask').addEventListener('click', () => openModule(storyRoomIndex));
 document.getElementById('continueStory').addEventListener('click', continueStoryPath);
 document.getElementById('finalHub').addEventListener('click', () => showStoryRoom(0));
 document.getElementById('placeholderBack').addEventListener('click', () => showStoryRoom(storyRoomIndex));
