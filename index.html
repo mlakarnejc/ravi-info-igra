@@ -40,6 +40,77 @@
       </div>
     </section>
 
+    <section id="screenStory" class="screen">
+      <div class="story-shell">
+        <div class="story-corridor">
+          <div class="story-grid"></div>
+          <div class="story-light story-light-a"></div>
+          <div class="story-light story-light-b"></div>
+
+          <div class="story-ravi-placeholder">
+            <div class="story-ravi-core">
+              <span class="story-eye"></span><span class="story-eye"></span>
+              <strong>R</strong>
+            </div>
+          </div>
+
+          <div class="story-path">
+            <span class="story-path-line"></span>
+            <div class="story-room-marker active" data-room="0">01</div>
+            <div class="story-room-marker" data-room="1">02</div>
+            <div class="story-room-marker" data-room="2">03</div>
+            <div class="story-room-marker" data-room="3">04</div>
+            <div class="story-room-marker" data-room="4">05</div>
+            <div class="story-room-marker" data-room="5">06</div>
+            <div class="story-room-marker" data-room="6">07</div>
+            <div class="story-room-marker" data-room="7">08</div>
+          </div>
+
+          <div class="story-door-wrap">
+            <div id="storyDoor" class="story-door">
+              <div class="story-door-side left"></div>
+              <div class="story-door-side right"></div>
+              <div class="story-door-glow"></div>
+              <div class="story-door-label">
+                <span id="storyRoomCode">SOBA 01</span>
+                <strong id="storyRoomName">HARDWARE LAB</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="story-copy">
+            <span id="storySubject" class="story-subject">Strojna in programska oprema</span>
+            <h2 id="storyTitle">Kaj je znotraj računalnika?</h2>
+            <p id="storyDescription">Spoznamo dele računalnika in kako skupaj tvorijo sistem.</p>
+
+            <div class="story-ravi-message ravi-message-panel message-instruction">
+              <div class="ravi-message-head"><strong>RAVI</strong><span>NAVODILO</span></div>
+              <p id="storyRaviText">»Najprej morava skozi strojni laboratorij. Brez osnovnega sistema ne pridem daleč.«</p>
+            </div>
+
+            <button id="enterStoryRoom" class="primary-btn story-enter-btn" type="button">VSTOPI V SOBO</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenRecovery" class="screen">
+      <div class="recovery-shell">
+        <div class="recovery-grid"></div>
+        <div class="recovery-core">
+          <div class="recovery-ring ring-one"></div>
+          <div class="recovery-ring ring-two"></div>
+          <div class="recovery-r">R</div>
+        </div>
+        <p class="eyebrow">RAVI // SYSTEM RECOVERY</p>
+        <h2 id="recoveryTitle">MODUL OBNOVLJEN ✓</h2>
+        <div class="recovery-percent"><strong id="recoveryPercent">12 %</strong></div>
+        <div class="recovery-track"><div id="recoveryBar"></div></div>
+        <p id="recoveryText">Sistem se obnavlja.</p>
+        <button id="continueStory" class="primary-btn" type="button">NADALJUJ POT</button>
+      </div>
+    </section>
+
     <section id="screenHub" class="screen">
       <div class="section-head">
         <div>
