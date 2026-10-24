@@ -4380,3 +4380,66 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   background:#29171c;
   color:#fff;
 }
+
+/* Dedicated gameplay briefing shown after entering a room */
+.briefing-shell {
+  width:min(760px,92vw);
+  min-height:560px;
+  margin:40px auto;
+  padding:38px;
+  border:1px solid #334862;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(72,113,255,.11),transparent 24rem),
+    linear-gradient(180deg,#101b2b,#0a1421);
+  box-shadow:0 26px 70px rgba(0,0,0,.34);
+}
+.briefing-shell h2 {
+  margin:8px 0 4px;
+  font-size:40px;
+}
+.briefing-subject {
+  margin:0 0 24px;
+  color:#90a4bd;
+  font-size:15px;
+}
+.briefing-instructions {
+  display:grid;
+  gap:12px;
+  margin:22px 0;
+}
+.briefing-instruction-row {
+  display:grid;
+  grid-template-columns:42px 1fr;
+  align-items:center;
+  gap:14px;
+  min-height:58px;
+  padding:10px 14px;
+  border:1px solid #3b506c;
+  border-radius:12px;
+  background:rgba(8,17,29,.72);
+}
+.briefing-instruction-row > span {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#ef3340;
+  color:#fff;
+  font:900 15px ui-monospace,monospace;
+}
+.briefing-instruction-row strong {
+  color:#f1f5f9;
+  font-size:17px;
+  line-height:1.45;
+}
+.briefing-ravi {
+  margin-top:20px;
+}
+.briefing-start {
+  width:100%;
+  margin-top:18px;
+  font-size:17px;
+  min-height:52px;
+}
