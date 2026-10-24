@@ -613,14 +613,33 @@ function finishCatchGame() {
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
 
   updateProgress();
-  showRecoveryAfterModule(0);
 
-  // Legacy hub rendering must never block the story transition.
-  try {
-    renderModules();
-  } catch (error) {
-    console.error('RAVI hub render error after Task 1:', error);
+  const game = document.getElementById('catchGame');
+  if (game) {
+    let victory = game.querySelector('.catch-victory');
+    if (!victory) {
+      victory = document.createElement('div');
+      victory.className = 'catch-victory';
+      victory.innerHTML = `
+        <span>10 / 10 ✓</span>
+        <strong>VSA OPREMA ZBRANA</strong>
+      `;
+      game.appendChild(victory);
+    }
+    victory.classList.add('show');
   }
+
+  setRaviMessage('raviTaskText', '»Odlično. Prvi sistem je spet pripravljen.«', 'success');
+
+  setTimeout(() => {
+    showRecoveryAfterModule(0);
+
+    try {
+      renderModules();
+    } catch (error) {
+      console.error('RAVI hub render error after Task 1:', error);
+    }
+  }, 1200);
 }
 
 function handleCatchKeyDown(event) {
