@@ -521,7 +521,7 @@ function resetCatchGame() {
   document.getElementById('catchMistakes').textContent = '0';
 
   const f = document.getElementById('taskFeedback');
-  f.textContent = 'Zberi 10 točk. Vse, kar spada k računalniku, prinese +1; ostali predmeti −1. Točke ne morejo pasti pod 0.';
+  f.textContent = '';
   f.className = 'feedback';
 }
 
@@ -1598,7 +1598,7 @@ function initDataFilterGame() {
 
 const topologyNodes = {
   pc:       { label: 'RAČUNALNIK', x: 11, y: 58 },
-  switch:   { label: 'STIKALO', x: 29, y: 55 },
+  switch:   { label: 'STIKALO', x: 29, y: 49 },
   router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
   printer:  { label: 'TISKALNIK', x: 23, y: 86 },
   nas:      { label: 'NAS', x: 49, y: 18 },
