@@ -1645,11 +1645,11 @@ const topologyNodes = {
 };
 
 const topologyLinks = {
-  pc: ['router', 'switch'],
+  pc: ['router', 'switch', 'server'],
   router: ['pc', 'nas', 'server'],
   switch: ['pc', 'server', 'ap'],
   nas: ['router', 'cloud', 'camera'],
-  server: ['router', 'switch', 'cloud', 'internet', 'camera'],
+  server: ['pc', 'router', 'switch', 'cloud', 'internet', 'camera'],
   ap: ['switch', 'camera', 'phone'],
   cloud: ['nas', 'server', 'internet', 'ravi'],
   camera: ['nas', 'server', 'ap', 'internet', 'phone'],
