@@ -239,7 +239,8 @@
           <h2>Programiraj RAVI-ja</h2>
           <p>S tipkami <strong>↑ ↶ ↷</strong> sestavi program. <strong>↑ pomeni NAPREJ</strong>, <strong>↶ OBRAT LEVO</strong>, <strong>↷ OBRAT DESNO</strong>. Nato pritisni <strong>ENTER</strong>.</p>
 
-          <div id="task2StartOverlay" class="task-start-overlay">
+          <div class="program-game-layout">
+            <div id="task2StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>PROGRAMIRAJ RAVI-JA</strong>
@@ -253,7 +254,6 @@
       </div>
     </div>
 
-          <div class="program-game-layout">
             <div class="program-board-wrap">
               <div id="programBoard" class="program-board" tabindex="0" aria-label="Mreža za programiranje RAVI-ja"></div>
               <div class="program-legend">
@@ -307,7 +307,8 @@
           <h2>Popravi spletno stran</h2>
           <p>Povleci prave HTML oznake na <strong>6 delov strani</strong>. V orodjarni so tudi napačne oznake, ki jih ne potrebuješ.</p>
 
-          <div id="task3StartOverlay" class="task-start-overlay">
+          <div class="html-repair-layout">
+            <div id="task3StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>POPRAVI SPLETNO STRAN</strong>
@@ -320,7 +321,6 @@
       </div>
     </div>
 
-          <div class="html-repair-layout">
             <div class="html-preview-shell">
               <div class="browser-bar"><span></span><span></span><span></span><b>ravi.local</b></div>
 
@@ -434,7 +434,8 @@
           <h2>Filtriraj podatke</h2>
           <p>Poišči <strong>dijaka</strong> iz programa <strong>Računalništvo</strong>, ki obiskuje <strong>3. letnik</strong> in ima med ustreznimi zapisi <strong>največ točk</strong>.</p>
 
-          <div id="task4StartOverlay" class="task-start-overlay">
+          <div class="data-game-stage">
+            <div id="task4StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>FILTRIRAJ PODATKE</strong>
@@ -446,8 +447,7 @@
         <button id="startTask4Game" class="primary-btn" type="button">ZAČNI</button>
       </div>
     </div>
-
-          <div class="data-filter-panel">
+            <div class="data-filter-panel">
             <div class="data-filter">
               <label for="filterSpol">SPOL</label>
               <select id="filterSpol">
@@ -507,6 +507,9 @@
             </table>
           </div>
 
+          
+          </div>
+
           <div class="task-actions">
             <button id="checkTask4" class="primary-btn" type="button">POTRDI REZULTAT</button>
             <button id="resetTask4" class="ghost-btn" type="button">POČISTI FILTRE</button>
@@ -536,7 +539,9 @@
           <h2>Usmeri podatkovni paket</h2>
           <p>Začni pri <strong>RAČUNALNIKU</strong> in s klikom izbiraj naslednjo napravo. Cilj je dostaviti paket do <strong>RAVI-ja</strong>.</p>
 
-          <div id="task5StartOverlay" class="task-start-overlay">
+          <div class="network-topology-layout">
+            <div id="networkTopology" class="network-topology" aria-label="Shema računalniškega omrežja">
+            <div id="task5StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>USMERI PODATKOVNI PAKET</strong>
@@ -549,8 +554,6 @@
       </div>
     </div>
 
-          <div class="network-topology-layout">
-            <div id="networkTopology" class="network-topology" aria-label="Shema računalniškega omrežja">
               <svg class="network-links" viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true">
                 <line x1="80" y1="325" x2="250" y2="135"></line>
                 <line x1="80" y1="325" x2="290" y2="310"></line>
@@ -668,7 +671,13 @@
           <h2>Varnostni skener</h2>
           <p>Preglej <strong>6 sporočil</strong>. S tipko <strong>←</strong> pošlji sumljivo sporočilo v karanteno, s tipko <strong>→</strong> pa varno sporočilo naprej.</p>
 
-          <div id="task6StartOverlay" class="task-start-overlay">
+          <div class="security-hud">
+            <span>PREGLEDANO: <strong id="securityProgress">0 / 6</strong></span>
+            <span>NAPAKE: <strong id="securityMistakes">0</strong></span>
+          </div>
+
+          <div id="securityScanner" class="security-scanner" tabindex="0" aria-label="Varnostni skener sporočil">
+            <div id="task6StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>VARNOSTNI SKENER</strong>
@@ -681,12 +690,6 @@
       </div>
     </div>
 
-          <div class="security-hud">
-            <span>PREGLEDANO: <strong id="securityProgress">0 / 6</strong></span>
-            <span>NAPAKE: <strong id="securityMistakes">0</strong></span>
-          </div>
-
-          <div id="securityScanner" class="security-scanner" tabindex="0" aria-label="Varnostni skener sporočil">
             <div class="security-lane lane-danger">
               <span>←</span>
               <strong>SUMLJIVO</strong>
@@ -751,7 +754,14 @@
           <h2>RAVI RUN</h2>
           <p>S tipkama <strong>← →</strong> premikaj RAVI-ja, s <strong>SPACE</strong> skoči. Poberi <strong>3 koščke kode</strong> in pridi do izhodnega terminala.</p>
 
-          <div id="task7StartOverlay" class="task-start-overlay">
+          <div class="runner-hud">
+            <span>KODA: <strong id="runnerCodeCount">0 / 3</strong></span>
+            <span>NAPAKE: <strong id="runnerHits">0</strong></span>
+            <span>TIPKE: <strong>← → + SPACE</strong></span>
+          </div>
+
+          <div id="runnerViewport" class="runner-viewport" tabindex="0" aria-label="RAVI RUN platformna igra">
+            <div id="task7StartOverlay" class="task-start-overlay">
       <div class="task-start-card">
         <span class="task-start-kicker">KAKO IGRAŠ</span>
         <strong>RAVI RUN</strong>
@@ -764,13 +774,6 @@
       </div>
     </div>
 
-          <div class="runner-hud">
-            <span>KODA: <strong id="runnerCodeCount">0 / 3</strong></span>
-            <span>NAPAKE: <strong id="runnerHits">0</strong></span>
-            <span>TIPKE: <strong>← → + SPACE</strong></span>
-          </div>
-
-          <div id="runnerViewport" class="runner-viewport" tabindex="0" aria-label="RAVI RUN platformna igra">
             <div id="runnerWorld" class="runner-world">
               <div class="runner-sky-grid"></div>
               <div class="runner-city city-a"></div>
@@ -842,20 +845,7 @@
           </div>
         </div>
 
-        <div id="task8StartOverlay" class="task-start-overlay">
-      <div class="task-start-card">
-        <span class="task-start-kicker">KAKO IGRAŠ</span>
-        <strong>NAUČI RAVI-JA</strong>
-        <div class="task-start-rules">
-          <span>Razvrsti primere na <b>MAČKE</b> in <b>PSE</b></span>
-          <span>Opazuj, kako se model <b>uči</b></span>
-          <span>Ko se zmoti, izberi podatke, ki ga najbolje <b>izboljšajo</b></span>
-        </div>
-        <button id="startTask8Game" class="primary-btn" type="button">ZAČNI</button>
-      </div>
-    </div>
-
-          <div class="ml-main-grid">
+        <div class="ml-main-grid">
           <aside class="ml-ravi-console">
             <div class="ml-core-wrap">
               <div class="ml-core-halo halo-1"></div>
@@ -879,6 +869,19 @@
           </aside>
 
           <div class="ml-workbench">
+            <div id="task8StartOverlay" class="task-start-overlay">
+      <div class="task-start-card">
+        <span class="task-start-kicker">KAKO IGRAŠ</span>
+        <strong>NAUČI RAVI-JA</strong>
+        <div class="task-start-rules">
+          <span>Razvrsti primere na <b>MAČKE</b> in <b>PSE</b></span>
+          <span>Opazuj, kako se model <b>uči</b></span>
+          <span>Ko se zmoti, izberi podatke, ki ga najbolje <b>izboljšajo</b></span>
+        </div>
+        <button id="startTask8Game" class="primary-btn" type="button">ZAČNI</button>
+      </div>
+    </div>
+
             <div class="ml-monitor-bar">
               <span id="mlMonitorTitle">TRAINING DATA // CLASSIFICATION</span>
               <div class="ml-live"><i></i> LIVE</div>
