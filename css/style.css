@@ -7393,3 +7393,27 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   width:100%;
   min-height:430px;
 }
+
+
+/* ===== ML final insight success frame ===== */
+#mlFinalPhase .ml-final-insight {
+  border:1px solid rgba(56,193,114,.62) !important;
+  border-radius:14px !important;
+  background:
+    linear-gradient(180deg,rgba(10,38,24,.90),rgba(7,26,17,.92)) !important;
+  box-shadow:
+    0 0 24px rgba(56,193,114,.10),
+    inset 0 1px rgba(255,255,255,.025) !important;
+}
+
+#mlFinalPhase .ml-final-insight > span {
+  color:#79e8a3 !important;
+}
+
+#mlFinalPhase .ml-final-insight > strong {
+  color:#effff4 !important;
+}
+
+#mlFinalPhase .ml-final-insight > p {
+  color:#b9d9c5 !important;
+}
