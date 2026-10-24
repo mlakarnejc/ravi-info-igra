@@ -174,19 +174,34 @@
         </div>
       </div>
     </section><section id="screenRecovery" class="screen">
-      <div class="recovery-shell">
+      <div class="recovery-shell recovery-tech-shell">
         <div class="recovery-grid"></div>
+        <div class="recovery-scan-line" aria-hidden="true"></div>
+
+        <div class="recovery-system-head">
+          <span>RAVI // SYSTEM RECOVERY</span>
+          <strong id="recoveryModuleReadout">MODULE 01 / 08</strong>
+        </div>
+
         <div class="recovery-core">
           <div class="recovery-ring ring-one"></div>
           <div class="recovery-ring ring-two"></div>
           <div class="recovery-r">R</div>
         </div>
-        <p class="eyebrow">RAVI // SYSTEM RECOVERY</p>
+
+        <p class="eyebrow">RECOVERY SEQUENCE // VERIFIED</p>
         <h2 id="recoveryTitle">MODUL OBNOVLJEN ✓</h2>
         <div class="recovery-percent"><strong id="recoveryPercent">12 %</strong></div>
         <div class="recovery-track"><div id="recoveryBar"></div></div>
         <p id="recoveryText">Sistem se obnavlja.</p>
-        <button id="continueStory" class="primary-btn" type="button">NADALJUJ POT</button>
+
+        <div class="recovery-status-row">
+          <div><span>CORE</span><strong id="recoveryCoreStatus">STABLE</strong></div>
+          <div><span>MODULES</span><strong id="recoveryModulesStatus">01 / 08</strong></div>
+          <div><span>NEXT</span><strong id="recoveryNextStatus">LAB 02</strong></div>
+        </div>
+
+        <button id="continueStory" class="primary-btn recovery-continue-btn" type="button">NADALJUJ POT</button>
       </div>
     </section>
 
@@ -1066,8 +1081,13 @@
                   <p id="mlPredictionSub">Model sklepa na podlagi trening podatkov.</p>
                 </div>
               </div>
+              <div id="mlErrorExplain" class="ml-error-explain hidden">
+                <span class="ml-error-kicker">MODEL ERROR // ANALIZA</span>
+                <strong>RAVI je črno mačko napačno prepoznal kot psa.</strong>
+                <p>Model je pri učenju videl premalo raznolikih primerov. Zato se je oprl na napačne značilnosti, kot sta barva in velikost, namesto na pomembnejše razlike med mačko in psom.</p>
+              </div>
               <div class="ml-test-actions">
-                <button id="mlContinueAfterError" class="primary-btn hidden" type="button" disabled>NADALJUJ</button>
+                <button id="mlContinueAfterError" class="primary-btn hidden" type="button" disabled>POPRAVI MODEL</button>
               </div>
             </div>
 
@@ -1101,6 +1121,9 @@
               </div>
 
               <div id="mlPackageFeedback" class="ml-package-feedback hidden"></div>
+              <div id="mlPackageContinueWrap" class="ml-package-continue hidden">
+                <button id="mlContinueAfterPackage" class="primary-btn" type="button">NADALJUJ UČENJE</button>
+              </div>
             </div>
 
             <div id="mlRetrainScanPhase" class="ml-phase">
@@ -1177,10 +1200,25 @@
         <div class="final-grid" aria-hidden="true"></div>
         <div class="final-scan-line" aria-hidden="true"></div>
 
-        <div class="final-core" aria-hidden="true">
-          <span class="final-core-ring ring-a"></span>
-          <span class="final-core-ring ring-b"></span>
-          <strong>R</strong>
+        <div class="final-ravi-hero" aria-label="RAVI je popolnoma aktiviran">
+          <div class="final-ravi-halo halo-a"></div>
+          <div class="final-ravi-halo halo-b"></div>
+          <div class="final-ravi-robot">
+            <div class="final-ravi-antenna"><i></i></div>
+            <div class="final-ravi-head">
+              <span class="final-ravi-eye left"></span>
+              <span class="final-ravi-eye right"></span>
+              <span class="final-ravi-mouth"></span>
+            </div>
+            <div class="final-ravi-body">
+              <strong>R</strong>
+              <span class="final-ravi-panel p1"></span>
+              <span class="final-ravi-panel p2"></span>
+            </div>
+            <div class="final-ravi-arm left"></div>
+            <div class="final-ravi-arm right"></div>
+          </div>
+          <div class="final-ravi-status"><i></i> RAVI ONLINE</div>
         </div>
 
         <p class="eyebrow">RAVI // SYSTEM READY</p>
