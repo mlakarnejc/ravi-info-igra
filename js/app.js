@@ -11,6 +11,119 @@ const modules = [
   { name: 'Umetna inteligenca', status: 'locked' }
 ];
 
+const storyRooms = [
+  {
+    code:'SOBA 01', room:'HARDWARE LAB', subject:'Strojna in programska oprema',
+    title:'Kaj je znotraj računalnika?',
+    description:'Spoznamo dele računalnika in kako skupaj tvorijo sistem.',
+    ravi:'»Najprej morava skozi strojni laboratorij. Brez osnovnega sistema ne pridem daleč.«'
+  },
+  {
+    code:'SOBA 02', room:'CODE ROOM', subject:'Osnove programiranja',
+    title:'Računalnik potrebuje natančna navodila.',
+    description:'Z ukazi računalniku povemo, kaj naj naredi. Iz zaporedja ukazov nastane program.',
+    ravi:'»Tukaj ne smeva ugibati. Program naredi točno to, kar mu poveš.«'
+  },
+  {
+    code:'SOBA 03', room:'WEB LAB', subject:'Spletne aplikacije',
+    title:'Iz kode nastane splet.',
+    description:'Iz HTML elementov, vsebine in oblikovanja nastanejo spletne strani in aplikacije.',
+    ravi:'»Moja spletna stran je razpadla. Sestaviva jo, preden naju kdo vidi.«'
+  },
+  {
+    code:'SOBA 04', room:'DATA VAULT', subject:'Upravljanje s podatki',
+    title:'Podatki so uporabni samo, če jih znamo najti.',
+    description:'Podatkovne baze hranijo, urejajo in omogočajo hitro iskanje velike količine podatkov.',
+    ravi:'»V podatkovnem trezorju je pravi zapis. Najdiva ga, preden se vrata zaprejo.«'
+  },
+  {
+    code:'SOBA 05', room:'NETWORK CONTROL', subject:'Računalniške komunikacije in omrežja',
+    title:'Podatki morajo najti pravo pot.',
+    description:'Naprave komunicirajo prek omrežij, podatki pa potujejo skozi različne povezave in naprave.',
+    ravi:'»Pošlji paket do cilja. Napačna pot pomeni slepo ulico.«'
+  },
+  {
+    code:'SOBA 06', room:'SECURITY ZONE', subject:'Varnost in zaščita v informatiki',
+    title:'Vsakemu sporočilu ne smemo zaupati.',
+    description:'Prepoznavamo nevarnosti ter ščitimo naprave, uporabnike in podatke.',
+    ravi:'»Varnostni sistem je strog. Ločiti morava varno od sumljivega.«'
+  },
+  {
+    code:'SOBA 07', room:'APP DEVELOPMENT LAB', subject:'Programiranje aplikacij',
+    title:'Iz kode nastanejo prave aplikacije.',
+    description:'Programerji iz idej in kode ustvarjajo igre, aplikacije in uporabne sisteme.',
+    ravi:'»Čaka naju testna aplikacija. Tokrat ne govoriva o igri — igrala jo bova.«'
+  },
+  {
+    code:'SOBA 08', room:'AI CORE', subject:'Umetna inteligenca',
+    title:'Umetna inteligenca se uči iz podatkov.',
+    description:'AI išče vzorce v podatkih, kakovost podatkov in človeško preverjanje pa odločata o rezultatu.',
+    ravi:'»Zadnja soba. Tokrat boš moral naučiti mene.«'
+  }
+];
+
+let storyRoomIndex = 0;
+
+function renderStoryRoom(index = storyRoomIndex) {
+  storyRoomIndex = Math.max(0, Math.min(storyRooms.length - 1, index));
+  const room = storyRooms[storyRoomIndex];
+
+  document.getElementById('storyRoomCode').textContent = room.code;
+  document.getElementById('storyRoomName').textContent = room.room;
+  document.getElementById('storySubject').textContent = room.subject;
+  document.getElementById('storyTitle').textContent = room.title;
+  document.getElementById('storyDescription').textContent = room.description;
+  setRaviMessage('storyRaviText', room.ravi, 'instruction');
+
+  document.querySelectorAll('.story-room-marker').forEach((marker, markerIndex) => {
+    marker.classList.toggle('active', markerIndex === storyRoomIndex);
+    marker.classList.toggle('done', markerIndex < storyRoomIndex);
+  });
+
+  const door = document.getElementById('storyDoor');
+  door.classList.remove('door-open');
+  void door.offsetWidth;
+}
+
+function showStoryRoom(index) {
+  renderStoryRoom(index);
+  showScreen('screenStory');
+}
+
+function enterStoryRoom() {
+  const door = document.getElementById('storyDoor');
+  door.classList.add('door-open');
+
+  setTimeout(() => {
+    openModule(storyRoomIndex);
+  }, 620);
+}
+
+function showRecoveryAfterModule(moduleIndex) {
+  const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
+  document.getElementById('recoveryPercent').textContent = `${percent} %`;
+  document.getElementById('recoveryBar').style.width = `${percent}%`;
+  document.getElementById('recoveryTitle').textContent = 'MODUL OBNOVLJEN ✓';
+
+  const nextRoom = storyRooms[moduleIndex + 1];
+  document.getElementById('recoveryText').textContent = nextRoom
+    ? `RAVI je obnovil del sistema. Naslednja postaja: ${nextRoom.room}.`
+    : 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
+
+  showScreen('screenRecovery');
+}
+
+function continueStoryPath() {
+  if (completed >= 8) {
+    showScreen('screenFinal');
+    return;
+  }
+
+  showStoryRoom(Math.min(completed, 7));
+}
+
+
+
 const components = [
   { id: 'cpu', label: 'Procesor', icon: '🧠', correct: true },
   { id: 'ram', label: 'RAM', icon: '▥', correct: true },
@@ -258,7 +371,7 @@ function checkTask1() {
 
     updateProgress();
     renderModules();
-    setTimeout(() => showScreen('screenHub'), 1600);
+    setTimeout(() => showRecoveryAfterModule(4), 1600);
     return;
   }
 
@@ -711,7 +824,7 @@ async function runProgramGame() {
     updateProgress();
     renderModules();
     programRunning = false;
-    setTimeout(() => showScreen('screenHub'), 1900);
+    setTimeout(() => showRecoveryAfterModule(1), 1900);
     return;
   }
 
@@ -826,7 +939,7 @@ function checkTask2() {
 
     updateProgress();
     renderModules();
-    setTimeout(() => showScreen('screenHub'), 1700);
+    setTimeout(() => showRecoveryAfterModule(2), 1700);
     return;
   }
 
@@ -2619,12 +2732,12 @@ function resetTask8() {
   renderMLTrainingCards();
 }
 
-document.getElementById('startBtn').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
 document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
 document.getElementById('restartCatchGame').addEventListener('click', resetCatchGame);
 document.getElementById('backHub1').addEventListener('click', () => {
   stopCatchGame();
-  showScreen('screenHub');
+  showStoryRoom(0);
 });
 document.addEventListener('keydown', handleCatchKeyDown);
 document.addEventListener('keyup', handleCatchKeyUp);
@@ -2632,26 +2745,29 @@ document.getElementById('runProgramGame').addEventListener('click', runProgramGa
 document.getElementById('clearProgramGame').addEventListener('click', clearProgramGame);
 document.getElementById('backHub2').addEventListener('click', () => {
   programRunning = false;
-  showScreen('screenHub');
+  showStoryRoom(1);
 });
 document.addEventListener('keydown', handleProgramKey);
 document.getElementById('resetTask3').addEventListener('click', resetHtmlRepairGame);
-document.getElementById('finishTask3').addEventListener('click', () => showScreen('screenHub'));
-document.getElementById('backHub3').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('finishTask3').addEventListener('click', () => {
+  if (modules[2].status === 'complete') showRecoveryAfterModule(2);
+  else showStoryRoom(2);
+});
+document.getElementById('backHub3').addEventListener('click', () => showStoryRoom(2));
 document.getElementById('checkTask4').addEventListener('click', checkTask4);
 document.getElementById('resetTask4').addEventListener('click', resetTask4);
-document.getElementById('backHub4').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('backHub4').addEventListener('click', () => showStoryRoom(3));
 document.getElementById('resetTask5').addEventListener('click', resetNetworkGame);
-document.getElementById('backHub5').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('backHub5').addEventListener('click', () => showStoryRoom(4));
 document.getElementById('resetTask6').addEventListener('click', resetTask6);
-document.getElementById('backHub6').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('backHub6').addEventListener('click', () => showStoryRoom(5));
 document.addEventListener('keydown', handleSecurityKey);
 document.getElementById('startRunner').addEventListener('click', startRunnerGame);
 document.getElementById('resetTask7').addEventListener('click', resetRunnerGame);
 document.getElementById('backHub7').addEventListener('click', () => {
   runnerState.running = false;
   if (runnerState.raf) cancelAnimationFrame(runnerState.raf);
-  showScreen('screenHub');
+  showStoryRoom(6);
 });
 document.addEventListener('keydown', handleRunnerKeyDown);
 document.addEventListener('keyup', handleRunnerKeyUp);
@@ -2660,8 +2776,10 @@ document.querySelectorAll('.ml-data-package').forEach((button) => {
 });
 document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule);
 document.getElementById('resetTask8').addEventListener('click', resetTask8);
-document.getElementById('backHub8').addEventListener('click', () => showScreen('screenHub'));
-document.getElementById('finalHub').addEventListener('click', () => showScreen('screenHub'));
+document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
+document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
+document.getElementById('continueStory').addEventListener('click', continueStoryPath);
+document.getElementById('finalHub').addEventListener('click', () => showStoryRoom(0));
 document.getElementById('placeholderBack').addEventListener('click', () => showScreen('screenHub'));
 
 
