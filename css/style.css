@@ -5932,3 +5932,164 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   .intro-mission-flow { grid-template-columns:1fr; }
   .intro-route { overflow-x:auto; padding-bottom:4px; }
 }
+
+/* ===== Shared animated technical surface for all game windows ===== */
+.unified-game-surface {
+  position:relative !important;
+  overflow:hidden !important;
+  background:
+    radial-gradient(circle at 16% 20%,rgba(74,114,180,.07),transparent 14rem),
+    radial-gradient(circle at 86% 78%,rgba(239,51,64,.045),transparent 16rem),
+    linear-gradient(180deg,rgba(10,19,31,.97),rgba(7,14,24,.985)) !important;
+  border-color:#35506d !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.018),
+    inset 0 0 45px rgba(49,84,133,.035),
+    0 12px 32px rgba(0,0,0,.18) !important;
+}
+
+/* subtle grid/texture like the airlock */
+.unified-game-surface::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(72,108,162,.035) 1px,transparent 1px),
+    linear-gradient(rgba(72,108,162,.03) 1px,transparent 1px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),rgba(0,0,0,.18));
+}
+
+/* scan beam, now more visible but still subtle */
+.unified-game-surface::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  z-index:6;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(93,153,255,.42),transparent);
+  box-shadow:0 0 14px rgba(93,153,255,.18);
+  animation:gameSurfaceScan 6.8s linear infinite;
+}
+@keyframes gameSurfaceScan {
+  0% { transform:translateY(44px); opacity:0; }
+  10% { opacity:.72; }
+  90% { opacity:.3; }
+  100% { transform:translateY(560px); opacity:0; }
+}
+
+/* decorative animated radar/rings + status dots */
+.game-tech-layer {
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+.game-tech-rings {
+  position:absolute;
+  left:20px;
+  top:58px;
+  width:92px;
+  height:92px;
+  opacity:.26;
+}
+.game-tech-rings i {
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(91,148,235,.42);
+}
+.game-tech-rings i:nth-child(1) {
+  width:86px;height:86px;
+  border-style:dashed;
+  animation:gameRingSpin 13s linear infinite;
+}
+.game-tech-rings i:nth-child(2) {
+  width:58px;height:58px;
+  border-color:rgba(91,148,235,.55);
+  animation:gameRingSpinReverse 9s linear infinite;
+}
+.game-tech-rings i:nth-child(3) {
+  width:30px;height:30px;
+  border-color:rgba(239,51,64,.34);
+  animation:gameRingPulse 2.7s ease-in-out infinite;
+}
+@keyframes gameRingSpin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes gameRingSpinReverse { to { transform:translate(-50%,-50%) rotate(-360deg); } }
+@keyframes gameRingPulse {
+  0%,100% { opacity:.35; transform:translate(-50%,-50%) scale(.9); }
+  50% { opacity:1; transform:translate(-50%,-50%) scale(1.08); }
+}
+
+.game-tech-dot {
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#58a0ff;
+  box-shadow:0 0 10px rgba(88,160,255,.75);
+  animation:gameTechDot 1.9s ease-in-out infinite;
+}
+.game-tech-dot.dot-a { right:24px; top:58px; }
+.game-tech-dot.dot-b { right:38px; top:74px; animation-delay:.32s; }
+.game-tech-dot.dot-c { right:54px; top:58px; animation-delay:.64s; }
+@keyframes gameTechDot {
+  0%,100% { opacity:.25; transform:scale(.8); }
+  50% { opacity:1; transform:scale(1.25); }
+}
+
+.game-tech-corner {
+  position:absolute;
+  width:42px;
+  height:42px;
+  opacity:.28;
+}
+.game-tech-corner.tl {
+  left:10px; top:10px;
+  border-left:1px solid #5f86be;
+  border-top:1px solid #5f86be;
+}
+.game-tech-corner.br {
+  right:10px; bottom:10px;
+  border-right:1px solid #5f86be;
+  border-bottom:1px solid #5f86be;
+}
+
+/* make actual gameplay content sit above decorative layer */
+.unified-game-surface > *:not(.game-tech-layer):not(.task-start-overlay):not(.catch-overlay) {
+  position:relative;
+  z-index:8;
+}
+.task-start-overlay,
+.catch-overlay {
+  z-index:90 !important;
+}
+
+/* intro diagnostics need more breathing room from the top */
+.intro-diagnostics {
+  top:48px !important;
+  gap:10px !important;
+}
+.intro-diagnostics div {
+  padding:13px 12px 12px !important;
+}
+.intro-code-a {
+  top:18px !important;
+}
+
+/* airlock status boxes sit clearly below room markers */
+.airlock-status-grid {
+  top:106px !important;
+}
+
+/* network link addition styling */
+.network-links line {
+  vector-effect:non-scaling-stroke;
+}
