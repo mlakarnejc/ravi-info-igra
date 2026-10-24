@@ -610,6 +610,10 @@ function finishCatchGame() {
 
   updateProgress();
   renderModules();
+
+  setTimeout(() => {
+    showRecoveryAfterModule(0);
+  }, 1400);
 }
 
 function handleCatchKeyDown(event) {
