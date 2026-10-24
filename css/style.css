@@ -4202,3 +4202,58 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   margin-bottom:10px;
   color:#9baabd;
 }
+
+/* Task 1 instructions live only on the start overlay */
+#screenTask1 .ravi-task-hints {
+  display:none !important;
+}
+#screenTask1 .task-card > p {
+  display:none;
+}
+#screenTask1 #taskFeedback:empty {
+  display:none;
+}
+
+.catch-overlay-instructions {
+  gap:16px;
+  padding:30px;
+}
+.catch-overlay-kicker {
+  color:#ff8f97 !important;
+  font:900 11px ui-monospace,monospace;
+  letter-spacing:.16em;
+}
+.catch-overlay-instructions > strong {
+  font-size:32px;
+  line-height:1.1;
+  letter-spacing:.04em;
+}
+.catch-start-rules {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(180px,1fr));
+  gap:10px;
+  width:min(560px,88%);
+  margin:4px auto 2px;
+}
+.catch-start-rules span {
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:10px 14px;
+  border:1px solid #3c4d66;
+  border-radius:10px;
+  background:rgba(16,28,44,.88);
+  color:#d9e2ed !important;
+  font:800 13px ui-monospace,monospace;
+}
+.catch-start-rules b {
+  color:#fff;
+  font-size:14px;
+}
+.catch-overlay-instructions .primary-btn {
+  margin-top:4px;
+  min-width:150px;
+  font-size:16px;
+}
