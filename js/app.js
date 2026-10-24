@@ -767,7 +767,7 @@ function resetProgramGame() {
 
   const feedback2 = document.getElementById('task2Feedback');
   if (feedback2) {
-    feedback2.textContent = 'Sestavi program s puščicami. RAVI se bo premaknil šele, ko ga zaženeš.';
+    feedback2.textContent = '';
     feedback2.className = 'feedback';
   }
 }
@@ -1155,7 +1155,7 @@ function resetHtmlRepairGame() {
 
   const feedback3 = document.getElementById('task3Feedback');
   if (feedback3) {
-    feedback3.textContent = 'Povleci HTML oznako na pravi del spletne strani.';
+    feedback3.textContent = '';
     feedback3.className = 'feedback';
   }
 
@@ -1659,7 +1659,7 @@ function resetNetworkGame() {
   const feedback5 = document.getElementById('task5Feedback');
   const ravi5 = document.getElementById('raviTask5Text');
   if (feedback5) {
-    feedback5.textContent = 'Izberi napravo, kamor naj paket potuje naslednji.';
+    feedback5.textContent = '';
     feedback5.className = 'feedback';
   }
   if (ravi5) {
