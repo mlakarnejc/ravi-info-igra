@@ -6469,3 +6469,9 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenTask7 .task-actions {
   margin-top:14px !important;
 }
+
+
+/* ===== Airlock layout fix: keep door clear of status cards ===== */
+#screenStory .story-door-wrap {
+  top:160px !important;
+}
