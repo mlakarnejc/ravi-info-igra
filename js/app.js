@@ -2799,6 +2799,9 @@ function runMLFinalRetest() {
   const finishBtn = document.getElementById('mlFinishBtn');
   if (finishBtn) finishBtn.disabled = true;
 
+  const finalPhase = document.getElementById('mlFinalPhase');
+  finalPhase?.classList.remove('reveal-insight');
+
   const scene = document.querySelector('.ml-final-scan');
   const panel = scene?.querySelector('.ml-prediction-panel');
   const title = panel?.querySelector('strong');
@@ -2821,6 +2824,7 @@ function runMLFinalRetest() {
     text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
     confidence.textContent = '97 %';
     if (finishBtn) finishBtn.disabled = false;
+    finalPhase?.classList.add('reveal-insight');
     setRaviMessage('raviTask8Text', '»Uspeh. Po boljšem treningu sem isti primer pravilno prepoznal kot MAČKO.«', 'success');
   }, 1300);
 }
@@ -2891,6 +2895,7 @@ function resetTask8() {
 
   const testScene = document.querySelector('.ml-test-scene');
   testScene?.classList.remove('prediction-wrong','scanning');
+  document.getElementById('mlFinalPhase')?.classList.remove('reveal-insight');
 
   document.getElementById('raviTask8Text').textContent =
     '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«';
