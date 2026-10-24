@@ -1597,7 +1597,7 @@ function initDataFilterGame() {
 
 
 const topologyNodes = {
-  pc:       { label: 'RAČUNALNIK', x: 8, y: 58 },
+  pc:       { label: 'RAČUNALNIK', x: 11, y: 58 },
   switch:   { label: 'STIKALO', x: 29, y: 55 },
   router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
   printer:  { label: 'TISKALNIK', x: 23, y: 86 },
