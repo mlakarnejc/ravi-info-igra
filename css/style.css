@@ -5204,3 +5204,125 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   0% { transform:translateX(120px) scale(.96); opacity:1; }
   100% { transform:translateX(260px) scale(.18); opacity:0; }
 }
+
+/* ===== Technical HUD layer for rooms 1-7 ===== */
+.tech-hud {
+  position:absolute;
+  left:14px;
+  right:14px;
+  top:12px;
+  z-index:24;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  pointer-events:none;
+  opacity:.92;
+}
+.tech-hud span {
+  min-width:0;
+  padding:6px 8px;
+  border:1px solid rgba(83,106,140,.34);
+  border-radius:7px;
+  background:rgba(7,15,26,.72);
+  color:#71839d;
+  font:800 8px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.08em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.tech-hud b {
+  float:right;
+  color:#9eddb6;
+  font-weight:900;
+}
+.tech-hud i {
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin-right:6px;
+  border-radius:50%;
+  background:#4dd884;
+  box-shadow:0 0 8px rgba(77,216,132,.6);
+  animation:techPulse 1.5s ease-in-out infinite;
+}
+@keyframes techPulse {
+  0%,100% { opacity:.45; }
+  50% { opacity:1; }
+}
+
+/* Subtle scanning line gives each room motion without changing gameplay. */
+.unified-game-surface::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  z-index:5;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(89,132,255,.36),transparent);
+  box-shadow:0 0 14px rgba(89,132,255,.2);
+  animation:techScan 5.8s linear infinite;
+}
+@keyframes techScan {
+  from { transform:translateY(48px); opacity:0; }
+  8%,88% { opacity:.75; }
+  to { transform:translateY(520px); opacity:0; }
+}
+
+/* Keep overlays above HUD/scan. */
+.task-start-overlay,
+.catch-overlay {
+  z-index:90 !important;
+}
+
+/* Theme accents per room. */
+.tech-hud-hardware b { color:#8ee9b6; }
+.tech-hud-code b { color:#9bb9ff; }
+.tech-hud-web b { color:#8fd9ff; }
+.tech-hud-data b { color:#d2b4ff; }
+.tech-hud-network b { color:#86e3ff; }
+.tech-hud-security b { color:#ff9ca4; }
+.tech-hud-runner b { color:#ffd27a; }
+
+/* Give HUD a little room inside each game surface. */
+#catchGame,
+.program-game-layout,
+.html-repair-layout,
+.data-game-stage,
+.network-topology,
+.security-scanner,
+.runner-viewport {
+  padding-top:46px;
+}
+
+/* Network: smaller nodes and clearer spacing. */
+.network-topology .topology-node {
+  width:94px !important;
+  min-width:94px !important;
+  min-height:66px !important;
+  padding:8px 6px !important;
+  border-radius:13px !important;
+}
+.network-topology .topology-icon {
+  font-size:21px !important;
+}
+.network-topology .topology-node strong {
+  font-size:8px !important;
+}
+.network-links line {
+  stroke-width:3.5;
+  opacity:.56;
+}
+.network-links .route-link {
+  stroke:#6684ad;
+  opacity:.82;
+  stroke-width:4.5;
+}
+
+/* Tech HUD is hidden behind the start instruction overlay but visible immediately after start. */
+.task-start-overlay:not(.hidden) ~ .tech-hud,
+.catch-overlay:not(.hidden) ~ .tech-hud {
+  opacity:.18;
+}
