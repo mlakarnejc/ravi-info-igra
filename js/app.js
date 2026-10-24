@@ -613,9 +613,14 @@ function finishCatchGame() {
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
 
   updateProgress();
-  renderModules();
-
   showRecoveryAfterModule(0);
+
+  // Legacy hub rendering must never block the story transition.
+  try {
+    renderModules();
+  } catch (error) {
+    console.error('RAVI hub render error after Task 1:', error);
+  }
 }
 
 function handleCatchKeyDown(event) {
