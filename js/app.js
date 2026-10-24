@@ -1598,7 +1598,7 @@ function initDataFilterGame() {
 
 const topologyNodes = {
   pc:       { label: 'RAČUNALNIK', x: 11, y: 58 },
-  switch:   { label: 'STIKALO', x: 29, y: 49 },
+  switch:   { label: 'STIKALO', x: 36, y: 44 },
   router:   { label: 'USMERJEVALNIK', x: 25, y: 24 },
   printer:  { label: 'TISKALNIK', x: 23, y: 86 },
   nas:      { label: 'NAS', x: 49, y: 18 },
@@ -1613,12 +1613,12 @@ const topologyNodes = {
 
 const topologyLinks = {
   pc: ['router', 'switch', 'printer'],
-  router: ['pc', 'nas', 'server'],
-  switch: ['pc', 'server', 'ap'],
+  router: ['pc', 'nas', 'switch'],
+  switch: ['pc', 'router', 'server'],
   printer: ['pc', 'server', 'ap'],
   nas: ['router', 'cloud', 'camera'],
-  server: ['router', 'switch', 'printer', 'cloud', 'internet', 'camera'],
-  ap: ['switch', 'printer', 'camera'],
+  server: ['switch', 'printer', 'cloud', 'internet', 'camera'],
+  ap: ['printer', 'camera'],
   cloud: ['nas', 'server', 'internet', 'ravi'],
   camera: ['nas', 'server', 'ap', 'internet', 'phone'],
   internet: ['server', 'cloud', 'camera', 'ravi', 'phone'],
@@ -1626,7 +1626,7 @@ const topologyLinks = {
   phone: ['camera', 'internet']
 };
 
-const correctTopologyRoute = ['pc', 'router', 'server', 'internet', 'ravi'];
+const correctTopologyRoute = ['pc', 'router', 'switch', 'server', 'internet', 'ravi'];
 let topologyCurrent = 'pc';
 let topologyStage = 0;
 let topologyWrongAttempts = 0;
@@ -1774,7 +1774,9 @@ function chooseTopologyNode(targetId) {
     feedback5.className = 'feedback success';
 
     if (targetId === 'router') {
-      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer, ampak pot še ni končana.«';
+      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer. Zdaj poišči napravo, ki povezuje omrežne naprave.«';
+    } else if (targetId === 'switch') {
+      ravi5.textContent = '»Pravilno. Stikalo je vmesna povezava do strežnika.«';
     } else if (targetId === 'server') {
       ravi5.textContent = '»Pravilno. Paket je prišel do vmesnega strežnika. Kam naprej?«';
     } else if (targetId === 'internet') {
@@ -1949,6 +1951,7 @@ function classifySecurityMessage(choice) {
   const ravi6 = document.getElementById('raviTask6Text');
 
   securityLocked = true;
+  card.classList.remove('vault-left','vault-right');
   card.classList.add(choice === 'safe' ? 'swipe-right' : 'swipe-left');
 
   if (correct) {
@@ -1956,6 +1959,10 @@ function classifySecurityMessage(choice) {
     feedback6.className = 'feedback hidden';
     reason.innerHTML = `<strong>PRAVILNO ✓</strong><span>${msg.reason}</span>`;
     reason.className = 'security-reason result-correct';
+
+    setTimeout(() => {
+      card.classList.add(choice === 'safe' ? 'vault-right' : 'vault-left');
+    }, 650);
 
     setTimeout(() => {
       securityIndex += 1;
@@ -1967,7 +1974,7 @@ function classifySecurityMessage(choice) {
 
       securityLocked = false;
       renderSecurityMessage();
-    }, 3000);
+    }, 2550);
 
     return;
   }
@@ -2583,6 +2590,12 @@ function startMLTraining() {
 }
 
 function runMLBadPrediction() {
+  const continueBtn = document.getElementById('mlContinueAfterError');
+  if (continueBtn) {
+    continueBtn.disabled = true;
+    continueBtn.classList.add('hidden');
+  }
+
   const phase = document.getElementById('mlTestPhase');
   const scene = phase.querySelector('.ml-test-scene');
   scene.classList.add('scanning');
@@ -2599,6 +2612,7 @@ function runMLBadPrediction() {
     setRaviMessage('raviTask8Text', '»92 % prepričan ... in napačen. Očitno moji podatki niso bili dovolj raznoliki.«', 'error');
 
     const continueBtn = document.getElementById('mlContinueAfterError');
+    continueBtn.disabled = false;
     continueBtn.classList.remove('hidden');
     setRaviMessage('raviTask8Text', '»Zmotil sem se. Preberi rezultat, nato klikni NADALJUJ.«', 'error');
 
@@ -2615,6 +2629,14 @@ function chooseMLPackage(packageId) {
   if (mlBusy) return;
 
   document.getElementById('mlContinueAfterError')?.classList.add('hidden');
+
+  const continueBtn = document.getElementById('mlContinueAfterError');
+  if (continueBtn) {
+    continueBtn.disabled = true;
+    continueBtn.classList.add('hidden');
+  }
+  const finishBtn = document.getElementById('mlFinishBtn');
+  if (finishBtn) finishBtn.disabled = true;
 
   const feedback = document.getElementById('mlPackageFeedback');
   const buttons = document.querySelectorAll('.ml-data-package');
@@ -2720,6 +2742,9 @@ function startMLRetraining() {
 }
 
 function runMLFinalRetest() {
+  const finishBtn = document.getElementById('mlFinishBtn');
+  if (finishBtn) finishBtn.disabled = true;
+
   const scene = document.querySelector('.ml-final-scan');
   const panel = scene?.querySelector('.ml-prediction-panel');
   const title = panel?.querySelector('strong');
@@ -2741,6 +2766,7 @@ function runMLFinalRetest() {
     title.textContent = 'MAČKA ✓';
     text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
     confidence.textContent = '97 %';
+    if (finishBtn) finishBtn.disabled = false;
     setRaviMessage('raviTask8Text', '»Uspeh. Po boljšem treningu sem isti primer pravilno prepoznal kot MAČKO.«', 'success');
   }, 1300);
 }
