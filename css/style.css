@@ -4932,3 +4932,78 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #finishTask3 {
   display:none !important;
 }
+
+/* ===== Layout polish pass ===== */
+
+/* Story room and task cards share the same visual baseline. */
+.story-corridor,
+.task-card,
+.ml-lab-shell {
+  min-height:690px;
+}
+.task-card,
+.ml-lab-shell {
+  align-self:start;
+}
+
+/* Keep every task's bottom navigation comfortably away from the game surface. */
+.task-actions {
+  margin-top:24px !important;
+  padding-top:0 !important;
+  border-top:0 !important;
+}
+.ml-footer {
+  margin-top:24px !important;
+}
+
+/* Program action buttons must fit inside their panel without touching/clipping the edge. */
+.program-panel {
+  overflow:hidden;
+}
+.program-panel .in-game-actions {
+  display:grid !important;
+  grid-template-columns:minmax(0,1.45fr) minmax(0,.8fr);
+  gap:8px !important;
+  width:100%;
+  margin-top:14px !important;
+  padding:0 12px 12px !important;
+}
+.program-panel .in-game-actions button {
+  width:100% !important;
+  min-width:0 !important;
+  padding:0 10px !important;
+  font-size:13px !important;
+  white-space:nowrap !important;
+}
+
+/* Data-task confirmation gets breathing room from the table/frame. */
+.data-confirm-actions {
+  padding:18px 14px 16px !important;
+}
+#screenTask4 .task-actions {
+  margin-top:22px !important;
+}
+
+/* Runner navigation should not visually stick to the game viewport. */
+#screenTask7 .task-actions {
+  margin-top:24px !important;
+}
+
+/* Network nodes need safe inner padding from the game-surface edge. */
+.network-topology {
+  padding-left:12px;
+  padding-right:12px;
+}
+
+/* Persistent control line: clean separators and consistent spacing. */
+.task-card > h2 + p,
+.ml-topline h2 + p {
+  min-height:22px;
+  margin-bottom:18px !important;
+  word-spacing:.04em;
+}
+
+/* Keep generic buttons compact enough for narrow in-game panels. */
+.in-game-actions button {
+  max-width:100%;
+}
