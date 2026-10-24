@@ -4284,3 +4284,56 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   font-size:30px;
   letter-spacing:.05em;
 }
+
+/* Room intro: one clear place for all gameplay instructions */
+.story-howto {
+  margin:16px 0;
+  padding:14px;
+  border:1px solid #465c79;
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(24,39,59,.92),rgba(11,21,34,.94));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.story-howto-label {
+  display:block;
+  margin-bottom:10px;
+  color:#ff9299;
+  font:900 10px ui-monospace,monospace;
+  letter-spacing:.15em;
+}
+.story-instructions {
+  display:grid;
+  gap:8px;
+}
+.story-instruction-row {
+  display:grid;
+  grid-template-columns:30px 1fr;
+  align-items:center;
+  gap:10px;
+  min-height:42px;
+  padding:8px 10px;
+  border:1px solid #344860;
+  border-radius:9px;
+  background:rgba(8,17,29,.64);
+}
+.story-instruction-row > span {
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:#ef3340;
+  color:#fff;
+  font:900 11px ui-monospace,monospace;
+  box-shadow:0 0 12px rgba(239,51,64,.22);
+}
+.story-instruction-row > strong {
+  color:#eaf0f6;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:700;
+}
+.story-instruction-row b {
+  color:#fff;
+  font-size:14px;
+}
