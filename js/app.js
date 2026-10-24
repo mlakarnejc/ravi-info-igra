@@ -2899,6 +2899,9 @@ function resetTask8() {
   renderMLTrainingCards();
 }
 
+/* initialize restart buttons hidden until each task starts */
+[1,2,3,4,5,6,7,8].forEach((taskNumber) => setTaskRestartVisible(taskNumber, false));
+
 document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
 
 function initTestRoomJump() {
@@ -2925,7 +2928,11 @@ function initTestRoomJump() {
 }
 
 initTestRoomJump();
-document.getElementById('startCatchGame').addEventListener('click', startCatchGame);
+document.getElementById('startCatchGame').addEventListener('click', () => {
+  document.getElementById('catchStartOverlay')?.classList.add('hidden');
+  setTaskRestartVisible(1, true);
+  startCatchGame();
+});
 document.getElementById('restartCatchGame').addEventListener('click', () => { resetCatchGame(); showTaskStartOverlay(1); });
 document.getElementById('backHub1').addEventListener('click', () => {
   stopCatchGame();
@@ -2971,7 +2978,28 @@ document.getElementById('resetTask8').addEventListener('click', () => { resetTas
 document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
 
+function setTaskRestartVisible(taskNumber, visible) {
+  const ids = {
+    1:'restartCatchGame',
+    2:'restartTask2',
+    3:'resetTask3',
+    4:'resetTask4',
+    5:'resetTask5',
+    6:'resetTask6',
+    7:'resetTask7',
+    8:'resetTask8'
+  };
+
+  const button = document.getElementById(ids[taskNumber]);
+  if (!button) return;
+
+  button.hidden = !visible;
+  button.disabled = !visible;
+}
+
 function showTaskStartOverlay(taskNumber) {
+  setTaskRestartVisible(taskNumber, false);
+
   if (taskNumber === 1) {
     document.getElementById('catchStartOverlay')?.classList.remove('hidden');
     return;
@@ -2982,6 +3010,7 @@ function showTaskStartOverlay(taskNumber) {
 function dismissTaskStartOverlay(taskNumber) {
   const overlay = document.getElementById(`task${taskNumber}StartOverlay`);
   if (overlay) overlay.classList.add('hidden');
+  setTaskRestartVisible(taskNumber, true);
 }
 
 [2,3,4,5,6,8].forEach((taskNumber) => {
