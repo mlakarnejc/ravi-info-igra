@@ -1606,7 +1606,7 @@ const topologyNodes = {
   ap:       { label: 'DOSTOPNA TOČKA', x: 49, y: 88 },
   internet: { label: 'INTERNET', x: 90, y: 49 },
   camera:   { label: 'KAMERA', x: 73, y: 70 },
-  ravi:     { label: 'RAVI', x: 91, y: 18 },
+  ravi:     { label: 'RAVI', x: 86, y: 18 },
   cloud:    { label: 'OBLAK', x: 69, y: 30 },
   phone:    { label: 'TELEFON', x: 90, y: 84 }
 };
