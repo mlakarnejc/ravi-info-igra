@@ -1647,15 +1647,15 @@ const topologyNodes = {
 const topologyLinks = {
   pc: ['router', 'switch'],
   router: ['pc', 'nas', 'server'],
-  switch: ['pc', 'server'],
+  switch: ['pc', 'server', 'ap'],
   nas: ['router', 'cloud', 'camera'],
   server: ['router', 'switch', 'cloud', 'internet', 'camera'],
-  ap: ['camera'],
+  ap: ['switch', 'camera', 'phone'],
   cloud: ['nas', 'server', 'internet', 'ravi'],
   camera: ['nas', 'server', 'ap', 'internet', 'phone'],
   internet: ['server', 'cloud', 'camera', 'ravi', 'phone'],
   ravi: ['cloud', 'internet'],
-  phone: ['camera', 'internet']
+  phone: ['ap', 'camera', 'internet']
 };
 
 const correctTopologyRoute = ['pc', 'router', 'server', 'internet', 'ravi'];
