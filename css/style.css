@@ -7349,3 +7349,47 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .task-restart-btn[hidden] {
   display:none !important;
 }
+
+
+/* ===== Network/security/ML polish pass ===== */
+/* All network connections should be equally visible before interaction. */
+.network-links line,
+.network-links .direct-link {
+  stroke:#4a6283 !important;
+  stroke-width:3px !important;
+  opacity:.82 !important;
+  filter:none !important;
+}
+
+/* Security side zones: equal vertical spacing from the scanner frame. */
+#screenTask6 .security-scanner {
+  padding-top:18px !important;
+  padding-bottom:18px !important;
+}
+#screenTask6 .security-lane {
+  top:18px !important;
+  bottom:18px !important;
+  height:auto !important;
+}
+
+/* ML final phase: analysis first, insight revealed only after result. */
+#mlFinalPhase .ml-final-test {
+  grid-template-columns:1fr !important;
+}
+#mlFinalPhase .ml-final-insight {
+  width:min(760px,94%);
+  margin:22px auto 0;
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:opacity .35s ease, transform .35s ease;
+}
+#mlFinalPhase.reveal-insight .ml-final-insight {
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+#mlFinalPhase .ml-final-scan {
+  width:100%;
+  min-height:430px;
+}
