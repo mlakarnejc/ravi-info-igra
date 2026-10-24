@@ -6475,3 +6475,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenStory .story-door-wrap {
   top:160px !important;
 }
+
+
+/* ===== Airlock alignment: status follows the same axis as room markers ===== */
+#screenStory .airlock-status-grid {
+  left:270px !important;
+  right:50px !important;
+  width:auto !important;
+  transform:none !important;
+  top:118px !important;
+}
