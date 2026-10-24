@@ -5081,3 +5081,37 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .network-topology .node-ravi {
   max-width:112px;
 }
+
+/* Task 8 footer: match all other task screens */
+#screenTask8 .ml-footer {
+  display:grid !important;
+  grid-template-columns:auto auto 1fr;
+  align-items:center;
+  justify-content:start;
+  column-gap:10px;
+  row-gap:14px;
+}
+
+#screenTask8 .ml-progress-dots {
+  grid-column:1 / -1;
+  justify-self:start;
+}
+
+#screenTask8 #resetTask8 {
+  grid-column:1;
+  justify-self:start;
+}
+
+#screenTask8 #backHub8 {
+  grid-column:2;
+  justify-self:start;
+}
+
+#screenTask8 .subject-label {
+  grid-column:3;
+  justify-self:end;
+  width:auto;
+  margin-top:0;
+  padding-top:0;
+  border-top:0;
+}
