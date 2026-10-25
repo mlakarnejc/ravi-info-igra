@@ -2713,6 +2713,7 @@ function runMLBadPrediction() {
 
   if (continueBtn) {
     continueBtn.disabled = true;
+    continueBtn.hidden = true;
     continueBtn.classList.add('hidden');
     continueBtn.textContent = 'POPRAVI MODEL';
   }
@@ -2737,8 +2738,10 @@ function runMLBadPrediction() {
 
     if (continueBtn) {
       continueBtn.disabled = false;
+      continueBtn.hidden = false;
       continueBtn.classList.remove('hidden');
       continueBtn.onclick = () => {
+        continueBtn.hidden = true;
         continueBtn.classList.add('hidden');
         errorExplain?.classList.add('hidden');
         updateMLStage(2);
@@ -2959,6 +2962,7 @@ function resetTask8() {
   const mlContinueAfterError = document.getElementById('mlContinueAfterError');
   if (mlContinueAfterError) {
     mlContinueAfterError.disabled = true;
+    mlContinueAfterError.hidden = true;
     mlContinueAfterError.classList.add('hidden');
     mlContinueAfterError.textContent = 'POPRAVI MODEL';
   }
