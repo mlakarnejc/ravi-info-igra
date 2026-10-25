@@ -910,6 +910,7 @@ function addProgramCommand(command) {
 function handleProgramKey(event) {
   const screen = document.getElementById('screenTask2');
   if (!screen || !screen.classList.contains('active')) return;
+  if (isTaskStartOverlayOpen(2)) return;
   if (programRunning || modules[1].status === 'complete') return;
 
   if (['ArrowUp','ArrowLeft','ArrowRight','Enter','Backspace'].includes(event.key)) {
@@ -2126,6 +2127,7 @@ function finishSecurityGame() {
 
 function handleSecurityKey(event) {
   if (!document.getElementById('screenTask6')?.classList.contains('active')) return;
+  if (isTaskStartOverlayOpen(6)) return;
   if (event.key === 'ArrowLeft') {
     event.preventDefault();
     classifySecurityMessage('danger');
@@ -2252,6 +2254,7 @@ function runnerJump() {
 
 function handleRunnerKeyDown(event) {
   if (!document.getElementById('screenTask7')?.classList.contains('active')) return;
+  if (isTaskStartOverlayOpen(7)) return;
 
   if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {
     event.preventDefault();
@@ -2268,6 +2271,7 @@ function handleRunnerKeyDown(event) {
 }
 
 function handleRunnerKeyUp(event) {
+  if (isTaskStartOverlayOpen(7)) return;
   if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') runnerState.left = false;
   if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') runnerState.right = false;
 }
@@ -2978,6 +2982,42 @@ function resetTask8() {
 
 /* initialize restart buttons hidden until each task starts */
 [1,2,3,4,5,6,7,8].forEach((taskNumber) => setTaskRestartVisible(taskNumber, false));
+
+function isTaskStartOverlayOpen(taskNumber) {
+  const overlay = taskNumber === 1
+    ? document.getElementById('catchStartOverlay')
+    : document.getElementById(`task${taskNumber}StartOverlay`);
+
+  return !!overlay && !overlay.classList.contains('hidden');
+}
+
+function handleStartOverlayEnter(event) {
+  if (event.key !== 'Enter' || event.repeat) return;
+
+  const startButtons = [
+    { task:1, id:'startCatchGame' },
+    { task:2, id:'startTask2Game' },
+    { task:3, id:'startTask3Game' },
+    { task:4, id:'startTask4Game' },
+    { task:5, id:'startTask5Game' },
+    { task:6, id:'startTask6Game' },
+    { task:7, id:'startTask7Game' },
+    { task:8, id:'startTask8Game' }
+  ];
+
+  const active = startButtons.find(({ task, id }) => {
+    const button = document.getElementById(id);
+    return button && !button.disabled && isTaskStartOverlayOpen(task);
+  });
+
+  if (!active) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  document.getElementById(active.id)?.click();
+}
+
+document.addEventListener('keydown', handleStartOverlayEnter, true);
 
 document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
 
