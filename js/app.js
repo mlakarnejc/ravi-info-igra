@@ -283,7 +283,7 @@ function resetWholeMission() {
   renderMLTrainingCards();
 
   document.getElementById('screenFinal')?.classList.remove('final-sequence-start','final-sequence-revealed');
-  document.getElementById('finalTransition')?.classList.remove('finished');
+  document.getElementById('finalTransition')?.classList.add('finished');
 
   updateProgress();
   renderModules();
