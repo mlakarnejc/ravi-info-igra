@@ -7895,3 +7895,49 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     height: 270px;
   }
 }
+
+
+/* RAVI placement final correction */
+#screenIntro .intro-ravi-avatar.has-ravi-image {
+  position: absolute !important;
+  top: 185px !important;
+  left: 50% !important;
+  width: 350px !important;
+  height: 350px !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+}
+
+#screenStory .story-ravi-placeholder.has-ravi-image {
+  position: absolute !important;
+  left: 72px !important;
+  top: 250px !important;
+  bottom: auto !important;
+  width: 270px !important;
+  height: 350px !important;
+}
+
+#screenTask8 .ml-core-wrap.has-ravi-image {
+  width: 205px !important;
+  height: 245px !important;
+  margin: 0 auto 22px !important;
+}
+#screenTask8 .ml-core-wrap.has-ravi-image > :not(.ravi-stage-image) {
+  display: none !important;
+}
+#screenTask8 .ml-core-wrap.has-ravi-image .ravi-stage-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+}
+
+@media (max-width: 1000px) {
+  #screenStory .story-ravi-placeholder.has-ravi-image {
+    display: block !important;
+    left: 26px !important;
+    top: 230px !important;
+    width: 200px !important;
+    height: 260px !important;
+  }
+}
