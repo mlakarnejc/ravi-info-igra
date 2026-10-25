@@ -8034,3 +8034,21 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     letter-spacing: .12em;
   }
 }
+
+
+/* Header label refinement */
+.brand-with-logo {
+  align-items: flex-end !important;
+}
+
+.brand-with-logo span {
+  font-size: 14px !important;
+  padding-bottom: 7px;
+}
+
+@media (max-width: 620px) {
+  .brand-with-logo span {
+    font-size: 12px !important;
+    padding-bottom: 5px;
+  }
+}
