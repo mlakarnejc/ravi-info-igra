@@ -173,6 +173,17 @@ function completeTaskFlow(moduleIndex, feedbackId, message, delay = 1600) {
   }, delay);
 }
 
+const raviRepairSteps = [
+  'Samopopravljanje je zagnano. RAVI je začel ponovno sestavljati podvozje.',
+  'Prvo kolo je spet na mestu. RAVI se že lažje postavi pokonci.',
+  'Obe kolesi sta pritrjeni. RAVI lahko spet stoji in se premika.',
+  'Poškodovane žice so pospravljene in notranje povezave so spet stabilne.',
+  'Ohišje se obnavlja. Glavne praske in poškodbe so odpravljene.',
+  'Ohišje in zaslon sta obnovljena. Ostala je samo še poškodovana signalna žarnica.',
+  'Tudi žarnica je popravljena. Še ne sveti — manjka samo še zadnji zagon sistema.',
+  'Vsi deli so obnovljeni. RAVI je pripravljen na popoln zagon.'
+];
+
 function showRecoveryAfterModule(moduleIndex) {
   const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
   setRaviStageImage(
@@ -187,9 +198,10 @@ function showRecoveryAfterModule(moduleIndex) {
     : 'MODUL OBNOVLJEN ✓';
 
   const nextRoom = storyRooms[moduleIndex + 1];
+  const repairText = raviRepairSteps[moduleIndex] || 'RAVI je obnovil del sistema.';
   document.getElementById('recoveryText').textContent = nextRoom
-    ? `RAVI je obnovil del sistema. Naslednja postaja: ${nextRoom.room}.`
-    : 'Vseh 8 modulov je aktivnih. RAVI je pripravljen na končni zagon.';
+    ? `${repairText} Naslednja postaja: ${nextRoom.room}.`
+    : `${repairText} Začenja se končni zagon.`;
 
   const moduleNumber = String(moduleIndex + 1).padStart(2, '0');
   document.getElementById('recoveryModuleReadout').textContent = `MODULE ${moduleNumber} / 08`;
