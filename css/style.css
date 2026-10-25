@@ -8776,3 +8776,30 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   margin:0 !important;
   text-align:center !important;
 }
+
+
+/* Remove any visual frame around the final loading sequence */
+#screenFinal .final-tech-card:has(.final-transition:not(.finished)) {
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+  width:100% !important;
+  max-width:none !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+
+#screenFinal .final-transition {
+  outline:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+/* Give the final result screen a little more vertical breathing room */
+#screenFinal.final-sequence-revealed .final-tech-card {
+  height:min(790px,calc(100vh - 70px)) !important;
+  min-height:700px !important;
+}
