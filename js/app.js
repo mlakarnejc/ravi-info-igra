@@ -3018,12 +3018,7 @@ function runMLFinalRetest() {
   setTimeout(() => {
     scene.classList.remove('scanning');
     title.textContent = 'MAČKA ✓';
-    const task8Feedback = document.getElementById('task8Feedback');
-    if (task8Feedback) {
-      task8Feedback.textContent = 'USPEH ✓ Tokrat je RAVI isti primer pravilno prepoznal kot MAČKO.';
-      task8Feedback.className = 'feedback success';
-    }
-    text.textContent = 'Tokrat je RAVI pravilno prepoznal črno mačko. Boljši podatki so izboljšali model.';
+        text.textContent = 'Tokrat je RAVI pravilno prepoznal črno mačko. Boljši podatki so izboljšali model.';
     confidence.textContent = '97 %';
     finalPhase?.classList.add('reveal-insight');
     setRaviMessage('raviTask8Text', '»Tokrat sem jo pravilno prepoznal. Boljši podatki so očitno pomagali.«', 'success');
@@ -3044,12 +3039,7 @@ function finishMLModule() {
   modules[7].status = 'complete';
   completed = 8;
   document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
-  const feedback8 = document.getElementById('task8Feedback');
-  if (feedback8) {
-    feedback8.textContent = 'NALOGA KONČANA ✓ RAVI je po izboljšanem učenju isti primer pravilno prepoznal.';
-    feedback8.className = 'feedback success';
-  }
-  completeTaskFlow(7, 'task8Feedback', 'NALOGA KONČANA ✓ RAVI je po izboljšanem učenju isti primer pravilno prepoznal.', 1800);
+    completeTaskFlow(7, null, '', 1800);
 
   setTimeout(() => {
     shell?.classList.remove('ml-complete');
@@ -3086,11 +3076,7 @@ function resetTask8() {
     mlContinueAfterError.classList.add('hidden');
     mlContinueAfterError.textContent = 'POPRAVI MODEL';
   }
-  const task8Feedback = document.getElementById('task8Feedback');
-  if (task8Feedback) {
-    task8Feedback.textContent = '';
-    task8Feedback.className = 'feedback';
-  }
+  
 
   document.querySelectorAll('.ml-data-package').forEach((button) => {
     button.disabled = false;
