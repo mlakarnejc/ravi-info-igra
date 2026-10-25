@@ -3028,7 +3028,7 @@ function runMLFinalRetest() {
     finalPhase?.classList.add('reveal-insight');
     setRaviMessage('raviTask8Text', '»Tokrat sem jo pravilno prepoznal. Boljši podatki so očitno pomagali.«', 'success');
 
-    setTimeout(finishMLModule, 3200);
+    setTimeout(finishMLModule, 4800);
   }, 1300);
 }
 
