@@ -9053,3 +9053,47 @@ body > #finalTransition .final-transition-progress {
   from { transform:scaleX(0); }
   to { transform:scaleX(1); }
 }
+
+
+/* Final boot: extra tech activity */
+#finalTransition .final-transition-tech {
+  display:flex !important;
+  gap:10px !important;
+  flex-wrap:wrap !important;
+  justify-content:center !important;
+  margin-top:-2px !important;
+}
+
+#finalTransition .final-transition-tech span {
+  padding:7px 10px !important;
+  border:1px solid rgba(91,151,255,.28) !important;
+  border-radius:8px !important;
+  background:rgba(12,24,40,.72) !important;
+  color:#7f93ad !important;
+  font:800 9px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace !important;
+  letter-spacing:.12em !important;
+  animation:finalTechPulse 1.35s ease-in-out infinite !important;
+}
+
+#finalTransition .final-transition-tech span:nth-child(2) {
+  animation-delay:.22s !important;
+}
+#finalTransition .final-transition-tech span:nth-child(3) {
+  animation-delay:.44s !important;
+}
+
+#finalTransition .final-transition-progress > div > i {
+  transform:scaleX(0) !important;
+  animation:finalBootProgressRoot 2.5s linear forwards !important;
+  box-shadow:0 0 14px rgba(255,100,112,.38) !important;
+}
+
+#finalTransition .final-transition-progress > span b {
+  color:#ff7c86 !important;
+  margin-left:8px !important;
+}
+
+@keyframes finalTechPulse {
+  0%,100% { opacity:.45; box-shadow:none; }
+  50% { opacity:1; box-shadow:0 0 14px rgba(91,151,255,.12); }
+}
