@@ -132,6 +132,11 @@ function renderStoryRoom(index = storyRoomIndex) {
 
 function showStoryRoom(index) {
   renderStoryRoom(index);
+  setRaviStageImage(
+    document.querySelector('.story-ravi-placeholder'),
+    Math.min(storyRoomIndex + 1, 8),
+    `RAVI pred modulom ${Math.min(storyRoomIndex + 1, 8)}`
+  );
   showScreen('screenStory');
 }
 
@@ -169,6 +174,11 @@ function completeTaskFlow(moduleIndex, feedbackId, message, delay = 1600) {
 
 function showRecoveryAfterModule(moduleIndex) {
   const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
+  setRaviStageImage(
+    document.querySelector('.recovery-core'),
+    Math.min(moduleIndex + 2, 9),
+    `RAVI po obnovi modula ${moduleIndex + 1}`
+  );
   document.getElementById('recoveryPercent').textContent = `${percent} %`;
   document.getElementById('recoveryBar').style.width = `${percent}%`;
   document.getElementById('recoveryTitle').textContent = moduleIndex === 7
@@ -264,6 +274,7 @@ function resetWholeMission() {
 
   updateProgress();
   renderModules();
+  syncRaviStageImages();
   showScreen('screenIntro');
 }
 
@@ -308,6 +319,65 @@ const moduleGrid = document.getElementById('moduleGrid');
 const componentGrid = document.getElementById('componentGrid');
 const feedback = document.getElementById('taskFeedback');
 const raviTaskText = document.getElementById('raviTaskText');
+
+
+const RAVI_IMAGE_BASE = 'assets/ravi';
+
+function setRaviStageImage(container, stage, alt = 'RAVI') {
+  if (!container) return;
+
+  const safeStage = Math.max(1, Math.min(9, Number(stage) || 1));
+  let image = container.querySelector(':scope > .ravi-stage-image');
+
+  if (!image) {
+    image = document.createElement('img');
+    image.className = 'ravi-stage-image';
+    container.appendChild(image);
+  }
+
+  const wantedSrc = `${RAVI_IMAGE_BASE}/ravi-${safeStage}.webp`;
+  if (!image.getAttribute('src')?.endsWith(wantedSrc)) {
+    image.src = wantedSrc;
+  }
+
+  image.alt = alt;
+  image.dataset.stage = String(safeStage);
+  container.classList.add('has-ravi-image');
+}
+
+function syncRaviStageImages() {
+  setRaviStageImage(
+    document.querySelector('.intro-ravi-avatar'),
+    1,
+    'RAVI v začetnem poškodovanem stanju'
+  );
+
+  setRaviStageImage(
+    document.querySelector('.story-ravi-placeholder'),
+    Math.min(storyRoomIndex + 1, 8),
+    `RAVI pred modulom ${Math.min(storyRoomIndex + 1, 8)}`
+  );
+
+  for (let task = 1; task <= 8; task += 1) {
+    setRaviStageImage(
+      document.querySelector(`#screenTask${task} .mini-ravi`),
+      task,
+      `RAVI – stanje ${task}`
+    );
+  }
+
+  setRaviStageImage(
+    document.querySelector('.hub-ravi'),
+    Math.min(completed + 1, 9),
+    'Trenutno stanje RAVI-ja'
+  );
+
+  setRaviStageImage(
+    document.querySelector('.final-ravi-robot'),
+    9,
+    'Popolnoma obnovljen RAVI'
+  );
+}
 
 function showScreen(id) {
   screens.forEach((screen) => screen.classList.toggle('active', screen.id === id));
@@ -3226,3 +3296,7 @@ safeInit('ML training cards', renderMLTrainingCards);
 safeInit('Legacy components', renderComponents);
 safeInit('Program order', renderProgramOrder);
 safeInit('Data rows', renderDataRows);
+
+
+syncRaviStageImages();
+// RAVI_STAGE_IMAGES_READY
