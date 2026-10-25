@@ -9053,3 +9053,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-tech-card {
   margin-top: 0 !important;
 }
+
+
+/* Add a little more breathing room below the header for intro + room screens */
+#screenIntro.active,
+#screenStory.active {
+  margin-top: 14px !important;
+}
