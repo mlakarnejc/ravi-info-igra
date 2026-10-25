@@ -9060,3 +9060,60 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenStory.active {
   margin-top: 14px !important;
 }
+
+
+/* ===== FINAL VERTICAL POSITIONING FIX =====
+   One shared top gap below the header. No vertical centering. */
+:root {
+  --main-screen-gap: 24px;
+}
+
+#screenIntro.active,
+#screenStory.active,
+#screenRecovery.active,
+#screenTask1.active,
+#screenTask2.active,
+#screenTask3.active,
+#screenTask4.active,
+#screenTask5.active,
+#screenTask6.active,
+#screenTask7.active,
+#screenTask8.active,
+#screenFinal.active {
+  margin-top: var(--main-screen-gap) !important;
+}
+
+/* Story used to add 70–120px internally; remove that extra offset. */
+#screenStory.active .story-shell {
+  padding-top: 0 !important;
+  min-height: 0 !important;
+  display: block !important;
+  place-items: initial !important;
+  align-items: initial !important;
+  justify-items: initial !important;
+}
+
+/* Recovery used to vertically center the whole card in the viewport. */
+#screenRecovery.active {
+  display: block !important;
+  min-height: 0 !important;
+  place-items: initial !important;
+  align-items: initial !important;
+  justify-items: initial !important;
+}
+
+#screenRecovery .recovery-shell {
+  margin: 0 auto !important;
+}
+
+/* Task rooms used to have an old 70–120px internal top margin. */
+#screenTask1.active .task-layout,
+#screenTask2.active .task-layout,
+#screenTask3.active .task-layout,
+#screenTask4.active .task-layout,
+#screenTask5.active .task-layout,
+#screenTask6.active .task-layout,
+#screenTask7.active .task-layout,
+#screenTask8.active .ml-lab-shell {
+  margin-top: 0 !important;
+}
