@@ -1683,12 +1683,14 @@ function renderDataRows() {
   if (feedback4 && modules[3].status !== 'complete') {
     if (readyForSort && !dataSortedByPoints) {
       feedback4.textContent = 'Pravilno filtrirano. Ostali so 3 dijaki. Zdaj razvrsti po točkah.';
+      feedback4.className = 'feedback success';
     } else if (dataSortedByPoints && filtered.length === 3) {
       feedback4.textContent = 'Razvrščeno. Najboljši rezultat je zdaj na vrhu — potrdi rezultat.';
+      feedback4.className = 'feedback success';
     } else {
       feedback4.textContent = `Prikazanih zapisov: ${filtered.length}. Nadaljuj s filtriranjem.`;
+      feedback4.className = 'feedback info';
     }
-    feedback4.className = 'feedback';
   }
 }
 
@@ -1797,11 +1799,13 @@ function checkTask4() {
 
   if (!dataSortedByPoints) {
     feedback4.textContent = 'Filtri so pravilni, vendar naloga zahteva še največ točk. Klikni glavo stolpca TOČKE.';
+    feedback4.className = 'feedback success';
     ravi4.textContent = '»Trije ustrezajo. Potrebujem najboljšega — razvrsti jih po točkah.«';
     return;
   }
 
   feedback4.textContent = 'Podatki so že razvrščeni. Najvišji rezultat je prvi zapis v tabeli.';
+  feedback4.className = 'feedback success';
   ravi4.textContent = '»Po razvrščanju je odgovor na vrhu. Zdaj ga samo še potrdi.«';
 }
 
