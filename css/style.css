@@ -8497,3 +8497,83 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     column-gap:28px !important;
   }
 }
+
+
+/* FINAL SCREEN FIX: true 40/60 layout, no clipping */
+#screenFinal .final-tech-card {
+  width:min(1440px,96vw) !important;
+  height:min(760px,calc(100vh - 80px)) !important;
+  max-width:none !important;
+  overflow:hidden !important;
+  grid-template-columns:minmax(0,40%) minmax(0,60%) !important;
+  column-gap:36px !important;
+  padding:32px 40px !important;
+}
+
+#screenFinal .final-ravi-hero {
+  min-width:0 !important;
+  overflow:visible !important;
+}
+
+#screenFinal .final-ravi-hero .final-ravi-robot.has-ravi-image {
+  width:min(520px,100%) !important;
+  height:min(620px,100%) !important;
+}
+
+#screenFinal .eyebrow,
+#screenFinal .final-system-title,
+#screenFinal .final-percent,
+#screenFinal .final-lead,
+#screenFinal .final-message,
+#screenFinal .final-status-row,
+#screenFinal .final-auto-reset {
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:visible !important;
+}
+
+#screenFinal .final-system-title {
+  font-size:clamp(40px,3.8vw,62px) !important;
+  line-height:.98 !important;
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+}
+
+#screenFinal .final-lead {
+  font-size:16px !important;
+}
+
+#screenFinal .final-message {
+  box-sizing:border-box !important;
+}
+
+#screenFinal .final-message strong {
+  font-size:clamp(20px,1.8vw,28px) !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+}
+
+#screenFinal .final-status-row {
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+
+#screenFinal .final-status-row > div {
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+
+@media (max-width:1200px) {
+  #screenFinal .final-tech-card {
+    width:97vw !important;
+    grid-template-columns:minmax(0,38%) minmax(0,62%) !important;
+    column-gap:24px !important;
+    padding:28px 30px !important;
+  }
+
+  #screenFinal .final-system-title {
+    font-size:clamp(36px,3.6vw,54px) !important;
+  }
+}
