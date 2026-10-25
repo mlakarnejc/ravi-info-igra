@@ -3018,6 +3018,11 @@ function runMLFinalRetest() {
   setTimeout(() => {
     scene.classList.remove('scanning');
     title.textContent = 'MAČKA ✓';
+    const task8Feedback = document.getElementById('task8Feedback');
+    if (task8Feedback) {
+      task8Feedback.textContent = 'Tokrat je RAVI mačko pravilno prepoznal. ✓';
+      task8Feedback.className = 'feedback success';
+    }
     text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
     confidence.textContent = '97 %';
     finalPhase?.classList.add('reveal-insight');
