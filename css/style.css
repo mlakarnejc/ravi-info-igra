@@ -8116,3 +8116,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   0%,100% { opacity:.78; transform:translateY(0); }
   50% { opacity:1; transform:translateY(-1px); }
 }
+
+
+.nowrap {
+  white-space: nowrap;
+}
+
+
+#screenIntro .intro-title-main {
+  font-size: .92em;
+}
