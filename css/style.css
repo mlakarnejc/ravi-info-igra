@@ -8126,3 +8126,41 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenIntro .intro-title-main {
   font-size: .92em;
 }
+
+
+/* Unified feedback system across all modules */
+.feedback:not(:empty) {
+  display:block !important;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:16px;
+  padding:13px 16px;
+  border-radius:12px;
+  background:rgba(72,132,194,.07);
+  border:1px solid rgba(102,159,216,.28);
+  color:#a9c8e8;
+  font-size:14px;
+  line-height:1.45;
+}
+
+.feedback.info:not(:empty) {
+  background:rgba(72,132,194,.07) !important;
+  border-color:rgba(102,159,216,.28) !important;
+  color:#a9c8e8 !important;
+}
+
+.feedback.success:not(:empty) {
+  background:rgba(56,193,114,.08) !important;
+  border-color:rgba(56,193,114,.38) !important;
+  color:#8ee9b6 !important;
+}
+
+.feedback.error:not(:empty) {
+  background:rgba(239,51,64,.08) !important;
+  border-color:rgba(239,51,64,.42) !important;
+  color:#ff9ca5 !important;
+}
+
+.feedback:empty {
+  display:none !important;
+}
