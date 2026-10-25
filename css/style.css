@@ -7723,3 +7723,10 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   font:800 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.14em;
 }
+
+
+/* ===== ML error action visibility fix ===== */
+#mlContinueAfterError[hidden],
+#mlContinueAfterError.hidden {
+  display:none !important;
+}
