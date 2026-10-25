@@ -8577,3 +8577,88 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     font-size:clamp(36px,3.6vw,54px) !important;
   }
 }
+
+
+/* FINAL ROOT FIX: break the final card out of the 1180px app-shell */
+#screenFinal.active {
+  overflow:visible !important;
+}
+
+#screenFinal .final-tech-card {
+  position:relative !important;
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:min(1420px,calc(100vw - 48px)) !important;
+  height:min(740px,calc(100vh - 110px)) !important;
+  max-width:none !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:34px 42px !important;
+  overflow:hidden !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,40%) minmax(0,60%) !important;
+  column-gap:42px !important;
+  box-sizing:border-box !important;
+}
+
+#screenFinal .final-ravi-hero {
+  min-width:0 !important;
+  min-height:0 !important;
+  width:100% !important;
+  height:100% !important;
+  grid-column:1 !important;
+  grid-row:1 / -1 !important;
+}
+
+#screenFinal .final-ravi-hero .final-ravi-robot.has-ravi-image {
+  width:min(520px,100%) !important;
+  height:min(610px,100%) !important;
+  max-width:100% !important;
+}
+
+#screenFinal .eyebrow,
+#screenFinal .final-system-title,
+#screenFinal .final-percent,
+#screenFinal .final-lead,
+#screenFinal .final-message,
+#screenFinal .final-status-row,
+#screenFinal .final-auto-reset {
+  grid-column:2 !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+#screenFinal .final-system-title {
+  font-size:clamp(42px,3.5vw,62px) !important;
+  line-height:.98 !important;
+}
+
+#screenFinal .final-percent {
+  font-size:clamp(50px,4.2vw,72px) !important;
+}
+
+#screenFinal .final-status-row {
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+
+@media (max-width:1000px) {
+  #screenFinal .final-tech-card {
+    left:0 !important;
+    transform:none !important;
+    width:100% !important;
+    height:auto !important;
+    grid-template-columns:1fr !important;
+  }
+
+  #screenFinal .final-ravi-hero,
+  #screenFinal .eyebrow,
+  #screenFinal .final-system-title,
+  #screenFinal .final-percent,
+  #screenFinal .final-lead,
+  #screenFinal .final-message,
+  #screenFinal .final-status-row,
+  #screenFinal .final-auto-reset {
+    grid-column:1 !important;
+    grid-row:auto !important;
+  }
+}
