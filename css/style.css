@@ -9137,3 +9137,29 @@ body > #finalTransition .final-transition-progress {
 @media (max-width:900px) {
   :root { --main-frame-top: 18px; }
 }
+
+
+/* TRUE TOP-EDGE ALIGNMENT: do not vertically center story/recovery frames */
+#screenStory .story-shell,
+#screenRecovery .recovery-shell {
+  min-height:0 !important;
+  display:block !important;
+  place-items:unset !important;
+}
+
+#screenRecovery.active {
+  display:block !important;
+  min-height:0 !important;
+  place-items:unset !important;
+}
+
+#screenStory .story-corridor,
+#screenRecovery .recovery-tech-shell {
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* Task 8 uses ml-lab-shell rather than task-card; align its top as well. */
+#screenTask8 .ml-lab-shell {
+  margin-top:0 !important;
+}
