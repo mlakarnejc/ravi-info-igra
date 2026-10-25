@@ -8662,3 +8662,54 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     grid-row:auto !important;
   }
 }
+
+
+/* Keep the final loading sequence independent from the widened result card */
+#screenFinal .final-transition {
+  position:fixed !important;
+  inset:0 !important;
+  left:0 !important;
+  top:0 !important;
+  width:100vw !important;
+  height:100vh !important;
+  transform:none !important;
+  margin:0 !important;
+  z-index:999 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(67,117,201,.14),transparent 24rem),
+    #07101b !important;
+}
+
+/* Loading content stays compact and centered. */
+#screenFinal .final-transition-core-wrap {
+  flex:0 0 auto !important;
+  width:160px !important;
+  height:160px !important;
+  margin:0 !important;
+}
+
+#screenFinal .final-transition-title {
+  width:auto !important;
+  max-width:90vw !important;
+  margin:12px 0 0 !important;
+  text-align:center !important;
+}
+
+#screenFinal .final-transition-progress {
+  width:min(520px,70vw) !important;
+  margin:14px 0 0 !important;
+}
+
+/* Hide only the extra technical rows on the loading overlay. */
+#screenFinal .final-transition-header,
+#screenFinal .final-transition-status {
+  display:none !important;
+}
