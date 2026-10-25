@@ -8803,3 +8803,90 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   height:min(790px,calc(100vh - 70px)) !important;
   min-height:700px !important;
 }
+
+
+/* ===== SYSTEMIC SCREEN ALIGNMENT ===== */
+:root {
+  --screen-top-gap: 28px;
+}
+
+/* All main screens begin at the same vertical position below the fixed header area. */
+#screenIntro.active,
+#screenStory.active,
+#screenRecovery.active,
+#screenTask1.active,
+#screenTask2.active,
+#screenTask3.active,
+#screenTask4.active,
+#screenTask5.active,
+#screenTask6.active,
+#screenTask7.active,
+#screenTask8.active,
+#screenFinal.active {
+  margin-top: var(--screen-top-gap) !important;
+}
+
+/* Main framed surfaces align to the same top baseline; only their height can differ. */
+#screenIntro .intro-mission,
+#screenStory .story-shell,
+#screenRecovery .recovery-card,
+#screenTask1 .task-card,
+#screenTask2 .task-card,
+#screenTask3 .task-card,
+#screenTask4 .task-card,
+#screenTask5 .task-card,
+#screenTask6 .task-card,
+#screenTask7 .task-card,
+#screenTask8 .task-card,
+#screenFinal .final-tech-card {
+  margin-top:0 !important;
+}
+
+/* True viewport-level final loading overlay. */
+body > #finalTransition.final-transition {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100vh !important;
+  z-index:99999 !important;
+  transform:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  display:grid !important;
+  grid-template-rows:auto auto auto !important;
+  place-content:center !important;
+  justify-items:center !important;
+  gap:14px !important;
+  background:#07101b !important;
+}
+
+body > #finalTransition .final-transition-grid,
+body > #finalTransition .final-transition-scan,
+body > #finalTransition .final-transition-header,
+body > #finalTransition .final-transition-status {
+  display:none !important;
+}
+
+body > #finalTransition .final-transition-core-wrap {
+  width:170px !important;
+  height:170px !important;
+  margin:0 !important;
+}
+
+body > #finalTransition .final-transition-title {
+  margin:0 !important;
+  text-align:center !important;
+}
+
+body > #finalTransition .final-transition-progress {
+  width:min(520px,72vw) !important;
+  margin:0 !important;
+  text-align:center !important;
+}
+
+@media (max-width:900px) {
+  :root { --screen-top-gap: 18px; }
+}
