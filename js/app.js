@@ -236,11 +236,17 @@ function startFinalSequence() {
   transition?.classList.remove('finished');
 
   const bootPercent = document.getElementById('finalBootPercent');
+  const bootBar = document.querySelector('#finalTransition .final-transition-progress > div > i');
   let bootValue = 0;
   if (bootPercent) bootPercent.textContent = '0%';
+  if (bootBar) {
+    bootBar.style.animation = 'none';
+    bootBar.style.transform = 'scaleX(0)';
+  }
   const bootTicker = setInterval(() => {
     bootValue = Math.min(100, bootValue + 4);
     if (bootPercent) bootPercent.textContent = `${bootValue}%`;
+    if (bootBar) bootBar.style.transform = `scaleX(${bootValue / 100})`;
     if (bootValue >= 100) clearInterval(bootTicker);
   }, 100);
 
