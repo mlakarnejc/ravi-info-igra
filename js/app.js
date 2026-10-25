@@ -336,13 +336,19 @@ function setRaviStageImage(container, stage, alt = 'RAVI') {
   }
 
   const wantedSrc = `${RAVI_IMAGE_BASE}/ravi-${safeStage}.webp`;
+
+  image.onload = () => container.classList.add('has-ravi-image');
+  image.onerror = () => container.classList.remove('has-ravi-image');
+
   if (!image.getAttribute('src')?.endsWith(wantedSrc)) {
+    container.classList.remove('has-ravi-image');
     image.src = wantedSrc;
+  } else if (image.complete && image.naturalWidth > 0) {
+    container.classList.add('has-ravi-image');
   }
 
   image.alt = alt;
   image.dataset.stage = String(safeStage);
-  container.classList.add('has-ravi-image');
 }
 
 function syncRaviStageImages() {
