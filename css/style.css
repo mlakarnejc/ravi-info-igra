@@ -8713,3 +8713,66 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-transition-status {
   display:none !important;
 }
+
+
+/* FINAL LOADING CLEANUP: pure standalone fullscreen boot */
+#screenFinal:not(.final-sequence-revealed) .final-ravi-hero,
+#screenFinal:not(.final-sequence-revealed) > .final-card > .final-grid,
+#screenFinal:not(.final-sequence-revealed) > .final-card > .final-scan-line,
+#screenFinal:not(.final-sequence-revealed) .eyebrow,
+#screenFinal:not(.final-sequence-revealed) .final-system-title,
+#screenFinal:not(.final-sequence-revealed) .final-percent,
+#screenFinal:not(.final-sequence-revealed) .final-lead,
+#screenFinal:not(.final-sequence-revealed) .final-message,
+#screenFinal:not(.final-sequence-revealed) .final-status-row,
+#screenFinal:not(.final-sequence-revealed) .final-auto-reset {
+  visibility:hidden !important;
+}
+
+#screenFinal .final-transition {
+  position:fixed !important;
+  inset:0 !important;
+  z-index:9999 !important;
+  width:100vw !important;
+  height:100vh !important;
+  display:grid !important;
+  grid-template-rows:auto auto auto !important;
+  place-content:center !important;
+  justify-items:center !important;
+  gap:14px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  transform:none !important;
+  background:#07101b !important;
+}
+
+#screenFinal .final-transition-grid,
+#screenFinal .final-transition-scan,
+#screenFinal .final-transition-header,
+#screenFinal .final-transition-status {
+  display:none !important;
+}
+
+#screenFinal .final-transition-core-wrap {
+  grid-row:1 !important;
+  width:170px !important;
+  height:170px !important;
+  margin:0 !important;
+}
+
+#screenFinal .final-transition-title {
+  grid-row:2 !important;
+  margin:0 !important;
+  text-align:center !important;
+  font-size:22px !important;
+}
+
+#screenFinal .final-transition-progress {
+  grid-row:3 !important;
+  width:min(520px,72vw) !important;
+  margin:0 !important;
+  text-align:center !important;
+}
