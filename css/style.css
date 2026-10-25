@@ -9117,3 +9117,11 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenTask8.active .ml-lab-shell {
   margin-top: 0 !important;
 }
+
+
+/* Final boot progress is driven by the same JS value as the percentage */
+#finalTransition .final-transition-progress > div > i {
+  animation:none !important;
+  transform:scaleX(0);
+  transition:transform .10s linear !important;
+}
