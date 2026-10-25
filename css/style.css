@@ -8164,3 +8164,25 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .feedback:empty {
   display:none !important;
 }
+
+
+/* Final screen: larger centered RAVI */
+#screenFinal .final-ravi-robot.has-ravi-image {
+  width: 520px !important;
+  height: 560px !important;
+}
+
+#screenFinal .final-ravi-hero {
+  min-height: 590px !important;
+}
+
+@media (max-width: 900px) {
+  #screenFinal .final-ravi-robot.has-ravi-image {
+    width: 390px !important;
+    height: 430px !important;
+  }
+
+  #screenFinal .final-ravi-hero {
+    min-height: 450px !important;
+  }
+}
