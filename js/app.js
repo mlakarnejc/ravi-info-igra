@@ -115,7 +115,7 @@ function renderStoryRoom(index = storyRoomIndex) {
 
   const storyPercent = Math.round((storyRoomIndex / storyRooms.length) * 100);
   document.getElementById('airlockAccess').textContent = `${String(storyRoomIndex + 1).padStart(2,'0')} / 08`;
-  document.getElementById('airlockStatus').textContent = storyRoomIndex === 7 ? 'CORE READY' : 'READY';
+  document.getElementById('airlockStatus').textContent = 'READY';
   document.getElementById('airlockPower').textContent = `${storyPercent} %`;
   document.getElementById('airlockDoor').textContent = 'SECURED';
   document.getElementById('airlockConsoleRoom').textContent = `LAB ${String(storyRoomIndex + 1).padStart(2,'0')}`;
@@ -187,6 +187,10 @@ function showRecoveryAfterModule(moduleIndex) {
   document.getElementById('recoveryNextStatus').textContent = nextRoom
     ? `LAB ${String(moduleIndex + 2).padStart(2, '0')}`
     : 'RAVI';
+  const continueStoryBtn = document.getElementById('continueStory');
+  if (continueStoryBtn) {
+    continueStoryBtn.textContent = moduleIndex === 7 ? 'ZAKLJUČI POT' : 'NADALJUJ POT';
+  }
 
   const recoveryScreen = document.getElementById('screenRecovery');
   document.querySelectorAll('.screen').forEach((screen) => {
