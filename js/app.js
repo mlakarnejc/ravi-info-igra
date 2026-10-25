@@ -2992,7 +2992,12 @@ function isTaskStartOverlayOpen(taskNumber) {
     ? document.getElementById('catchStartOverlay')
     : document.getElementById(`task${taskNumber}StartOverlay`);
 
-  return !!overlay && !overlay.classList.contains('hidden');
+  const screen = document.getElementById(`screenTask${taskNumber}`);
+
+  return !!overlay &&
+    !!screen &&
+    screen.classList.contains('active') &&
+    !overlay.classList.contains('hidden');
 }
 
 function handleStartOverlayEnter(event) {
