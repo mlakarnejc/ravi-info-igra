@@ -3623,19 +3623,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 .ml-footer .subject-label {margin-left:8px}
 
 .ml-lab-shell.ml-complete {animation:mlCompletePulse 1s ease-in-out infinite alternate}
-.ml-lab-shell.ml-complete::after {
-  content:"AI CORE READY";
-  position:absolute;inset:0;z-index:40;display:grid;place-items:center;
-  background:radial-gradient(circle,rgba(22,55,43,.75),rgba(5,12,20,.92));
-  backdrop-filter:blur(7px);color:#a9f2c4;font:900 38px ui-monospace,monospace;letter-spacing:.1em;
-  text-shadow:0 0 25px rgba(56,193,114,.6);animation:mlFinalReveal 3.2s ease both;
-}
 @keyframes mlCompletePulse {to{box-shadow:0 0 85px rgba(56,193,114,.18),inset 0 0 38px rgba(56,193,114,.05)}}
-@keyframes mlFinalReveal {
-  0%{opacity:0;transform:scale(.96);letter-spacing:.2em}
-  18%,78%{opacity:1;transform:scale(1);letter-spacing:.1em}
-  100%{opacity:0;transform:scale(1.02)}
-}
 
 @media (max-width:1050px){
   .ml-main-grid{grid-template-columns:1fr}
