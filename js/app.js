@@ -3020,21 +3020,15 @@ function runMLFinalRetest() {
     title.textContent = 'MAČKA ✓';
     const task8Feedback = document.getElementById('task8Feedback');
     if (task8Feedback) {
-      task8Feedback.textContent = 'Tokrat je RAVI mačko pravilno prepoznal. ✓';
+      task8Feedback.textContent = 'USPEH ✓ Tokrat je RAVI isti primer pravilno prepoznal kot MAČKO.';
       task8Feedback.className = 'feedback success';
     }
-    text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
+    text.textContent = 'Tokrat je RAVI pravilno prepoznal črno mačko. Boljši podatki so izboljšali model.';
     confidence.textContent = '97 %';
     finalPhase?.classList.add('reveal-insight');
-    setRaviMessage('raviTask8Text', '»Uspeh. Po boljšem treningu sem isti primer pravilno prepoznal kot MAČKO.«', 'success');
+    setRaviMessage('raviTask8Text', '»Tokrat sem jo pravilno prepoznal. Boljši podatki so očitno pomagali.«', 'success');
 
-    const feedback8 = document.getElementById('task8Feedback');
-    if (feedback8) {
-      feedback8.textContent = 'NALOGA KONČANA ✓ Model je izboljšan in isti primer pravilno prepoznan.';
-      feedback8.className = 'feedback success';
-    }
-
-    setTimeout(finishMLModule, 1700);
+    setTimeout(finishMLModule, 3200);
   }, 1300);
 }
 
@@ -3052,10 +3046,10 @@ function finishMLModule() {
   document.getElementById('hubMessage').textContent = 'Vseh 8 modulov je aktivnih. Sistem je pripravljen.';
   const feedback8 = document.getElementById('task8Feedback');
   if (feedback8) {
-    feedback8.textContent = 'NALOGA KONČANA ✓ AI model je izboljšan in pravilno prepozna nov primer.';
+    feedback8.textContent = 'NALOGA KONČANA ✓ RAVI je po izboljšanem učenju isti primer pravilno prepoznal.';
     feedback8.className = 'feedback success';
   }
-  completeTaskFlow(7, 'task8Feedback', 'NALOGA KONČANA ✓ AI model je izboljšan in pravilno prepozna nov primer.', 1800);
+  completeTaskFlow(7, 'task8Feedback', 'NALOGA KONČANA ✓ RAVI je po izboljšanem učenju isti primer pravilno prepoznal.', 1800);
 
   setTimeout(() => {
     shell?.classList.remove('ml-complete');
