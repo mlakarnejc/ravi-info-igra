@@ -235,6 +235,15 @@ function startFinalSequence() {
   finalScreen?.classList.add('final-sequence-start');
   transition?.classList.remove('finished');
 
+  const bootPercent = document.getElementById('finalBootPercent');
+  let bootValue = 0;
+  if (bootPercent) bootPercent.textContent = '0%';
+  const bootTicker = setInterval(() => {
+    bootValue = Math.min(100, bootValue + 4);
+    if (bootPercent) bootPercent.textContent = `${bootValue}%`;
+    if (bootValue >= 100) clearInterval(bootTicker);
+  }, 100);
+
   setTimeout(() => {
     transition?.classList.add('finished');
     finalScreen?.classList.add('final-sequence-revealed');
@@ -2069,12 +2078,12 @@ function initNetworkTopologyGame() {
 
 const securityMessages = [
   {
-    sender: 'Google <no-reply@accounts.google.com>',
-    subject: 'Nova prijava v vaš Google račun',
+    sender: 'Facebook <no-reply@facebook.com>',
+    subject: 'Nova prijava v vaš Facebook račun',
     body: 'Zaznali smo novo prijavo v vaš račun. Če ste bili to vi, ni potrebno storiti ničesar.',
-    extra: 'accounts.google.com/security',
+    extra: 'facebook.com/security',
     safe: true,
-    reason: 'Uradna Google domena, brez zahteve po geslu ali občutljivih podatkih.'
+    reason: 'Uradna Facebook domena, brez zahteve po geslu ali občutljivih podatkih.'
   },
   {
     sender: 'Šolski administrator <admin@srednja-sola-ravne.support>',
