@@ -141,6 +141,7 @@ function showStoryRoom(index) {
 }
 
 function enterStoryRoom() {
+  syncTaskRaviForModule(storyRoomIndex);
   const door = document.getElementById('storyDoor');
   const doorStatus = document.getElementById('airlockDoor');
   const moduleStatus = document.getElementById('airlockStatus');
@@ -484,7 +485,18 @@ function renderModules() {
   });
 }
 
+
+function syncTaskRaviForModule(moduleIndex) {
+  const taskNumber = Math.max(1, Math.min(8, Number(moduleIndex) + 1));
+  setRaviStageImage(
+    document.querySelector(`#screenTask${taskNumber} .mini-ravi`),
+    taskNumber,
+    `RAVI – stanje ${taskNumber}`
+  );
+}
+
 function openModule(index) {
+  syncTaskRaviForModule(index);
   if (index === 0) {
     if (modules[0].status !== 'complete') resetCatchGame();
     showScreen('screenTask1');
