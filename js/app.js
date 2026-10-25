@@ -189,7 +189,7 @@ function showRecoveryAfterModule(moduleIndex) {
     : 'RAVI';
   const continueStoryBtn = document.getElementById('continueStory');
   if (continueStoryBtn) {
-    continueStoryBtn.textContent = moduleIndex === 7 ? 'ZAKLJUČI POT' : 'NADALJUJ POT';
+    continueStoryBtn.textContent = moduleIndex === 7 ? 'DOKONČAJ OBNOVO' : 'NADALJUJ Z OBNOVO';
   }
 
   const recoveryScreen = document.getElementById('screenRecovery');
