@@ -7730,3 +7730,35 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #mlContinueAfterError.hidden {
   display:none !important;
 }
+
+
+/* ===== Task 8 footer navigation alignment fix ===== */
+#screenTask8 .ml-footer {
+  grid-template-columns:244px minmax(0,1fr) !important;
+}
+
+#screenTask8 #resetTask8,
+#screenTask8 #backHub8 {
+  grid-row:1;
+  justify-self:start;
+  margin-left:0 !important;
+}
+
+#screenTask8 #resetTask8 {
+  grid-column:2;
+}
+
+#screenTask8 #backHub8 {
+  grid-column:2;
+}
+
+/* When restart is hidden, BACK occupies the first navigation position. */
+#screenTask8 #resetTask8[hidden] + #backHub8,
+#screenTask8 #resetTask8.hidden + #backHub8 {
+  margin-left:0 !important;
+}
+
+/* When restart is visible, BACK sits immediately to its right. */
+#screenTask8 #resetTask8:not([hidden]):not(.hidden) + #backHub8 {
+  margin-left:186px !important;
+}
