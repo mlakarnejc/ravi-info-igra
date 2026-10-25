@@ -195,9 +195,77 @@ function showRecoveryAfterModule(moduleIndex) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+let finalResetTimer = null;
+let finalCountdownTimer = null;
+
+function startFinalSequence() {
+  showScreen('screenFinal');
+
+  const finalScreen = document.getElementById('screenFinal');
+  const transition = document.getElementById('finalTransition');
+  const countdownEl = document.getElementById('finalResetCountdown');
+
+  finalScreen?.classList.add('final-sequence-start');
+  transition?.classList.remove('finished');
+
+  setTimeout(() => {
+    transition?.classList.add('finished');
+    finalScreen?.classList.add('final-sequence-revealed');
+  }, 2600);
+
+  if (finalResetTimer) clearTimeout(finalResetTimer);
+  if (finalCountdownTimer) clearInterval(finalCountdownTimer);
+
+  let seconds = 30;
+  if (countdownEl) countdownEl.textContent = String(seconds);
+
+  finalCountdownTimer = setInterval(() => {
+    seconds -= 1;
+    if (countdownEl) countdownEl.textContent = String(Math.max(seconds, 0));
+    if (seconds <= 0) clearInterval(finalCountdownTimer);
+  }, 1000);
+
+  finalResetTimer = setTimeout(resetWholeMission, 30000);
+}
+
+function resetWholeMission() {
+  if (finalResetTimer) clearTimeout(finalResetTimer);
+  if (finalCountdownTimer) clearInterval(finalCountdownTimer);
+  finalResetTimer = null;
+  finalCountdownTimer = null;
+
+  completed = 0;
+  storyRoomIndex = 0;
+  modules.forEach((module, index) => {
+    module.status = index === 0 ? 'ready' : 'locked';
+  });
+
+  resetCatchGame();
+  resetProgramGame();
+  resetHtmlRepairGame();
+  resetTask4();
+  resetNetworkGame();
+  resetTask6();
+  resetRunnerGame();
+
+  mlPlaced = new Map();
+  mlStage = 0;
+  mlBusy = false;
+  updateMLStage(0);
+  setMLPhase('mlTrainingPhase');
+  renderMLTrainingCards();
+
+  document.getElementById('screenFinal')?.classList.remove('final-sequence-start','final-sequence-revealed');
+  document.getElementById('finalTransition')?.classList.remove('finished');
+
+  updateProgress();
+  renderModules();
+  showScreen('screenIntro');
+}
+
 function continueStoryPath() {
   if (completed >= 8) {
-    showScreen('screenFinal');
+    startFinalSequence();
     return;
   }
 
@@ -3034,7 +3102,6 @@ if (startTask7Game) {
 }
 
 document.getElementById('continueStory').addEventListener('click', continueStoryPath);
-document.getElementById('finalHub').addEventListener('click', () => showStoryRoom(0));
 document.getElementById('placeholderBack').addEventListener('click', () => showStoryRoom(storyRoomIndex));
 
 
