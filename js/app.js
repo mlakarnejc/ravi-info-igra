@@ -1708,7 +1708,7 @@ function resetTask4() {
 
   const ravi4 = document.getElementById('raviTask4Text');
   if (ravi4) {
-    ravi4.textContent = '»Cilj: poišči dijake, kjer je SPOL = M, PROGRAM = Računalništvo in LETNIK = 3. Nato klikni TOČKE in potrdi najboljšega.«';
+    ravi4.textContent = '»Najdi dijaka 3. letnika računalništva, ki ima največ točk. Najprej ga izlušči s filtri, potem pa razvrsti rezultate.«';
   }
 
   renderDataRows();
