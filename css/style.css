@@ -7983,3 +7983,27 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   line-height:1.02;
   margin-top:4px;
 }
+
+
+/* School logo in top header */
+.brand-with-logo {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.school-logo {
+  display:block;
+  height:34px;
+  width:auto;
+  max-width:110px;
+  object-fit:contain;
+  flex:0 0 auto;
+}
+
+@media (max-width: 620px) {
+  .school-logo {
+    height:30px;
+    max-width:96px;
+  }
+}
