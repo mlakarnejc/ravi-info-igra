@@ -3030,6 +3030,37 @@ function handleStartOverlayEnter(event) {
   document.getElementById(active.id)?.click();
 }
 
+
+function handleGlobalPrimaryEnter(event) {
+  if (event.key !== 'Enter' || event.repeat || event.defaultPrevented) return;
+
+  const activeScreen = document.querySelector('.screen.active');
+  if (!activeScreen) return;
+
+  const target = event.target;
+  const editable = target &&
+    (target.tagName === 'INPUT' ||
+     target.tagName === 'TEXTAREA' ||
+     target.tagName === 'SELECT' ||
+     target.isContentEditable);
+
+  if (editable) return;
+
+  const primaryButtons = [...activeScreen.querySelectorAll('.primary-btn')]
+    .filter((button) =>
+      !button.disabled &&
+      !button.hidden &&
+      button.offsetParent !== null
+    );
+
+  if (primaryButtons.length !== 1) return;
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  primaryButtons[0].click();
+}
+
+document.addEventListener('keydown', handleGlobalPrimaryEnter, true);
 document.addEventListener('keydown', handleStartOverlayEnter, true);
 
 document.getElementById('startBtn').addEventListener('click', () => showStoryRoom(0));
