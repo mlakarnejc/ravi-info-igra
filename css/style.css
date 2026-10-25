@@ -8221,3 +8221,199 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     max-width:86vw !important;
   }
 }
+
+
+/* ===== FINAL SCREEN COMPACT TWO-COLUMN LAYOUT ===== */
+#screenFinal.active {
+  overflow:hidden !important;
+}
+
+#screenFinal .final-tech-card {
+  width:min(1180px,96vw) !important;
+  height:clamp(560px, calc(100vh - 150px), 720px) !important;
+  min-height:0 !important;
+  max-height:720px !important;
+  margin:0 auto !important;
+  padding:30px 38px !important;
+  overflow:hidden !important;
+  display:grid !important;
+  grid-template-columns:minmax(360px,.92fr) minmax(470px,1.08fr) !important;
+  grid-template-rows:auto auto auto auto auto auto !important;
+  column-gap:34px !important;
+  align-content:center !important;
+  align-items:center !important;
+}
+
+/* RAVI occupies the whole left column. */
+#screenFinal .final-ravi-hero {
+  grid-column:1 !important;
+  grid-row:1 / span 6 !important;
+  width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  max-height:none !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+#screenFinal .final-ravi-hero .final-ravi-robot.has-ravi-image {
+  width:min(500px,100%) !important;
+  height:min(570px,100%) !important;
+  max-width:none !important;
+  margin:0 auto !important;
+}
+
+#screenFinal .final-ravi-hero .ravi-stage-image {
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+
+/* All textual/result content sits in the right column. */
+#screenFinal .eyebrow,
+#screenFinal .final-system-title,
+#screenFinal .final-percent,
+#screenFinal .final-lead,
+#screenFinal .final-message,
+#screenFinal .final-status-row,
+#screenFinal .final-auto-reset {
+  grid-column:2 !important;
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  text-align:left !important;
+}
+
+#screenFinal .eyebrow {
+  margin:0 0 8px !important;
+}
+
+#screenFinal .final-system-title {
+  font-size:clamp(38px,4.2vw,64px) !important;
+  line-height:.96 !important;
+  margin:0 0 4px !important;
+}
+
+#screenFinal .final-percent {
+  font-size:clamp(42px,4.5vw,66px) !important;
+  line-height:1 !important;
+  margin:0 0 10px !important;
+}
+
+#screenFinal .final-lead {
+  margin:0 0 14px !important;
+  line-height:1.45 !important;
+}
+
+#screenFinal .final-message {
+  margin:0 0 14px !important;
+  padding:16px 18px !important;
+}
+
+#screenFinal .final-message strong {
+  font-size:clamp(19px,2vw,27px) !important;
+  line-height:1.16 !important;
+}
+
+#screenFinal .final-status-row {
+  margin:0 0 12px !important;
+}
+
+#screenFinal .final-auto-reset {
+  margin:0 !important;
+}
+
+/* Compact the cinematic boot overlay to the same viewport-sized card. */
+#screenFinal .final-transition {
+  inset:0 !important;
+  padding:54px 40px 28px !important;
+  gap:8px !important;
+  justify-content:center !important;
+}
+
+#screenFinal .final-transition-core-wrap {
+  width:138px !important;
+  height:138px !important;
+  margin-top:4px !important;
+}
+
+#screenFinal .final-transition-core {
+  width:86px !important;
+  height:86px !important;
+}
+
+#screenFinal .final-transition-ring.ring-1 {
+  width:126px !important;
+  height:126px !important;
+}
+
+#screenFinal .final-transition-ring.ring-2 {
+  width:106px !important;
+  height:106px !important;
+}
+
+#screenFinal .final-transition-title {
+  margin-top:2px !important;
+  font-size:20px !important;
+}
+
+#screenFinal .final-transition-status {
+  width:min(600px,76%) !important;
+  margin-top:10px !important;
+}
+
+#screenFinal .final-transition-status > div {
+  padding:9px 12px !important;
+}
+
+#screenFinal .final-transition-progress {
+  width:min(600px,76%) !important;
+  margin-top:8px !important;
+}
+
+#screenFinal .final-transition-header {
+  top:20px !important;
+  left:28px !important;
+  right:28px !important;
+}
+
+/* Hide old decorative halos/status that consume visual room around the final image. */
+#screenFinal .final-ravi-halo,
+#screenFinal .final-ravi-status {
+  display:none !important;
+}
+
+@media (max-width:900px) {
+  #screenFinal.active {
+    overflow:auto !important;
+  }
+
+  #screenFinal .final-tech-card {
+    height:auto !important;
+    max-height:none !important;
+    grid-template-columns:1fr !important;
+    grid-template-rows:auto !important;
+    padding:24px !important;
+  }
+
+  #screenFinal .final-ravi-hero,
+  #screenFinal .eyebrow,
+  #screenFinal .final-system-title,
+  #screenFinal .final-percent,
+  #screenFinal .final-lead,
+  #screenFinal .final-message,
+  #screenFinal .final-status-row,
+  #screenFinal .final-auto-reset {
+    grid-column:1 !important;
+    grid-row:auto !important;
+    text-align:center !important;
+  }
+
+  #screenFinal .final-ravi-hero {
+    height:380px !important;
+  }
+}
