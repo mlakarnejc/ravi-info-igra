@@ -8890,3 +8890,166 @@ body > #finalTransition .final-transition-progress {
 @media (max-width:900px) {
   :root { --screen-top-gap: 18px; }
 }
+
+
+/* FINAL LOADING ROOT STYLES — finalTransition now lives directly under body */
+#finalTransition {
+  position:fixed !important;
+  inset:0 !important;
+  z-index:99999 !important;
+  width:100vw !important;
+  height:100vh !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:grid !important;
+  grid-template-rows:auto auto auto !important;
+  place-content:center !important;
+  justify-items:center !important;
+  gap:16px !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(67,117,201,.14), transparent 24rem),
+    #07101b !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+
+#finalTransition.finished {
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+#finalTransition:not(.finished) {
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+#finalTransition .final-transition-grid,
+#finalTransition .final-transition-scan,
+#finalTransition .final-transition-header,
+#finalTransition .final-transition-status {
+  display:none !important;
+}
+
+#finalTransition .final-transition-core-wrap {
+  position:relative !important;
+  width:170px !important;
+  height:170px !important;
+  margin:0 !important;
+}
+
+#finalTransition .final-transition-core {
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:92px !important;
+  height:92px !important;
+  transform:translate(-50%,-50%) !important;
+  border-radius:50% !important;
+  border:1px solid rgba(91,151,255,.42) !important;
+  box-shadow:
+    0 0 0 18px rgba(91,151,255,.04),
+    0 0 50px rgba(91,151,255,.16) !important;
+  animation:finalBootPulseRoot 1.2s ease-in-out infinite !important;
+}
+
+#finalTransition .final-transition-core::before,
+#finalTransition .final-transition-core::after {
+  content:"" !important;
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  border-radius:50% !important;
+  transform:translate(-50%,-50%) !important;
+}
+
+#finalTransition .final-transition-core::before {
+  width:68px !important;
+  height:68px !important;
+  border:1px dashed rgba(239,51,64,.55) !important;
+  animation:finalBootSpinRoot 2.1s linear infinite !important;
+}
+
+#finalTransition .final-transition-core::after {
+  width:26px !important;
+  height:26px !important;
+  background:#ef3340 !important;
+  box-shadow:0 0 22px rgba(239,51,64,.52) !important;
+}
+
+#finalTransition .final-transition-ring {
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+}
+
+#finalTransition .final-transition-ring.ring-1 {
+  width:154px !important;
+  height:154px !important;
+  border:1px solid rgba(91,151,255,.24) !important;
+}
+
+#finalTransition .final-transition-ring.ring-2 {
+  width:126px !important;
+  height:126px !important;
+  border:1px dashed rgba(239,51,64,.20) !important;
+  animation:finalBootSpinRoot 4s linear infinite reverse !important;
+}
+
+#finalTransition .final-transition-title {
+  margin:0 !important;
+  color:#eef5ff !important;
+  font-size:22px !important;
+  font-weight:900 !important;
+  letter-spacing:.04em !important;
+  text-align:center !important;
+}
+
+#finalTransition .final-transition-progress {
+  width:min(520px,72vw) !important;
+  margin:0 !important;
+}
+
+#finalTransition .final-transition-progress > div {
+  width:100% !important;
+  height:8px !important;
+  overflow:hidden !important;
+  border:1px solid #2c3950 !important;
+  border-radius:999px !important;
+  background:#202b3c !important;
+}
+
+#finalTransition .final-transition-progress > div > i {
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  background:linear-gradient(90deg,#ef3340,#ff6470) !important;
+  transform-origin:left center !important;
+  animation:finalBootProgressRoot 2.45s ease forwards !important;
+}
+
+#finalTransition .final-transition-progress > span {
+  display:block !important;
+  margin-top:10px !important;
+  color:#7f93ad !important;
+  font:800 11px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace !important;
+  letter-spacing:.14em !important;
+  text-align:center !important;
+}
+
+@keyframes finalBootSpinRoot {
+  to { transform:translate(-50%,-50%) rotate(360deg); }
+}
+@keyframes finalBootPulseRoot {
+  0%,100% { transform:translate(-50%,-50%) scale(.96); opacity:.72; }
+  50% { transform:translate(-50%,-50%) scale(1.04); opacity:1; }
+}
+@keyframes finalBootProgressRoot {
+  from { transform:scaleX(0); }
+  to { transform:scaleX(1); }
+}
