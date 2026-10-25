@@ -113,7 +113,7 @@ function renderStoryRoom(index = storyRoomIndex) {
   document.getElementById('storySubject').textContent = room.subject;
   document.getElementById('storyDescription').textContent = room.description;
 
-  const storyPercent = Math.round((storyRoomIndex / storyRooms.length) * 100);
+  const storyPercent = getRaviRecoveryPercent(storyRoomIndex);
   document.getElementById('airlockAccess').textContent = `${String(storyRoomIndex + 1).padStart(2,'0')} / 08`;
   document.getElementById('airlockStatus').textContent = 'READY';
   document.getElementById('airlockPower').textContent = `${storyPercent} %`;
@@ -185,7 +185,7 @@ const raviRepairSteps = [
 ];
 
 function showRecoveryAfterModule(moduleIndex) {
-  const percent = Math.round(((moduleIndex + 1) / storyRooms.length) * 100);
+  const percent = getRaviRecoveryPercent(moduleIndex + 1);
   setRaviStageImage(
     document.querySelector('.recovery-core'),
     Math.min(moduleIndex + 2, 9),
@@ -435,6 +435,13 @@ function setRaviMessage(elementId, message, state = 'instruction') {
   }
 }
 
+function getRaviRecoveryPercent(completedModules) {
+  const baseRecovery = 18;
+  const totalRepair = 100 - baseRecovery;
+  const clamped = Math.max(0, Math.min(8, Number(completedModules) || 0));
+  return Math.round(baseRecovery + (totalRepair * clamped / 8));
+}
+
 function updateProgress() {
   const percent = Math.round((completed / modules.length) * 100);
   document.getElementById('progressText').textContent = `${completed} / ${modules.length} modulov`;
@@ -449,7 +456,7 @@ function updateHubStage() {
 
   stage.className = `hub-stage progress-${completed}`;
 
-  const percent = Math.round((completed / modules.length) * 100);
+  const percent = getRaviRecoveryPercent(completed);
   document.getElementById('repairPercent').textContent = `${percent} %`;
   document.getElementById('repairBar').style.width = `${percent}%`;
 
