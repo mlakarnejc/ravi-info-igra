@@ -365,13 +365,19 @@ function syncRaviStageImages() {
     `RAVI pred modulom ${Math.min(storyRoomIndex + 1, 8)}`
   );
 
-  for (let task = 1; task <= 8; task += 1) {
+  for (let task = 1; task <= 7; task += 1) {
     setRaviStageImage(
       document.querySelector(`#screenTask${task} .mini-ravi`),
       task,
       `RAVI – stanje ${task}`
     );
   }
+
+  setRaviStageImage(
+    document.querySelector('#screenTask8 .ml-core-wrap'),
+    8,
+    'RAVI – stanje 8'
+  );
 
   setRaviStageImage(
     document.querySelector('.hub-ravi'),
@@ -488,8 +494,12 @@ function renderModules() {
 
 function syncTaskRaviForModule(moduleIndex) {
   const taskNumber = Math.max(1, Math.min(8, Number(moduleIndex) + 1));
+  const container = taskNumber === 8
+    ? document.querySelector('#screenTask8 .ml-core-wrap')
+    : document.querySelector(`#screenTask${taskNumber} .mini-ravi`);
+
   setRaviStageImage(
-    document.querySelector(`#screenTask${taskNumber} .mini-ravi`),
+    container,
     taskNumber,
     `RAVI – stanje ${taskNumber}`
   );
