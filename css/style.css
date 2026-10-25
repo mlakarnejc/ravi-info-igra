@@ -7971,3 +7971,15 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     min-height: 400px;
   }
 }
+
+
+/* Intro title hierarchy */
+.intro-title-main {
+  display:inline-block;
+}
+.intro-title-sub {
+  display:inline-block;
+  font-size:.82em;
+  line-height:1.02;
+  margin-top:4px;
+}
