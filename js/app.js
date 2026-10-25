@@ -2872,9 +2872,6 @@ function startMLRetraining() {
 }
 
 function runMLFinalRetest() {
-  const finishBtn = document.getElementById('mlFinishBtn');
-  if (finishBtn) finishBtn.disabled = true;
-
   const finalPhase = document.getElementById('mlFinalPhase');
   finalPhase?.classList.remove('reveal-insight');
 
@@ -2899,9 +2896,16 @@ function runMLFinalRetest() {
     title.textContent = 'MAČKA ✓';
     text.textContent = 'Model je po boljših podatkih pravilno prepoznal isti primer.';
     confidence.textContent = '97 %';
-    if (finishBtn) finishBtn.disabled = false;
     finalPhase?.classList.add('reveal-insight');
     setRaviMessage('raviTask8Text', '»Uspeh. Po boljšem treningu sem isti primer pravilno prepoznal kot MAČKO.«', 'success');
+
+    const feedback8 = document.getElementById('task8Feedback');
+    if (feedback8) {
+      feedback8.textContent = 'NALOGA KONČANA ✓ Model je izboljšan in isti primer pravilno prepoznan.';
+      feedback8.className = 'feedback success';
+    }
+
+    setTimeout(finishMLModule, 1700);
   }, 1300);
 }
 
@@ -3090,7 +3094,6 @@ document.addEventListener('keyup', handleRunnerKeyUp);
 document.querySelectorAll('.ml-data-package').forEach((button) => {
   button.addEventListener('click', () => chooseMLPackage(button.dataset.package));
 });
-document.getElementById('mlFinishBtn').addEventListener('click', finishMLModule);
 document.getElementById('resetTask8').addEventListener('click', () => { resetTask8(); showTaskStartOverlay(8); });
 document.getElementById('backHub8').addEventListener('click', () => showStoryRoom(7));
 document.getElementById('enterStoryRoom').addEventListener('click', enterStoryRoom);
