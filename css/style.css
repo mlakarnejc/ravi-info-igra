@@ -8102,3 +8102,17 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     letter-spacing: .02em !important;
   }
 }
+
+
+/* Data task: draw attention to TOČKE when sorting is the next step */
+#screenTask4 .sort-head-btn.attention {
+  color:#ff9aa1 !important;
+  border-bottom:2px solid #ef3340;
+  text-shadow:0 0 10px rgba(239,51,64,.28);
+  animation:dataSortAttention 1.25s ease-in-out infinite;
+}
+
+@keyframes dataSortAttention {
+  0%,100% { opacity:.78; transform:translateY(0); }
+  50% { opacity:1; transform:translateY(-1px); }
+}
