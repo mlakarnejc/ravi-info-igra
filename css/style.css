@@ -9097,3 +9097,44 @@ body > #finalTransition .final-transition-progress {
   0%,100% { opacity:.45; box-shadow:none; }
   50% { opacity:1; box-shadow:0 0 14px rgba(91,151,255,.12); }
 }
+
+
+/* Unified top baseline for all main framed screens; heights remain content-driven */
+:root {
+  --main-frame-top: 26px;
+}
+
+#screenIntro.active,
+#screenStory.active,
+#screenRecovery.active,
+#screenTask1.active,
+#screenTask2.active,
+#screenTask3.active,
+#screenTask4.active,
+#screenTask5.active,
+#screenTask6.active,
+#screenTask7.active,
+#screenTask8.active,
+#screenFinal.active {
+  margin-top: var(--main-frame-top) !important;
+}
+
+#screenIntro .intro-mission,
+#screenStory .story-shell,
+#screenRecovery .recovery-card,
+#screenTask1 .task-card,
+#screenTask2 .task-card,
+#screenTask3 .task-card,
+#screenTask4 .task-card,
+#screenTask5 .task-card,
+#screenTask6 .task-card,
+#screenTask7 .task-card,
+#screenTask8 .task-card,
+#screenFinal .final-tech-card {
+  margin-top:0 !important;
+  height:auto;
+}
+
+@media (max-width:900px) {
+  :root { --main-frame-top: 18px; }
+}
