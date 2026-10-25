@@ -8052,3 +8052,53 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     padding-bottom: 5px;
   }
 }
+
+
+/* Final RAVI centered horizontally, keep current visual height */
+#screenFinal .final-ravi-hero {
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+}
+
+#screenFinal .final-ravi-robot.has-ravi-image {
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+/* Tech typography for intro and final hero titles */
+#screenIntro .intro-briefing h1,
+#screenFinal .final-system-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-weight: 800 !important;
+  letter-spacing: .035em !important;
+  text-transform: uppercase;
+  color: #d5e2f2 !important;
+  text-shadow:
+    0 0 18px rgba(104,164,255,.10),
+    0 1px 0 rgba(255,255,255,.02);
+}
+
+#screenIntro .intro-title-main {
+  color: #e3edf8 !important;
+}
+
+#screenIntro .intro-title-sub {
+  color: #8fa6c2 !important;
+  font-weight: 700 !important;
+  letter-spacing: .06em !important;
+}
+
+#screenFinal .final-system-title {
+  color: #a9c8eb !important;
+  font-size: clamp(42px, 6vw, 78px) !important;
+  line-height: .98 !important;
+  margin-bottom: 10px !important;
+}
+
+@media (max-width: 620px) {
+  #screenIntro .intro-briefing h1,
+  #screenFinal .final-system-title {
+    letter-spacing: .02em !important;
+  }
+}
