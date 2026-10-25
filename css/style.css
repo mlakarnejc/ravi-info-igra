@@ -8186,3 +8186,38 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     min-height: 450px !important;
   }
 }
+
+
+/* FINAL OVERRIDE: final RAVI must be large and centered */
+#screenFinal.active .final-ravi-hero {
+  width:100% !important;
+  min-height:650px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+#screenFinal.active .final-ravi-hero .final-ravi-robot.has-ravi-image {
+  width:620px !important;
+  height:620px !important;
+  max-width:72vw !important;
+  margin:0 auto !important;
+}
+
+#screenFinal.active .final-ravi-hero .final-ravi-robot.has-ravi-image .ravi-stage-image {
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+
+@media (max-width:900px) {
+  #screenFinal.active .final-ravi-hero {
+    min-height:500px !important;
+  }
+  #screenFinal.active .final-ravi-hero .final-ravi-robot.has-ravi-image {
+    width:460px !important;
+    height:460px !important;
+    max-width:86vw !important;
+  }
+}
