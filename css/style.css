@@ -9132,7 +9132,6 @@ body > #finalTransition .final-transition-progress {
 #screenTask8 .task-card,
 #screenFinal .final-tech-card {
   margin-top:0 !important;
-  height:auto;
 }
 
 @media (max-width:900px) {
