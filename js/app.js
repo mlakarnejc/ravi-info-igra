@@ -925,7 +925,7 @@ function finishCatchGame() {
 
   setRaviMessage('raviTaskText', '»Odlično. Prvi sistem je spet pripravljen.«', 'success');
 
-  completeTaskFlow(0, 'taskFeedback', 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.', 1400);
+  completeTaskFlow(0, 'taskFeedback', 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.', 1800);
 }
 
 function handleCatchKeyDown(event) {
@@ -1144,7 +1144,7 @@ async function runProgramGame() {
     programRunning = false;
     setTechHudValue('code', 'STATUS', 'SUCCESS');
     setTechHudValue('code', 'EXECUTION', 'DONE');
-    completeTaskFlow(1, 'task2Feedback', 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.', 1600);
+    completeTaskFlow(1, 'task2Feedback', 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.', 1800);
     return;
   }
 
@@ -1521,7 +1521,7 @@ function finishHtmlRepairGame() {
   ravi3.textContent = '»Odlično. Šest elementov, ena prava stran. Tako je videti, ko se HTML končno ne prepira sam s sabo.«';
   document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
 
-  completeTaskFlow(2, 'task3Feedback', 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.', 3000);
+  completeTaskFlow(2, 'task3Feedback', 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.', 1800);
 }
 
 function initHtmlRepairGame() {
@@ -1781,7 +1781,7 @@ function checkTask4() {
     ravi4.textContent = '»Filtriranje in razvrščanje. Dvanajst zapisov je postalo en uporaben podatek.«';
     document.getElementById('hubMessage').textContent = 'Podatkovni modul je aktiven. Računalniška omrežja so odklenjena.';
 
-    completeTaskFlow(3, 'task4Feedback', 'NALOGA KONČANA ✓ Našel si pravilen zapis.', 1600);
+    completeTaskFlow(3, 'task4Feedback', 'NALOGA KONČANA ✓ Našel si pravilen zapis.', 1800);
     return;
   }
 
@@ -2064,7 +2064,7 @@ function finishNetworkGame() {
   ravi5.textContent = '»Paket dostavljen. Pot si odkril sam — tako omrežje dobi smisel.«';
   document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnostni sistem je odklenjen.';
 
-  completeTaskFlow(4, 'task5Feedback', 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.', 1600);
+  completeTaskFlow(4, 'task5Feedback', 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.', 1800);
 }
 
 function initNetworkTopologyGame() {
@@ -2252,7 +2252,7 @@ function finishSecurityGame() {
   ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Programiranje aplikacij je odklenjeno.';
 
-  completeTaskFlow(5, 'task6Feedback', 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.', 1600);
+  completeTaskFlow(5, 'task6Feedback', 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.', 1800);
 }
 
 function handleSecurityKey(event) {
@@ -2627,7 +2627,7 @@ function finishRunnerGame() {
   document.getElementById('raviTask7Text').textContent = '»To je že bolj podobno pravi aplikaciji: gibanje, dogodki, kolizije in cilj. In nič opekačev.«';
   document.getElementById('hubMessage').textContent = 'Programiranje aplikacij je aktivno. Zadnji modul – Umetna inteligenca – je odklenjen.';
 
-  completeTaskFlow(6, 'task7Feedback', 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.', 1600);
+  completeTaskFlow(6, 'task7Feedback', 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.', 1800);
 }
 
 
