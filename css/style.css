@@ -8007,3 +8007,30 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     max-width:170px;
   }
 }
+
+
+/* Integrate project label into the game's tech UI */
+.brand-with-logo {
+  gap: 30px !important;
+}
+
+.brand-with-logo span {
+  color: #7f93ad;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(104,164,255,.10);
+}
+
+@media (max-width: 620px) {
+  .brand-with-logo {
+    gap: 18px !important;
+  }
+
+  .brand-with-logo span {
+    font-size: 11px;
+    letter-spacing: .12em;
+  }
+}
