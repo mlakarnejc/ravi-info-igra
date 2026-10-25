@@ -7941,3 +7941,33 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     height: 260px !important;
   }
 }
+
+
+/* Final RAVI positioning adjustments */
+#screenStory .story-ravi-placeholder.has-ravi-image {
+  left: 50px !important;
+}
+
+#screenFinal .final-ravi-robot.has-ravi-image {
+  width: 430px !important;
+  height: 470px !important;
+}
+
+#screenFinal .final-ravi-hero {
+  min-height: 500px;
+}
+
+@media (max-width: 900px) {
+  #screenStory .story-ravi-placeholder.has-ravi-image {
+    left: 22px !important;
+  }
+
+  #screenFinal .final-ravi-robot.has-ravi-image {
+    width: 340px !important;
+    height: 380px !important;
+  }
+
+  #screenFinal .final-ravi-hero {
+    min-height: 400px;
+  }
+}
