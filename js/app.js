@@ -242,12 +242,12 @@ function startFinalSequence() {
   if (bootBar) {
     bootBar.style.animation = 'none';
     bootBar.style.transform = 'none';
-    bootBar.style.width = '0%';
+    bootBar.style.setProperty('--boot-progress', '0%');
   }
   const bootTicker = setInterval(() => {
     bootValue = Math.min(100, bootValue + 4);
     if (bootPercent) bootPercent.textContent = `${bootValue}%`;
-    if (bootBar) bootBar.style.width = `${bootValue}%`;
+    if (bootBar) bootBar.style.setProperty('--boot-progress', `${bootValue}%`);
     if (bootValue >= 100) clearInterval(bootTicker);
   }, 100);
 
