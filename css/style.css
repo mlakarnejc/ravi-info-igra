@@ -9125,3 +9125,16 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   transform:scaleX(0);
   transition:transform .10s linear !important;
 }
+
+
+/* Final boot progress: visible width follows JS percentage exactly */
+#finalTransition .final-transition-progress > div > i {
+  display:block !important;
+  width:0;
+  height:100% !important;
+  transform:none !important;
+  animation:none !important;
+  transition:width .10s linear !important;
+  background:linear-gradient(90deg,#ef3340,#ff6470) !important;
+  box-shadow:0 0 14px rgba(255,100,112,.45) !important;
+}
