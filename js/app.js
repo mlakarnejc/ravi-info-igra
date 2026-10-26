@@ -241,12 +241,13 @@ function startFinalSequence() {
   if (bootPercent) bootPercent.textContent = '0%';
   if (bootBar) {
     bootBar.style.animation = 'none';
-    bootBar.style.transform = 'scaleX(0)';
+    bootBar.style.transform = 'none';
+    bootBar.style.width = '0%';
   }
   const bootTicker = setInterval(() => {
     bootValue = Math.min(100, bootValue + 4);
     if (bootPercent) bootPercent.textContent = `${bootValue}%`;
-    if (bootBar) bootBar.style.transform = `scaleX(${bootValue / 100})`;
+    if (bootBar) bootBar.style.width = `${bootValue}%`;
     if (bootValue >= 100) clearInterval(bootTicker);
   }, 100);
 
