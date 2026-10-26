@@ -236,7 +236,7 @@ function startFinalSequence() {
   transition?.classList.remove('finished');
 
   const bootPercent = document.getElementById('finalBootPercent');
-  const bootBar = document.querySelector('#finalTransition .final-transition-progress > div > i');
+  const bootBar = document.getElementById('finalBootBar');
   let bootValue = 0;
   if (bootPercent) bootPercent.textContent = '0%';
   if (bootBar) {
@@ -304,6 +304,7 @@ function resetWholeMission() {
   updateProgress();
   renderModules();
   syncRaviStageImages();
+shuffleMLPackageChoices();
   showScreen('screenIntro');
 }
 
@@ -2666,6 +2667,19 @@ function updateMLStage(stage) {
     dot.classList.toggle('active', index === stage);
     dot.classList.toggle('done', index < stage);
   });
+}
+
+function shuffleMLPackageChoices() {
+  const container = document.getElementById('mlPackageChoices');
+  if (!container) return;
+  const cards = [...container.children];
+  for (let i = cards.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = cards[i];
+    cards[i] = cards[j];
+    cards[j] = tmp;
+  }
+  cards.forEach((card) => container.appendChild(card));
 }
 
 function renderMLTrainingCards() {
