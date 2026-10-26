@@ -2896,6 +2896,7 @@ function runMLBadPrediction() {
         continueBtn.classList.add('hidden');
         errorExplain?.classList.add('hidden');
         updateMLStage(2);
+        shuffleMLPackageChoices();
         setMLPhase('mlRetrainPhase');
         setRaviMessage('raviTask8Text', '»Izberi EN paket podatkov, ki bi moj model najbolje izboljšal.«', 'instruction');
       };
