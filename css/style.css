@@ -9185,3 +9185,13 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   letter-spacing:.06em !important;
   color:#8ee9b6 !important;
 }
+
+
+/* Short subject descriptions shown under each room subject */
+.subject-description {
+  margin: 6px 0 0;
+  color: #9fb1c8;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  max-width: 760px;
+}
