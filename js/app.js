@@ -983,16 +983,8 @@ function checkTask1() {
     return;
   }
 
-  if (attempts === 1) {
-    feedback.textContent = 'Nekaj ni v redu. Poskusi še enkrat.';
-    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
-  } else if (attempts === 2) {
-    feedback.textContent = 'Namig: išči dele, ki jih najdeš znotraj računalnika.';
-    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
-  } else {
-    feedback.textContent = 'Močan namig: procesor, RAM in SSD so zelo dobra smer.';
-    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
-  }
+  feedback.textContent = 'Nekaj ni v redu. Preveri, ali izbrani predmeti res spadajo k računalniški opremi.';
+  raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
 
   feedback.className = 'feedback error';
   selected.clear();
@@ -1178,7 +1170,7 @@ function catchGameLoop(now) {
         catchScoreValue += 1;
         document.getElementById('catchScore').textContent = `${catchScoreValue} / ${catchTargetScore}`;
         setTechHudValue('hardware', 'CPU', `${36 + catchScoreValue * 4}%`);
-        document.getElementById('taskFeedback').textContent = `+1: ${obj.label}. Do cilja še ${Math.max(0, catchTargetScore - catchScoreValue)}.`;
+        document.getElementById('taskFeedback').textContent = `Pravilno ✓ ${obj.label} | Še ${Math.max(0, catchTargetScore - catchScoreValue)} do cilja.`;
         document.getElementById('taskFeedback').className = 'feedback success';
 
         if (catchScoreValue >= catchTargetScore) {
@@ -1193,12 +1185,9 @@ function catchGameLoop(now) {
         game.classList.remove('hit');
         void game.offsetWidth;
         game.classList.add('hit');
-        document.getElementById('taskFeedback').textContent = `−1: ${obj.label} ne spada k računalniški opremi. Nadaljuj!`;
+        document.getElementById('taskFeedback').textContent = `Napačno ✕ ${obj.label} ne spada k računalniški opremi.`;
         document.getElementById('taskFeedback').className = 'feedback error';
-        document.getElementById('raviTaskText').textContent =
-          catchMistakeValue === 1
-            ? '»To ni komponenta. Ampak cenim ustvarjalnost.«'
-            : '»Osredotoči se na dele računalnika. Kuhinjski aparati imajo prost dan.«';
+        document.getElementById('raviTaskText').textContent = '»Ne, tega res ne potrebujem za zagon.«';
       }
 
       setTimeout(() => obj.el.remove(), 280);
@@ -1346,7 +1335,7 @@ function addProgramCommand(command) {
   if (programRunning || modules[1].status === 'complete') return;
   if (programCommands.length >= programMaxCommands) {
     const feedback2 = document.getElementById('task2Feedback');
-    feedback2.textContent = 'Program ima lahko največ 10 ukazov. Poskusi s krajšim zaporedjem.';
+    feedback2.textContent = 'Program ima lahko največ 10 ukazov.';
     feedback2.className = 'feedback error';
     return;
   }
@@ -1478,18 +1467,18 @@ async function runProgramGame() {
   feedback2.className = 'feedback error';
 
   if (crashed && programAttempts === 1) {
-    feedback2.textContent = 'RAVI je trčil v oviro. Obrat spremeni smer, ukaz ↑ pa ga premakne naprej.';
+    feedback2.textContent = 'RAVI je trčil v oviro. Popravi zaporedje ukazov.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (programAttempts === 1) {
-    feedback2.textContent = 'Program se je izvedel, vendar RAVI ni prišel do cilja. Popravi zaporedje.';
+    feedback2.textContent = 'RAVI ni prišel do cilja. Popravi zaporedje.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (programAttempts === 2) {
-    feedback2.textContent = 'Namig: RAVI je na začetku obrnjen NAVZGOR. Začni z NAPREJ, nato boš moral precej hitro narediti DESNI OBRAT.';
+    feedback2.textContent = 'Namig: RAVI začne obrnjen navzgor. Premisli, kdaj mora prvič spremeniti smer.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
     programCommands = [...programSolution];
     renderProgramSequence();
-    feedback2.textContent = 'RAVI pomoč: pravilen program sem pripravil. Pritisni ENTER in ga zaženi.';
+    feedback2.textContent = 'RAVI pomoč: program je pripravljen. Pritisni ENTER.';
     ravi2.textContent = '»Tokrat me boš premikal s programom. Jaz bom samo ubogal ukaze.«';
   }
 }
@@ -1588,13 +1577,13 @@ function checkTask2() {
   feedback2.className = 'feedback error';
 
   if (task2Attempts === 1) {
-    feedback2.textContent = 'Vrstni red še ni pravilen. Pomisli, kaj se mora zgoditi najprej.';
+    feedback2.textContent = 'Vrstni red še ni pravilen.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (task2Attempts === 2) {
-    feedback2.textContent = 'Namig: najprej preveri napajanje, nato vključi sistem.';
+    feedback2.textContent = 'Namig: preveri prvi korak zaporedja.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
-    feedback2.textContent = 'Močan namig: PREVERI NAPAJANJE → VKLOPI SISTEM → NALOŽI PROGRAM → PRIKAŽI SPOROČILO.';
+    feedback2.textContent = 'Močan namig: preveri zaporedje korakov od začetka do konca.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
 
     document.querySelectorAll('#codeOrder .code-step').forEach((row, index) => {
@@ -2013,13 +2002,13 @@ function renderDataRows() {
   const feedback4 = document.getElementById('task4Feedback');
   if (feedback4 && modules[3].status !== 'complete') {
     if (readyForSort && !dataSortedByPoints) {
-      feedback4.textContent = 'Pravilno filtrirano. Ostali so 3 dijaki. Zdaj razvrsti po točkah.';
+      feedback4.textContent = 'Pravilno filtrirano ✓ Ostali so 3 zapisi. Zdaj razvrsti po TOČKAH.';
       feedback4.className = 'feedback success';
     } else if (dataSortedByPoints && filtered.length === 3) {
-      feedback4.textContent = 'Razvrščeno. Najboljši rezultat je zdaj na vrhu — potrdi rezultat.';
+      feedback4.textContent = 'Razvrščeno ✓ Potrdi prvi zapis.';
       feedback4.className = 'feedback success';
     } else {
-      feedback4.textContent = `Prikazanih zapisov: ${filtered.length}. Nadaljuj s filtriranjem.`;
+      feedback4.textContent = `Prikazanih zapisov: ${filtered.length}.`;
       feedback4.className = 'feedback info';
     }
   }
@@ -2057,7 +2046,7 @@ function sortDataByPoints() {
   const ravi4 = document.getElementById('raviTask4Text');
 
   if (!(spol === 'M' && program === 'Računalništvo' && letnik === '3.')) {
-    feedback4.textContent = 'CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
+    feedback4.textContent = 'CILJ: M • Računalništvo • 3. letnik • največ TOČK.';
     feedback4.className = 'feedback error';
     ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     return;
@@ -2111,10 +2100,10 @@ function checkTask4() {
 
   if (!filtersCorrect) {
     if (task4Attempts === 1) {
-      feedback4.textContent = 'Napačen rezultat. CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
+      feedback4.textContent = 'Napačno ✕ CILJ: M • Računalništvo • 3. letnik • največ TOČK.';
       ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     } else if (task4Attempts === 2) {
-      feedback4.textContent = 'Še enkrat: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato klikni TOČKE in potrdi zapis na vrhu.';
+      feedback4.textContent = 'Namig: M • Računalništvo • 3. letnik. Nato TOČKE ↓ in potrdi prvega.';
       ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     } else {
       document.getElementById('filterSpol').value = 'M';
@@ -2122,20 +2111,20 @@ function checkTask4() {
       document.getElementById('filterLetnik').value = '3.';
       dataSortedByPoints = false;
       renderDataRows();
-      feedback4.textContent = 'RAVI pomoč: nastavil sem SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Zdaj klikni TOČKE in potrdi prvega.';
+      feedback4.textContent = 'RAVI pomoč: filtri so nastavljeni. Klikni TOČKE in potrdi prvi zapis.';
       ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     }
     return;
   }
 
   if (!dataSortedByPoints) {
-    feedback4.textContent = 'Filtri so pravilni, vendar naloga zahteva še največ točk. Klikni glavo stolpca TOČKE.';
+    feedback4.textContent = 'Filtri so pravilni ✓ Zdaj klikni TOČKE.';
     feedback4.className = 'feedback success';
     ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     return;
   }
 
-  feedback4.textContent = 'Podatki so že razvrščeni. Najvišji rezultat je prvi zapis v tabeli.';
+  feedback4.textContent = 'Podatki so razvrščeni ✓ Potrdi prvi zapis.';
   feedback4.className = 'feedback success';
   ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
 }
