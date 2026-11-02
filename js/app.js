@@ -379,7 +379,6 @@ function startFinalSequence() {
 
   const finalScreen = document.getElementById('screenFinal');
   const transition = document.getElementById('finalTransition');
-  const countdownEl = document.getElementById('finalResetCountdown');
 
   finalScreen?.classList.add('final-sequence-start');
   transition?.classList.remove('finished');
@@ -403,27 +402,18 @@ function startFinalSequence() {
   setTimeout(() => {
     transition?.classList.add('finished');
     finalScreen?.classList.add('final-sequence-revealed');
+    updateFinalNextState();
+    setTimeout(() => document.getElementById('leaderboardNickname')?.focus(), 80);
   }, 2600);
 
-  if (finalResetTimer) clearTimeout(finalResetTimer);
-  if (finalCountdownTimer) clearInterval(finalCountdownTimer);
 
-  let seconds = 60;
-  if (countdownEl) countdownEl.textContent = String(seconds);
-
-  finalCountdownTimer = setInterval(() => {
-    seconds -= 1;
-    if (countdownEl) countdownEl.textContent = String(Math.max(seconds, 0));
-    if (seconds <= 0) clearInterval(finalCountdownTimer);
-  }, 1000);
-
-  finalResetTimer = setTimeout(resetWholeMission, 60000);
 }
 
 function resetWholeMission() {
   resetMissionTimers();
   const nicknameInput = document.getElementById('leaderboardNickname');
   if (nicknameInput) nicknameInput.value = '';
+  updateFinalNextState();
   if (finalResetTimer) clearTimeout(finalResetTimer);
   if (finalCountdownTimer) clearInterval(finalCountdownTimer);
   finalResetTimer = null;
@@ -459,6 +449,33 @@ function resetWholeMission() {
 shuffleMLPackageChoices();
   showScreen('screenIntro');
 }
+
+
+const leaderboardNicknameInput = document.getElementById('leaderboardNickname');
+const finalNextBtn = document.getElementById('finalNextBtn');
+const finalNextHint = document.getElementById('finalNextHint');
+
+function updateFinalNextState() {
+  const nickname = leaderboardNicknameInput?.value.trim() || '';
+  const ready = nickname.length > 0;
+
+  if (finalNextBtn) finalNextBtn.disabled = !ready;
+  if (finalNextHint) {
+    finalNextHint.textContent = ready
+      ? 'Rezultat je pripravljen za lestvico.'
+      : 'Vnesi vzdevek za nadaljevanje.';
+  }
+}
+
+leaderboardNicknameInput?.addEventListener('input', updateFinalNextState);
+
+finalNextBtn?.addEventListener('click', () => {
+  const nickname = leaderboardNicknameInput?.value.trim() || '';
+  if (!nickname) return;
+
+  // Ko dodamo strežniški leaderboard, se bo rezultat tukaj najprej shranil v bazo.
+  resetWholeMission();
+});
 
 function continueStoryPath() {
   if (completed >= 8) {
