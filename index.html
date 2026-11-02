@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RAVI – Informativni dan</title>
-  <link rel="stylesheet" href="css/style.css?v=20261102-1235">
+  <link rel="stylesheet" href="css/style.css?v=20261102-1245">
 </head>
 <body>
   <main class="app-shell">
@@ -1204,8 +1204,14 @@
         </div>
 
         <section class="final-score-panel" aria-label="Rezultat misije">
+          <div class="final-score-intro">
+            <span>TV OJ REZULTAT</span>
+            <strong>Odlično! Dokončal si vseh 8 modulov.</strong>
+            <small>Spodaj vidiš svoje čase. Vpiši vzdevek, da se uvrstiš na lestvico.</small>
+          </div>
+
           <div class="final-score-head">
-            <span>REZULTAT MISIJE</span>
+            <span>SKUPNI ČAS</span>
             <strong id="finalTotalTime">00:00.0</strong>
           </div>
 
@@ -1221,7 +1227,7 @@
           </div>
 
           <label class="final-nickname">
-            <span>VZDEVEK ZA LESTVICO</span>
+            <span>VPIŠI VZDEVEK ZA LESTVICO</span>
             <input id="leaderboardNickname" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="npr. NEO">
           </label>
         </section>
@@ -1234,7 +1240,7 @@
 
         <div class="final-next-wrap">
           <button id="finalNextBtn" class="primary-btn final-next-btn" type="button" disabled>NAPREJ</button>
-          <small id="finalNextHint">Vnesi vzdevek za nadaljevanje.</small>
+          <small id="finalNextHint">Vzdevek je obvezen za vpis rezultata na lestvico.</small>
         </div>
       </div>
     </section>
