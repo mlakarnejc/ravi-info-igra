@@ -131,6 +131,7 @@ function renderStoryRoom(index = storyRoomIndex) {
 }
 
 function showStoryRoom(index) {
+  pauseActiveRoomTimer();
   renderStoryRoom(index);
   setRaviStageImage(
     document.querySelector('.story-ravi-placeholder'),
@@ -159,7 +160,142 @@ function enterStoryRoom() {
 
 
 
+
+/* ===== Mission timing ===== */
+const roomTiming = {
+  elapsed: Array(8).fill(0),
+  startedAt: Array(8).fill(null),
+  finished: Array(8).fill(false),
+  activeRoom: null,
+  raf: null
+};
+
+function formatGameTime(ms) {
+  const safe = Math.max(0, Math.floor(ms));
+  const minutes = Math.floor(safe / 60000);
+  const seconds = Math.floor((safe % 60000) / 1000);
+  const tenths = Math.floor((safe % 1000) / 100);
+  return `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}.${tenths}`;
+}
+
+function getRoomElapsedMs(roomIndex, now = performance.now()) {
+  let value = roomTiming.elapsed[roomIndex] || 0;
+  const startedAt = roomTiming.startedAt[roomIndex];
+  if (startedAt !== null) value += now - startedAt;
+  return value;
+}
+
+function getTotalElapsedMs(now = performance.now()) {
+  return roomTiming.elapsed.reduce((total, value, index) => {
+    const startedAt = roomTiming.startedAt[index];
+    return total + value + (startedAt !== null ? now - startedAt : 0);
+  }, 0);
+}
+
+function ensureTaskTimerDisplays() {
+  for (let taskNumber = 1; taskNumber <= 8; taskNumber += 1) {
+    const screen = document.getElementById(`screenTask${taskNumber}`);
+    if (!screen || screen.querySelector('.task-timer-panel')) continue;
+
+    const host = taskNumber === 8
+      ? screen.querySelector('.ml-lab-shell')
+      : screen.querySelector('.task-card');
+
+    if (!host) continue;
+
+    const panel = document.createElement('div');
+    panel.className = 'task-timer-panel';
+    panel.setAttribute('aria-label', 'Čas igre');
+    panel.innerHTML = `
+      <div class="task-timer-item">
+        <span>ČAS SOBE</span>
+        <strong data-room-time>00:00.0</strong>
+      </div>
+      <div class="task-timer-divider"></div>
+      <div class="task-timer-item total">
+        <span>SKUPAJ</span>
+        <strong data-total-time>00:00.0</strong>
+      </div>
+    `;
+    host.appendChild(panel);
+  }
+}
+
+function renderMissionTimers() {
+  const now = performance.now();
+
+  document.querySelectorAll('.task-timer-panel').forEach((panel) => {
+    const screen = panel.closest('.screen');
+    const match = screen?.id?.match(/^screenTask(\d+)$/);
+    if (!match) return;
+
+    const roomIndex = Number(match[1]) - 1;
+    const roomEl = panel.querySelector('[data-room-time]');
+    const totalEl = panel.querySelector('[data-total-time]');
+
+    if (roomEl) roomEl.textContent = formatGameTime(getRoomElapsedMs(roomIndex, now));
+    if (totalEl) totalEl.textContent = formatGameTime(getTotalElapsedMs(now));
+  });
+}
+
+function missionTimerLoop() {
+  renderMissionTimers();
+  roomTiming.raf = requestAnimationFrame(missionTimerLoop);
+}
+
+function startRoomTimer(roomIndex) {
+  if (roomIndex < 0 || roomIndex > 7 || roomTiming.finished[roomIndex]) return;
+
+  if (roomTiming.activeRoom !== null && roomTiming.activeRoom !== roomIndex) {
+    pauseRoomTimer(roomTiming.activeRoom);
+  }
+
+  if (roomTiming.startedAt[roomIndex] === null) {
+    roomTiming.startedAt[roomIndex] = performance.now();
+  }
+  roomTiming.activeRoom = roomIndex;
+  renderMissionTimers();
+}
+
+function pauseRoomTimer(roomIndex) {
+  if (roomIndex < 0 || roomIndex > 7) return;
+
+  const startedAt = roomTiming.startedAt[roomIndex];
+  if (startedAt !== null) {
+    roomTiming.elapsed[roomIndex] += performance.now() - startedAt;
+    roomTiming.startedAt[roomIndex] = null;
+  }
+
+  if (roomTiming.activeRoom === roomIndex) roomTiming.activeRoom = null;
+  renderMissionTimers();
+}
+
+function finishRoomTimer(roomIndex) {
+  if (roomIndex < 0 || roomIndex > 7 || roomTiming.finished[roomIndex]) return;
+  pauseRoomTimer(roomIndex);
+  roomTiming.finished[roomIndex] = true;
+  renderMissionTimers();
+}
+
+function pauseActiveRoomTimer() {
+  if (roomTiming.activeRoom !== null) pauseRoomTimer(roomTiming.activeRoom);
+}
+
+function resetMissionTimers() {
+  roomTiming.elapsed.fill(0);
+  roomTiming.startedAt.fill(null);
+  roomTiming.finished.fill(false);
+  roomTiming.activeRoom = null;
+  renderMissionTimers();
+}
+
+ensureTaskTimerDisplays();
+if (!roomTiming.raf) roomTiming.raf = requestAnimationFrame(missionTimerLoop);
+
+
 function completeTaskFlow(moduleIndex, feedbackId, message, delay = 1600) {
+  finishRoomTimer(moduleIndex);
+
   const feedback = document.getElementById(feedbackId);
   if (feedback) {
     feedback.textContent = message;
@@ -272,6 +408,7 @@ function startFinalSequence() {
 }
 
 function resetWholeMission() {
+  resetMissionTimers();
   if (finalResetTimer) clearTimeout(finalResetTimer);
   if (finalCountdownTimer) clearInterval(finalCountdownTimer);
   finalResetTimer = null;
@@ -3230,6 +3367,8 @@ function initTestRoomJump() {
 initTestRoomJump();
 document.getElementById('startCatchGame').addEventListener('click', () => {
   document.getElementById('catchStartOverlay')?.classList.add('hidden');
+  document.getElementById('screenTask1')?.classList.add('game-started');
+  startRoomTimer(0);
   setTaskRestartVisible(1, true);
   startCatchGame();
 });
@@ -3297,6 +3436,7 @@ function setTaskRestartVisible(taskNumber, visible) {
 }
 
 function showTaskStartOverlay(taskNumber) {
+  pauseRoomTimer(taskNumber - 1);
   setTaskRestartVisible(taskNumber, false);
   document.getElementById(`screenTask${taskNumber}`)?.classList.remove('game-started');
 
@@ -3311,6 +3451,7 @@ function dismissTaskStartOverlay(taskNumber) {
   const overlay = document.getElementById(`task${taskNumber}StartOverlay`);
   if (overlay) overlay.classList.add('hidden');
   document.getElementById(`screenTask${taskNumber}`)?.classList.add('game-started');
+  startRoomTimer(taskNumber - 1);
   setTaskRestartVisible(taskNumber, true);
 }
 
