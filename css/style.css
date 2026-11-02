@@ -9195,3 +9195,12 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   line-height: 1.45;
   max-width: 760px;
 }
+
+
+/* Kratek namig pod glavnim naslovom se pokaže šele po začetku igre. */
+.task-quick-hint {
+  display:none;
+}
+.screen.game-started .task-quick-hint {
+  display:block;
+}
