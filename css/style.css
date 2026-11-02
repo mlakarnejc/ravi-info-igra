@@ -7499,7 +7499,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-lead,
 #screenFinal .final-message,
 #screenFinal .final-status-row,
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   opacity:0;
   transform:translateY(12px);
 }
@@ -7526,28 +7526,28 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal.final-sequence-revealed .final-status-row { transition-delay:.42s; }
 #screenFinal.final-sequence-revealed .final-auto-reset { transition-delay:.48s; }
 
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   position:relative;
   z-index:2;
   margin-top:24px;
   text-align:center;
 }
 
-#screenFinal .final-auto-reset > span {
+#screenFinal .final-next-wrap > span {
   display:block;
   color:#79e8a3;
   font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.15em;
 }
 
-#screenFinal .final-auto-reset small {
+#screenFinal .final-next-wrap small {
   display:block;
   margin-top:7px;
   color:#71839b;
   font-size:11px;
 }
 
-#screenFinal .final-auto-reset strong {
+#screenFinal .final-next-wrap strong {
   color:#9fd8ff;
 }
 
@@ -8279,7 +8279,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-lead,
 #screenFinal .final-message,
 #screenFinal .final-status-row,
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   grid-column:2 !important;
   width:100% !important;
   max-width:none !important;
@@ -8323,7 +8323,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   margin:0 0 12px !important;
 }
 
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   margin:0 !important;
 }
 
@@ -8407,7 +8407,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   #screenFinal .final-lead,
   #screenFinal .final-message,
   #screenFinal .final-status-row,
-  #screenFinal .final-auto-reset {
+  #screenFinal .final-next-wrap {
     grid-column:1 !important;
     grid-row:auto !important;
     text-align:center !important;
@@ -8526,7 +8526,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-lead,
 #screenFinal .final-message,
 #screenFinal .final-status-row,
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   min-width:0 !important;
   max-width:100% !important;
   overflow:visible !important;
@@ -8622,7 +8622,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-lead,
 #screenFinal .final-message,
 #screenFinal .final-status-row,
-#screenFinal .final-auto-reset {
+#screenFinal .final-next-wrap {
   grid-column:2 !important;
   min-width:0 !important;
   max-width:100% !important;
@@ -8657,7 +8657,7 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   #screenFinal .final-lead,
   #screenFinal .final-message,
   #screenFinal .final-status-row,
-  #screenFinal .final-auto-reset {
+  #screenFinal .final-next-wrap {
     grid-column:1 !important;
     grid-row:auto !important;
   }
@@ -9478,5 +9478,45 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   }
   #screenFinal .final-nickname {
     grid-template-columns:1fr;
+  }
+}
+
+
+/* Manual final step: nickname -> NAPREJ */
+#screenFinal .final-next-wrap {
+  grid-column:2 !important;
+  width:100% !important;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 !important;
+  text-align:left !important;
+}
+
+#screenFinal .final-next-btn {
+  min-width:150px;
+  margin:0 !important;
+}
+
+#screenFinal .final-next-btn:disabled {
+  opacity:.42;
+  cursor:not-allowed;
+}
+
+#screenFinal .final-next-wrap small {
+  color:#7f91a8;
+  font-size:11px;
+}
+
+#screenFinal:not(.final-sequence-revealed) .final-next-wrap {
+  visibility:hidden !important;
+}
+
+@media (max-width:900px) {
+  #screenFinal .final-next-wrap {
+    grid-column:1 !important;
+    justify-content:center;
+    text-align:center !important;
+    flex-wrap:wrap;
   }
 }
