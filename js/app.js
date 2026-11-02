@@ -769,6 +769,8 @@ function startCatchGame() {
 
   resetCatchGame();
   document.getElementById('catchStartOverlay').classList.add('hidden');
+  document.getElementById('screenTask1')?.classList.add('game-started');
+  setTaskRestartVisible(1, true);
   document.getElementById('catchGame').focus();
 
   catchRunning = true;
@@ -3296,6 +3298,7 @@ function setTaskRestartVisible(taskNumber, visible) {
 
 function showTaskStartOverlay(taskNumber) {
   setTaskRestartVisible(taskNumber, false);
+  document.getElementById(`screenTask${taskNumber}`)?.classList.remove('game-started');
 
   if (taskNumber === 1) {
     document.getElementById('catchStartOverlay')?.classList.remove('hidden');
@@ -3307,6 +3310,7 @@ function showTaskStartOverlay(taskNumber) {
 function dismissTaskStartOverlay(taskNumber) {
   const overlay = document.getElementById(`task${taskNumber}StartOverlay`);
   if (overlay) overlay.classList.add('hidden');
+  document.getElementById(`screenTask${taskNumber}`)?.classList.add('game-started');
   setTaskRestartVisible(taskNumber, true);
 }
 
