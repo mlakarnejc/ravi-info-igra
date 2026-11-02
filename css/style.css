@@ -9217,3 +9217,31 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   letter-spacing:.14em;
   line-height:1.2;
 }
+
+
+/* FINAL: pre-start task UI visibility */
+#screenTask1 .catch-hud,
+#screenTask6 .security-hud,
+#screenTask7 .runner-hud,
+#screenTask8 .ml-stage-indicator {
+  display:none !important;
+}
+
+#screenTask1.game-started .catch-hud,
+#screenTask6.game-started .security-hud,
+#screenTask7.game-started .runner-hud,
+#screenTask8.game-started .ml-stage-indicator {
+  display:flex !important;
+}
+
+/* FINAL: make KAKO IGRAŠ a real overlay heading */
+.unified-game-surface > .task-start-overlay .task-start-kicker,
+.unified-game-surface > .catch-overlay .catch-overlay-kicker {
+  display:block !important;
+  margin:0 0 14px !important;
+  font-size:22px !important;
+  line-height:1.2 !important;
+  font-weight:900 !important;
+  letter-spacing:.14em !important;
+  color:#ff8f97 !important;
+}
