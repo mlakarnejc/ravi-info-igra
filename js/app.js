@@ -1802,6 +1802,7 @@ function tryHtmlRepair(tag, zone) {
     document.getElementById('htmlRepairCount').textContent = `${htmlFixedCount} / ${htmlTargetCount}`;
     feedback3.textContent = `Pravilno: <${tag}>. Del strani je popravljen.`;
     feedback3.className = 'feedback success';
+    ravi3.textContent = '»Moja spletna stran je razpadla. Sestavi jo nazaj iz pravih HTML elementov.«';
 
     if (htmlFixedCount >= htmlTargetCount) {
       finishHtmlRepairGame();
@@ -2039,9 +2040,11 @@ function renderDataRows() {
     if (readyForSort && !dataSortedByPoints) {
       feedback4.textContent = 'Pravilno filtrirano ✓ Ostali so 3 zapisi. Zdaj razvrsti po TOČKAH.';
       feedback4.className = 'feedback success';
+      document.getElementById('raviTask4Text').textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     } else if (dataSortedByPoints && filtered.length === 3) {
       feedback4.textContent = 'Razvrščeno ✓ Potrdi prvi zapis.';
       feedback4.className = 'feedback success';
+      document.getElementById('raviTask4Text').textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     } else {
       feedback4.textContent = `Prikazanih zapisov: ${filtered.length}.`;
       feedback4.className = 'feedback info';
@@ -2083,7 +2086,7 @@ function sortDataByPoints() {
   if (!(spol === 'M' && program === 'Računalništvo' && letnik === '3.')) {
     feedback4.textContent = 'CILJ: M • Računalništvo • 3. letnik • največ TOČK.';
     feedback4.className = 'feedback error';
-    ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
+    ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     return;
   }
 
@@ -2147,7 +2150,7 @@ function checkTask4() {
       dataSortedByPoints = false;
       renderDataRows();
       feedback4.textContent = 'RAVI pomoč: filtri so nastavljeni. Klikni TOČKE in potrdi prvi zapis.';
-      ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
+      ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     }
     return;
   }
@@ -2155,13 +2158,13 @@ function checkTask4() {
   if (!dataSortedByPoints) {
     feedback4.textContent = 'Filtri so pravilni ✓ Zdaj klikni TOČKE.';
     feedback4.className = 'feedback success';
-    ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
+    ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     return;
   }
 
   feedback4.textContent = 'Podatki so razvrščeni ✓ Potrdi prvi zapis.';
   feedback4.className = 'feedback success';
-  ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
+  ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
 }
 
 function initDataFilterGame() {
@@ -2304,6 +2307,7 @@ function chooseTopologyNode(targetId) {
     topologyWrongAttempts += 1;
     feedback5.textContent = `Med ${topologyNodes[topologyCurrent].label} in ${topologyNodes[targetId].label} ni neposredne povezave.`;
     feedback5.className = 'feedback error';
+    ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
 
     if (targetButton) {
       targetButton.classList.remove('wrong-hop');
@@ -2363,13 +2367,7 @@ function chooseTopologyNode(targetId) {
     feedback5.textContent = `Pravilno ✓ Paket je dosegel: ${topologyNodes[targetId].label}.`;
     feedback5.className = 'feedback success';
 
-    if (targetId === 'router') {
-      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
-    } else if (targetId === 'server') {
-      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
-    } else if (targetId === 'internet') {
-      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
-    }
+    ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
   }, 590);
 }
 
@@ -2522,7 +2520,7 @@ function resetTask6() {
   const ravi6 = document.getElementById('raviTask6Text');
   feedback6.textContent = '';
   feedback6.className = 'feedback hidden';
-  ravi6.textContent = '»To sporočilo je imelo znak, ki ga ne smemo spregledati.«';
+  ravi6.textContent = '»Varnostni skener je poln sporočil. Odloči, katera so varna in katera sumljiva.«';
 
   renderSecurityMessage();
   setTimeout(() => document.getElementById('securityScanner')?.focus(), 30);
@@ -2548,6 +2546,7 @@ function classifySecurityMessage(choice) {
     feedback6.className = 'feedback hidden';
     reason.innerHTML = `<strong>PRAVILNO ✓</strong><span>${msg.reason}</span>`;
     reason.className = 'security-reason result-correct';
+    ravi6.textContent = '»Varnostni skener je poln sporočil. Odloči, katera so varna in katera sumljiva.«';
 
     setTimeout(() => {
       card.classList.add(choice === 'safe' ? 'vault-right' : 'vault-left');
@@ -2570,6 +2569,7 @@ function classifySecurityMessage(choice) {
 
   securityMistakes += 1;
   document.getElementById('securityMistakes').textContent = String(securityMistakes);
+  ravi6.textContent = '»To sporočilo je imelo znak, ki ga ne smemo spregledati.«';
   feedback6.textContent = '';
   feedback6.className = 'feedback hidden';
   reason.innerHTML = `<strong>NAPAČNO ✕</strong><span>${msg.reason}</span>`;
@@ -2595,7 +2595,7 @@ function finishSecurityGame() {
   feedback6.className = 'feedback success';
   const reason = document.getElementById('securityReason');
   reason.classList.add('hidden');
-  ravi6.textContent = '»To sporočilo je imelo znak, ki ga ne smemo spregledati.«';
+  ravi6.textContent = '»Dobro. Pri varnosti je pomembneje opaziti podrobnosti kot biti hiter.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Programiranje aplikacij je odklenjeno.';
 
   completeTaskFlow(5, 'task6Feedback', 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.', 1800);
@@ -2781,10 +2781,10 @@ function collectRunnerCode(index) {
   const feedback7 = document.getElementById('task7Feedback');
   feedback7.textContent = `Košček kode ${runnerState.collected.size}/3 zbran ✓`;
   feedback7.className = 'feedback success';
+  document.getElementById('raviTask7Text').textContent = '»Zberi vse koščke kode in me pripelji do terminala.«';
 
   if (runnerState.collected.size === 3) {
     document.getElementById('runnerGoal')?.classList.add('unlocked');
-    document.getElementById('raviTask7Text').textContent = '»Zberi vse koščke kode in me pripelji do terminala.«';
   }
 }
 
