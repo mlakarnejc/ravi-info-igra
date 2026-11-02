@@ -9651,3 +9651,12 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     text-align:left;
   }
 }
+
+
+/* Task 8: keep mission timer clear of the ML header/status controls. */
+@media (min-width:621px) {
+  #screenTask8 .ml-lab-shell > .task-timer-panel {
+    top:72px !important;
+    right:32px !important;
+  }
+}
