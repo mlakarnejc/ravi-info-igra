@@ -9352,3 +9352,131 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     right:32px !important;
   }
 }
+
+
+/* ===== Final mission timing summary ===== */
+#screenFinal .final-score-panel {
+  grid-column:2 !important;
+  width:100% !important;
+  margin:0 0 12px !important;
+  padding:14px 16px !important;
+  border:1px solid rgba(75,100,139,.52);
+  border-radius:14px;
+  background:rgba(7,15,27,.78);
+  text-align:left !important;
+}
+
+#screenFinal .final-score-head {
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(75,100,139,.38);
+}
+
+#screenFinal .final-score-head span,
+#screenFinal .final-nickname > span {
+  color:#7f91a8;
+  font:900 9px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.14em;
+}
+
+#screenFinal .final-score-head strong {
+  color:#ff8f97;
+  font:900 30px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums;
+}
+
+#screenFinal .final-room-times {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin:10px 0 11px;
+}
+
+#screenFinal .final-room-times > div {
+  min-width:0;
+  padding:7px 8px;
+  border:1px solid rgba(65,85,114,.42);
+  border-radius:8px;
+  background:rgba(10,20,34,.66);
+}
+
+#screenFinal .final-room-times span {
+  display:block;
+  overflow:hidden;
+  margin-bottom:4px;
+  color:#6f8199;
+  font:800 7px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.07em;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+#screenFinal .final-room-times strong {
+  color:#e9f1fb;
+  font:900 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums;
+}
+
+#screenFinal .final-nickname {
+  display:grid;
+  grid-template-columns:auto minmax(140px,220px);
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+#screenFinal #leaderboardNickname {
+  width:100%;
+  min-height:36px;
+  padding:7px 10px;
+  border:1px solid #405472;
+  border-radius:8px;
+  outline:none;
+  background:#091321;
+  color:#fff;
+  font:900 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+#screenFinal #leaderboardNickname:focus {
+  border-color:#ef3340;
+  box-shadow:0 0 0 2px rgba(239,51,64,.13);
+}
+
+#screenFinal:not(.final-sequence-revealed) .final-score-panel {
+  visibility:hidden !important;
+}
+
+#screenFinal.final-sequence-revealed .final-score-panel {
+  animation:finalScoreReveal .42s ease both;
+}
+
+@keyframes finalScoreReveal {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:none; }
+}
+
+/* Make room for the result card in the existing right column. */
+#screenFinal .final-tech-card {
+  grid-template-rows:auto auto auto auto auto auto auto !important;
+}
+
+@media (max-width:1100px) {
+  #screenFinal .final-room-times {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (max-width:900px) {
+  #screenFinal .final-score-panel {
+    grid-column:1 !important;
+    text-align:left !important;
+  }
+  #screenFinal .final-nickname {
+    grid-template-columns:1fr;
+  }
+}
