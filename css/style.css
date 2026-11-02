@@ -9660,3 +9660,28 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     right:32px !important;
   }
 }
+
+
+.leaderboard-tabs {
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+}
+
+.leaderboard-tab {
+  min-height:34px;
+  padding:7px 12px;
+  border:1px solid #31455f;
+  border-radius:8px;
+  background:#0a1422;
+  color:#8294aa;
+  font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+  cursor:pointer;
+}
+
+.leaderboard-tab.active {
+  border-color:#ef3340;
+  color:#fff;
+  background:rgba(239,51,64,.14);
+}
