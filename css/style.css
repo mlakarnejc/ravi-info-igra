@@ -9816,3 +9816,138 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   font:900 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
   letter-spacing:.12em;
 }
+
+
+/* ===== Persistent task goal ===== */
+.task-goal {
+  margin:6px 0 4px;
+  color:#dbe5ef;
+  font-size:12px;
+  line-height:1.35;
+}
+
+.task-goal strong {
+  color:#ef3340;
+  font:900 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+  margin-right:5px;
+}
+
+/* Controls remain secondary and only appear after START through existing game-started logic. */
+.task-quick-hint {
+  margin-top:4px !important;
+}
+
+/* ===== Unified feedback semantics ===== */
+.feedback {
+  border:1px solid rgba(116,137,160,.35) !important;
+  background:rgba(20,32,46,.62) !important;
+  color:#c8d3df !important;
+}
+
+.feedback.success {
+  border-color:rgba(54,211,153,.55) !important;
+  background:rgba(23,92,68,.24) !important;
+  color:#8ff0c6 !important;
+}
+
+.feedback.error {
+  border-color:rgba(239,51,64,.62) !important;
+  background:rgba(111,23,34,.25) !important;
+  color:#ff9aa3 !important;
+}
+
+.feedback.info {
+  border-color:rgba(73,154,255,.48) !important;
+  background:rgba(27,72,126,.23) !important;
+  color:#9dc9ff !important;
+}
+
+.feedback.hint {
+  border-color:rgba(238,190,73,.56) !important;
+  background:rgba(113,82,19,.23) !important;
+  color:#f4d784 !important;
+}
+
+/* ===== Dedicated result screen ===== */
+#screenResult {
+  align-items:center;
+  justify-content:center;
+  padding:32px 20px;
+}
+
+.result-card {
+  width:min(860px,96vw);
+  padding:28px;
+  border:1px solid rgba(87,110,137,.56);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(11,23,38,.97),rgba(7,15,26,.98));
+  box-shadow:0 24px 70px rgba(0,0,0,.36);
+}
+
+.result-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:20px;
+}
+
+.result-head h2 {
+  margin:4px 0 6px;
+}
+
+.result-head p {
+  margin:0;
+  color:#aebccc;
+}
+
+.result-total {
+  min-width:170px;
+  text-align:right;
+}
+
+.result-total span {
+  display:block;
+  color:#8092a7;
+  font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+}
+
+.result-total strong {
+  display:block;
+  margin-top:6px;
+  color:#fff;
+  font-size:30px;
+}
+
+.result-room-times {
+  margin:0 0 18px;
+}
+
+.result-nickname {
+  display:block;
+  margin-top:18px;
+  padding:14px;
+  border:1px solid rgba(239,51,64,.42);
+  border-radius:10px;
+  background:rgba(29,10,16,.34);
+}
+
+.result-submit-wrap {
+  margin-top:14px !important;
+}
+
+.final-story-actions {
+  margin-top:20px !important;
+}
+
+@media (max-width:700px) {
+  .result-head {
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .result-total {
+    text-align:left;
+  }
+}
