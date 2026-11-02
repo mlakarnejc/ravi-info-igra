@@ -518,7 +518,7 @@ async function submitLeaderboardResult() {
   if (finalNextHint) finalNextHint.textContent = 'Rezultat se zapisuje v skupno lestvico.';
 
   try {
-    const response = await fetch('/api/leaderboard', {
+    const response = await fetch('/inforavi/api/leaderboard', {
       method:'POST',
       headers:{ 'Content-Type':'application/json' },
       body:JSON.stringify(payload)
