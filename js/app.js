@@ -469,6 +469,31 @@ function updateFinalNextState() {
 
 leaderboardNicknameInput?.addEventListener('input', updateFinalNextState);
 
+const INACTIVITY_RESET_MS = 3 * 60 * 1000;
+let inactivityResetTimer = null;
+
+function scheduleInactivityReset() {
+  if (inactivityResetTimer) clearTimeout(inactivityResetTimer);
+  inactivityResetTimer = setTimeout(() => {
+    resetWholeMission();
+  }, INACTIVITY_RESET_MS);
+}
+
+function registerUserActivity() {
+  scheduleInactivityReset();
+}
+
+['pointerdown','pointermove','keydown','touchstart','wheel'].forEach((eventName) => {
+  window.addEventListener(eventName, registerUserActivity, { passive: true });
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) scheduleInactivityReset();
+});
+
+scheduleInactivityReset();
+
+
 
 function getLeaderboardPayload() {
   const nickname = leaderboardNicknameInput?.value.trim() || '';
@@ -492,7 +517,10 @@ function renderLeaderboardRows(entries = []) {
   list.innerHTML = entries.map((entry, index) => `
     <div class="leaderboard-row ${entry.is_current ? 'current' : ''}">
       <span class="leaderboard-rank">${index + 1}.</span>
-      <strong class="leaderboard-name">${escapeLeaderboardText(entry.nickname)}</strong>
+      <strong class="leaderboard-name">
+        ${escapeLeaderboardText(entry.nickname)}
+        ${entry.is_current ? '<span class="leaderboard-you">TI</span>' : ''}
+      </strong>
       <span class="leaderboard-time">${formatGameTime(entry.total_ms)}</span>
     </div>
   `).join('');
