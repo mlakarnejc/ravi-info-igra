@@ -2057,9 +2057,9 @@ function sortDataByPoints() {
   const ravi4 = document.getElementById('raviTask4Text');
 
   if (!(spol === 'M' && program === 'Računalništvo' && letnik === '3.')) {
-    feedback4.textContent = 'Najprej pravilno filtriraj podatke. Razvrščanje pride na vrsto šele nato.';
+    feedback4.textContent = 'CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
     feedback4.className = 'feedback error';
-    ravi4.textContent = '»Če razvrstiva napačen nabor podatkov, dobiva zelo urejeno napačen odgovor.«';
+    ravi4.textContent = '»Najprej nastavi prave tri filtre, potem pa poišči najvišje število točk.«';
     return;
   }
 
@@ -2111,19 +2111,19 @@ function checkTask4() {
 
   if (!filtersCorrect) {
     if (task4Attempts === 1) {
-      feedback4.textContent = 'Preberi zahtevo natančno. Beseda "dijaka" pomeni tudi pogoj za spol.';
-      ravi4.textContent = '»V vprašanju je več pogojev, kot jih je videti na prvi pogled.«';
+      feedback4.textContent = 'Napačen rezultat. CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
+      ravi4.textContent = '»Preveri vse tri filtre. Iščemo točno določeno skupino podatkov.«';
     } else if (task4Attempts === 2) {
-      feedback4.textContent = 'Namig: SPOL = M, PROGRAM = Računalništvo, LETNIK = 3.';
-      ravi4.textContent = '»Najprej izloči vse, ki ne ustrezajo trem pogojem.«';
+      feedback4.textContent = 'Še enkrat: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato klikni TOČKE in potrdi zapis na vrhu.';
+      ravi4.textContent = '»Ko ostanejo pravi trije zapisi, jih razvrsti po točkah.«';
     } else {
       document.getElementById('filterSpol').value = 'M';
       document.getElementById('filterProgram').value = 'Računalništvo';
       document.getElementById('filterLetnik').value = '3.';
       dataSortedByPoints = false;
       renderDataRows();
-      feedback4.textContent = 'RAVI pomoč: filtri so pravilno nastavljeni. Zdaj klikni TOČKE, da jih razvrstiš.';
-      ravi4.textContent = '»Filtri so pripravljeni. Zdaj še ugotoviva, kdo ima največ točk.«';
+      feedback4.textContent = 'RAVI pomoč: nastavil sem SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Zdaj klikni TOČKE in potrdi prvega.';
+      ravi4.textContent = '»Filtri so pripravljeni. Zdaj še poišči najvišje število točk.«';
     }
     return;
   }
