@@ -82,25 +82,43 @@ def today_key() -> str:
     return datetime.now(APP_TZ).date().isoformat()
 
 
-def best_today(conn: sqlite3.Connection, limit: int = 10) -> list[dict]:
-    rows = conn.execute(
-        """
-        SELECT s.nickname, s.total_ms
-        FROM scores s
-        JOIN (
-            SELECT nickname, MIN(total_ms) AS best_ms
-            FROM scores
-            WHERE played_date = ?
-            GROUP BY nickname
-        ) b
-          ON b.nickname = s.nickname AND b.best_ms = s.total_ms
-        WHERE s.played_date = ?
-        GROUP BY s.nickname
-        ORDER BY s.total_ms ASC, MIN(s.id) ASC
-        LIMIT ?
-        """,
-        (today_key(), today_key(), limit),
-    ).fetchall()
+def best_scores(conn: sqlite3.Connection, limit: int = 10, scope: str = "today") -> list[dict]:
+    if scope == "all":
+        rows = conn.execute(
+            """
+            SELECT s.nickname, s.total_ms
+            FROM scores s
+            JOIN (
+                SELECT nickname, MIN(total_ms) AS best_ms
+                FROM scores
+                GROUP BY nickname
+            ) b
+              ON b.nickname = s.nickname AND b.best_ms = s.total_ms
+            GROUP BY s.nickname
+            ORDER BY s.total_ms ASC, MIN(s.id) ASC
+            LIMIT ?
+            """,
+            (limit,),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            """
+            SELECT s.nickname, s.total_ms
+            FROM scores s
+            JOIN (
+                SELECT nickname, MIN(total_ms) AS best_ms
+                FROM scores
+                WHERE played_date = ?
+                GROUP BY nickname
+            ) b
+              ON b.nickname = s.nickname AND b.best_ms = s.total_ms
+            WHERE s.played_date = ?
+            GROUP BY s.nickname
+            ORDER BY s.total_ms ASC, MIN(s.id) ASC
+            LIMIT ?
+            """,
+            (today_key(), today_key(), limit),
+        ).fetchall()
 
     return [{"nickname": row["nickname"], "total_ms": row["total_ms"]} for row in rows]
 
@@ -111,9 +129,12 @@ def health() -> dict:
 
 
 @app.get("/leaderboard")
-def get_leaderboard(limit: int = Query(default=10, ge=1, le=50)) -> dict:
+def get_leaderboard(
+    limit: int = Query(default=10, ge=1, le=50),
+    scope: str = Query(default="today", pattern="^(today|all)$"),
+) -> dict:
     with connect() as conn:
-        return {"date": today_key(), "top": best_today(conn, limit)}
+        return {"date": today_key(), "scope": scope, "top": best_scores(conn, limit, scope)}
 
 
 @app.post("/leaderboard")
@@ -150,12 +171,12 @@ def post_leaderboard(score: ScoreIn) -> dict:
         )
         conn.commit()
 
-        all_best = best_today(conn, 1000)
+        all_best = best_scores(conn, 1000, "today")
         rank = next(
             (index + 1 for index, row in enumerate(all_best) if row["nickname"] == score.nickname),
             None,
         )
-        top = best_today(conn, 10)
+        top = best_scores(conn, 10, "today")
 
     for row in top:
         row["is_current"] = row["nickname"] == score.nickname
