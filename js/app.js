@@ -289,6 +289,18 @@ function resetMissionTimers() {
   renderMissionTimers();
 }
 
+function renderFinalTimingSummary() {
+  const total = roomTiming.elapsed.reduce((sum, value) => sum + value, 0);
+  const totalEl = document.getElementById('finalTotalTime');
+  if (totalEl) totalEl.textContent = formatGameTime(total);
+
+  document.querySelectorAll('[data-final-room]').forEach((element) => {
+    const roomIndex = Number(element.dataset.finalRoom);
+    element.textContent = formatGameTime(roomTiming.elapsed[roomIndex] || 0);
+  });
+}
+
+
 ensureTaskTimerDisplays();
 if (!roomTiming.raf) roomTiming.raf = requestAnimationFrame(missionTimerLoop);
 
@@ -362,6 +374,7 @@ let finalResetTimer = null;
 let finalCountdownTimer = null;
 
 function startFinalSequence() {
+  renderFinalTimingSummary();
   showScreen('screenFinal');
 
   const finalScreen = document.getElementById('screenFinal');
@@ -395,7 +408,7 @@ function startFinalSequence() {
   if (finalResetTimer) clearTimeout(finalResetTimer);
   if (finalCountdownTimer) clearInterval(finalCountdownTimer);
 
-  let seconds = 30;
+  let seconds = 60;
   if (countdownEl) countdownEl.textContent = String(seconds);
 
   finalCountdownTimer = setInterval(() => {
@@ -404,11 +417,13 @@ function startFinalSequence() {
     if (seconds <= 0) clearInterval(finalCountdownTimer);
   }, 1000);
 
-  finalResetTimer = setTimeout(resetWholeMission, 30000);
+  finalResetTimer = setTimeout(resetWholeMission, 60000);
 }
 
 function resetWholeMission() {
   resetMissionTimers();
+  const nicknameInput = document.getElementById('leaderboardNickname');
+  if (nicknameInput) nicknameInput.value = '';
   if (finalResetTimer) clearTimeout(finalResetTimer);
   if (finalCountdownTimer) clearInterval(finalCountdownTimer);
   finalResetTimer = null;
