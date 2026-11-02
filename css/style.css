@@ -9745,3 +9745,40 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 #screenFinal .final-next-btn:not(:disabled) {
   box-shadow:0 0 0 1px rgba(239,51,64,.22),0 0 18px rgba(239,51,64,.12);
 }
+
+
+/* ===== Layout corrections: task 8 timer + final screen height ===== */
+
+/* Keep the task-8 timer clear of the FAZA indicator. */
+@media (min-width:621px) {
+  #screenTask8 .ml-lab-shell > .task-timer-panel {
+    top:118px !important;
+    right:32px !important;
+  }
+}
+
+/* Final screen must grow with the result/nickname/button content. */
+#screenFinal.active {
+  overflow:auto !important;
+}
+
+#screenFinal .final-tech-card {
+  height:auto !important;
+  min-height:760px !important;
+  max-height:none !important;
+  overflow:visible !important;
+  align-content:start !important;
+  padding-top:30px !important;
+  padding-bottom:32px !important;
+}
+
+#screenFinal .final-next-wrap {
+  margin-top:14px !important;
+  padding-bottom:4px !important;
+}
+
+@media (min-width:901px) {
+  #screenFinal .final-tech-card {
+    grid-template-rows:auto auto auto auto auto auto auto !important;
+  }
+}
