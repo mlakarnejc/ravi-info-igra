@@ -2112,10 +2112,10 @@ function checkTask4() {
   if (!filtersCorrect) {
     if (task4Attempts === 1) {
       feedback4.textContent = 'Napačen rezultat. CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
-      ravi4.textContent = '»Preveri vse tri filtre. Iščemo točno določeno skupino podatkov.«';
+      ravi4.textContent = '»Hmm ... med temi podatki se še skriva nekaj odvečnega.«';
     } else if (task4Attempts === 2) {
       feedback4.textContent = 'Še enkrat: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato klikni TOČKE in potrdi zapis na vrhu.';
-      ravi4.textContent = '»Ko ostanejo pravi trije zapisi, jih razvrsti po točkah.«';
+      ravi4.textContent = '»Skoraj. Zdaj je tabela že precej bolj podobna nečemu uporabnemu.«';
     } else {
       document.getElementById('filterSpol').value = 'M';
       document.getElementById('filterProgram').value = 'Računalništvo';
@@ -2123,7 +2123,7 @@ function checkTask4() {
       dataSortedByPoints = false;
       renderDataRows();
       feedback4.textContent = 'RAVI pomoč: nastavil sem SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Zdaj klikni TOČKE in potrdi prvega.';
-      ravi4.textContent = '»Filtri so pripravljeni. Zdaj še poišči najvišje število točk.«';
+      ravi4.textContent = '»Zdaj pa je v tabeli ravno prav podatkov. Ostane še finiš.«';
     }
     return;
   }
