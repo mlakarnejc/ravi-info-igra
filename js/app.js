@@ -575,7 +575,19 @@ async function submitLeaderboardResult() {
 
     if (!response.ok) {
       const detail = await response.json().catch(() => null);
-      throw new Error(detail?.detail || 'Shranjevanje rezultata ni uspelo.');
+      let message = 'Shranjevanje rezultata ni uspelo.';
+
+      if (typeof detail?.detail === 'string') {
+        message = detail.detail;
+      } else if (Array.isArray(detail?.detail)) {
+        message = detail.detail
+          .map((item) => item?.msg || item?.message || String(item))
+          .join(' ');
+      } else if (detail?.detail) {
+        message = JSON.stringify(detail.detail);
+      }
+
+      throw new Error(message);
     }
 
     const data = await response.json();
