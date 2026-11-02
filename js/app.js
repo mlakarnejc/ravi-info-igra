@@ -499,6 +499,37 @@ function renderLeaderboardRows(entries = []) {
 }
 
 
+
+let leaderboardScope = 'today';
+
+function setLeaderboardScope(scope) {
+  leaderboardScope = scope === 'all' ? 'all' : 'today';
+
+  document.getElementById('leaderboardTodayBtn')?.classList.toggle('active', leaderboardScope === 'today');
+  document.getElementById('leaderboardAllBtn')?.classList.toggle('active', leaderboardScope === 'all');
+
+  const title = document.getElementById('leaderboardTitle');
+  const subtitle = document.getElementById('leaderboardSubtitle');
+  if (title) title.textContent = leaderboardScope === 'all' ? 'TOP 10 VSEH ČASOV' : 'TOP 10 DANES';
+  if (subtitle) {
+    subtitle.textContent = leaderboardScope === 'all'
+      ? 'Najboljši doseženi časi RAVI INFO MISIJE.'
+      : 'Najboljši časi današnje RAVI INFO MISIJE.';
+  }
+}
+
+async function loadLeaderboard(scope = leaderboardScope) {
+  setLeaderboardScope(scope);
+  const list = document.getElementById('leaderboardList');
+  if (list) list.innerHTML = '<div class="leaderboard-empty">NALAGAM LESTVICO ...</div>';
+
+  const response = await fetch(`/inforavi/api/leaderboard?scope=${encodeURIComponent(leaderboardScope)}`);
+  if (!response.ok) throw new Error('Lestvice trenutno ni mogoče doseči.');
+  const data = await response.json();
+  renderLeaderboardRows(data.top || []);
+  return data;
+}
+
 async function openLeaderboardPreview() {
   const list = document.getElementById('leaderboardList');
   if (list) list.innerHTML = '<div class="leaderboard-empty">NALAGAM LESTVICO ...</div>';
@@ -508,10 +539,7 @@ async function openLeaderboardPreview() {
   showScreen('screenLeaderboard');
 
   try {
-    const response = await fetch('/inforavi/api/leaderboard');
-    if (!response.ok) throw new Error('Lestvice trenutno ni mogoče doseči.');
-    const data = await response.json();
-    renderLeaderboardRows(data.top || []);
+    await loadLeaderboard('today');
   } catch (error) {
     if (list) {
       list.innerHTML = `<div class="leaderboard-empty">${escapeLeaderboardText(error?.message || 'Napaka pri nalaganju lestvice.')}</div>`;
@@ -555,6 +583,7 @@ async function submitLeaderboardResult() {
     document.getElementById('leaderboardOwnRank').textContent =
       data.rank ? `UVRSTITEV: ${data.rank}. MESTO` : 'UVRSTITEV: IZVEN TOP 10';
 
+    setLeaderboardScope('today');
     renderLeaderboardRows(data.top || []);
     showScreen('screenLeaderboard');
   } catch (error) {
@@ -3646,3 +3675,18 @@ safeInit('Data rows', renderDataRows);
 
 syncRaviStageImages();
 // RAVI_STAGE_IMAGES_READY
+
+
+document.getElementById('leaderboardTodayBtn')?.addEventListener('click', () => {
+  loadLeaderboard('today').catch((error) => {
+    const list = document.getElementById('leaderboardList');
+    if (list) list.innerHTML = `<div class="leaderboard-empty">${escapeLeaderboardText(error?.message || 'Napaka pri nalaganju lestvice.')}</div>`;
+  });
+});
+
+document.getElementById('leaderboardAllBtn')?.addEventListener('click', () => {
+  loadLeaderboard('all').catch((error) => {
+    const list = document.getElementById('leaderboardList');
+    if (list) list.innerHTML = `<div class="leaderboard-empty">${escapeLeaderboardText(error?.message || 'Napaka pri nalaganju lestvice.')}</div>`;
+  });
+});
