@@ -15,7 +15,7 @@ const storyRooms = [
   {
     code:'SOBA 01', room:'HARDWARE LAB', subject:'Strojna in programska oprema',
     title:'Kaj je znotraj računalnika?',
-    description:'Spoznamo dele računalnika in kako skupaj tvorijo sistem.',
+    description:'Spoznamo dele računalnika, njihovo delovanje ter nameščanje in vzdrževanje programske opreme.',
     instructions:[
       '<b>← →</b> premikaj lovilec',
       'Zberi <b>10 točk</b>',
@@ -26,7 +26,7 @@ const storyRooms = [
   {
     code:'SOBA 02', room:'CODE ROOM', subject:'Osnove programiranja',
     title:'Računalnik potrebuje natančna navodila.',
-    description:'Z ukazi računalniku povemo, kaj naj naredi. Iz zaporedja ukazov nastane program.',
+    description:'Programiramo v jeziku Python ter se učimo pogojev, zank, seznamov in funkcij.',
     instructions:[
       'S tipkami <b>↑ ↶ ↷</b> sestavi program',
       '<b>↑</b> naprej · <b>↶</b> levo · <b>↷</b> desno',
@@ -37,7 +37,7 @@ const storyRooms = [
   {
     code:'SOBA 03', room:'WEB LAB', subject:'Spletne aplikacije',
     title:'Iz kode nastane splet.',
-    description:'Iz HTML elementov, vsebine in oblikovanja nastanejo spletne strani in aplikacije.',
+    description:'Izdelujemo spletne strani z jeziki HTML in CSS ter jim dodajamo interaktivnost.',
     instructions:[
       'Povleci HTML oznake na prava mesta',
       'Popravi vseh <b>6 delov strani</b>',
@@ -48,7 +48,7 @@ const storyRooms = [
   {
     code:'SOBA 04', room:'DATA VAULT', subject:'Upravljanje s podatki',
     title:'Podatki so uporabni samo, če jih znamo najti.',
-    description:'Podatkovne baze hranijo, urejajo in omogočajo hitro iskanje velike količine podatkov.',
+    description:'Učimo se urejanja, filtriranja in iskanja podatkov ter dela s podatkovnimi bazami.',
     instructions:[
       'Nastavi pravilne <b>filtre</b>',
       'Poišči dijaka programa <b>Računalništvo, 3. letnik</b>',
@@ -59,7 +59,7 @@ const storyRooms = [
   {
     code:'SOBA 05', room:'NETWORK CONTROL', subject:'Računalniške komunikacije in omrežja',
     title:'Podatki morajo najti pravo pot.',
-    description:'Naprave komunicirajo prek omrežij, podatki pa potujejo skozi različne povezave in naprave.',
+    description:'Spoznamo računalniška omrežja, IP-naslove, omrežno opremo in povezovanje naprav.',
     instructions:[
       'Začni pri <b>RAČUNALNIKU</b>',
       'Klikaj naprave po pravilni poti paketa',
@@ -70,7 +70,7 @@ const storyRooms = [
   {
     code:'SOBA 06', room:'SECURITY ZONE', subject:'Varnost in zaščita v informatiki',
     title:'Vsakemu sporočilu ne smemo zaupati.',
-    description:'Prepoznavamo nevarnosti ter ščitimo naprave, uporabnike in podatke.',
+    description:'Učimo se varovanja podatkov, varnih gesel ter prepoznavanja spletnih prevar in napadov.',
     instructions:[
       'Preberi sporočilo in poišči sumljive znake',
       '<b>←</b> SUMljivo · <b>→</b> VARNO',
@@ -81,7 +81,7 @@ const storyRooms = [
   {
     code:'SOBA 07', room:'APP DEVELOPMENT LAB', subject:'Programiranje aplikacij',
     title:'Iz kode nastanejo prave aplikacije.',
-    description:'Programerji iz idej in kode ustvarjajo igre, aplikacije in uporabne sisteme.',
+    description:'Programiramo aplikacije v jeziku C# ter spoznavamo objektno usmerjeno programiranje.',
     instructions:[
       '<b>← →</b> premikanje · <b>SPACE</b> skok',
       'Poberi vse <b>3 koščke kode</b>',
@@ -92,7 +92,7 @@ const storyRooms = [
   {
     code:'SOBA 08', room:'AI CORE', subject:'Umetna inteligenca',
     title:'Umetna inteligenca se uči iz podatkov.',
-    description:'AI išče vzorce v podatkih, kakovost podatkov in človeško preverjanje pa odločata o rezultatu.',
+    description:'Spoznamo, kako se modeli umetne inteligence učijo iz podatkov in kako izboljšujemo njihove rezultate.',
     instructions:[
       'Razvrsti primere na <b>MAČKE</b> in <b>PSE</b>',
       'Opazuj, kako se model iz podatkov <b>uči</b>',
