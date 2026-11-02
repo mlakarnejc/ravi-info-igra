@@ -9245,3 +9245,74 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
   letter-spacing:.14em !important;
   color:#ff8f97 !important;
 }
+
+
+/* ===== Room + total mission timer ===== */
+.task-card,
+.ml-lab-shell {
+  position:relative;
+}
+
+.task-timer-panel {
+  position:absolute;
+  top:26px;
+  right:92px;
+  z-index:12;
+  display:none;
+  align-items:center;
+  gap:12px;
+  padding:8px 12px;
+  border:1px solid rgba(84,107,138,.52);
+  border-radius:11px;
+  background:rgba(7,16,28,.84);
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  backdrop-filter:blur(4px);
+  pointer-events:none;
+}
+
+.screen.game-started .task-timer-panel {
+  display:flex;
+}
+
+.task-timer-item {
+  display:grid;
+  gap:2px;
+  min-width:76px;
+}
+
+.task-timer-item span {
+  color:#7f91a8;
+  font:800 8px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+}
+
+.task-timer-item strong {
+  color:#eef4fb;
+  font:900 16px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.03em;
+  font-variant-numeric:tabular-nums;
+}
+
+.task-timer-item.total strong {
+  color:#ff8f97;
+}
+
+.task-timer-divider {
+  width:1px;
+  height:28px;
+  background:rgba(84,107,138,.48);
+}
+
+#screenTask8 .task-timer-panel {
+  top:18px;
+  right:112px;
+}
+
+@media (max-width: 900px) {
+  .task-timer-panel,
+  #screenTask8 .task-timer-panel {
+    position:static;
+    width:max-content;
+    margin:10px 0 14px auto;
+  }
+}
