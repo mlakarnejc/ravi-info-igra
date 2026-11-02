@@ -3012,12 +3012,8 @@ function renderMLTrainingCards() {
 
     card.addEventListener('dragend', () => card.classList.remove('dragging'));
 
-    card.addEventListener('click', () => {
-      if (mlPlaced.has(item.id)) return;
-      const target = item.type === 'cat'
-        ? document.querySelector('.ml-dropzone.cat-zone')
-        : document.querySelector('.ml-dropzone.dog-zone');
-      placeMLItem(item.id, target?.dataset.class);
+    card.addEventListener('dblclick', (event) => {
+      event.preventDefault();
     });
 
     container.appendChild(card);
