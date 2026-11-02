@@ -402,8 +402,6 @@ function startFinalSequence() {
   setTimeout(() => {
     transition?.classList.add('finished');
     finalScreen?.classList.add('final-sequence-revealed');
-    updateFinalNextState();
-    setTimeout(() => document.getElementById('leaderboardNickname')?.focus(), 80);
   }, 2600);
 
 
@@ -635,9 +633,16 @@ async function submitLeaderboardResult() {
     console.error('Leaderboard submit error:', error);
     return;
   } finally {
-    if (finalNextBtn) finalNextBtn.textContent = 'NAPREJ';
+    if (finalNextBtn) finalNextBtn.textContent = 'NA LESTVICO';
   }
 }
+
+document.getElementById('finalResultsBtn')?.addEventListener('click', () => {
+  renderFinalTimingSummary();
+  showScreen('screenResult');
+  updateFinalNextState();
+  setTimeout(() => document.getElementById('leaderboardNickname')?.focus(), 80);
+});
 
 finalNextBtn?.addEventListener('click', submitLeaderboardResult);
 
