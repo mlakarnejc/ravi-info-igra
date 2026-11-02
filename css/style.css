@@ -9198,9 +9198,22 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
 
 
 /* Kratek namig pod glavnim naslovom se pokaže šele po začetku igre. */
-.task-quick-hint {
-  display:none;
+.task-card > .task-quick-hint,
+.ml-topline .task-quick-hint {
+  display:none !important;
 }
-.screen.game-started .task-quick-hint {
+.screen.game-started .task-card > .task-quick-hint,
+.screen.game-started .ml-topline .task-quick-hint {
+  display:block !important;
+}
+
+/* "KAKO IGRAŠ" is the visible heading of the start instructions. */
+.catch-overlay-kicker,
+.task-start-kicker {
   display:block;
+  margin-bottom:10px;
+  color:#ff8f97 !important;
+  font:900 18px ui-monospace,monospace;
+  letter-spacing:.14em;
+  line-height:1.2;
 }
