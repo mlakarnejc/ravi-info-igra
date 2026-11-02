@@ -469,13 +469,87 @@ function updateFinalNextState() {
 
 leaderboardNicknameInput?.addEventListener('input', updateFinalNextState);
 
-finalNextBtn?.addEventListener('click', () => {
-  const nickname = leaderboardNicknameInput?.value.trim() || '';
-  if (!nickname) return;
 
-  // Ko dodamo strežniški leaderboard, se bo rezultat tukaj najprej shranil v bazo.
-  resetWholeMission();
-});
+function getLeaderboardPayload() {
+  const nickname = leaderboardNicknameInput?.value.trim() || '';
+  const roomTimes = roomTiming.elapsed.map((value) => Math.round(value));
+  return {
+    nickname,
+    room_times_ms: roomTimes,
+    total_ms: roomTimes.reduce((sum, value) => sum + value, 0)
+  };
+}
+
+function renderLeaderboardRows(entries = []) {
+  const list = document.getElementById('leaderboardList');
+  if (!list) return;
+
+  if (!entries.length) {
+    list.innerHTML = '<div class="leaderboard-empty">Na lestvici še ni rezultatov.</div>';
+    return;
+  }
+
+  list.innerHTML = entries.map((entry, index) => `
+    <div class="leaderboard-row ${entry.is_current ? 'current' : ''}">
+      <span class="leaderboard-rank">${index + 1}.</span>
+      <strong class="leaderboard-name">${escapeLeaderboardText(entry.nickname)}</strong>
+      <span class="leaderboard-time">${formatGameTime(entry.total_ms)}</span>
+    </div>
+  `).join('');
+}
+
+function escapeLeaderboardText(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+async function submitLeaderboardResult() {
+  const payload = getLeaderboardPayload();
+  if (!payload.nickname) return;
+
+  if (finalNextBtn) {
+    finalNextBtn.disabled = true;
+    finalNextBtn.textContent = 'SHRANJUJEM ...';
+  }
+  if (finalNextHint) finalNextHint.textContent = 'Rezultat se zapisuje v skupno lestvico.';
+
+  try {
+    const response = await fetch('/api/leaderboard', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const detail = await response.json().catch(() => null);
+      throw new Error(detail?.detail || 'Shranjevanje rezultata ni uspelo.');
+    }
+
+    const data = await response.json();
+    document.getElementById('leaderboardOwnTime').textContent = formatGameTime(payload.total_ms);
+    document.getElementById('leaderboardOwnRank').textContent =
+      data.rank ? `UVRSTITEV: ${data.rank}. MESTO` : 'UVRSTITEV: IZVEN TOP 10';
+
+    renderLeaderboardRows(data.top || []);
+    showScreen('screenLeaderboard');
+  } catch (error) {
+    if (finalNextHint) finalNextHint.textContent =
+      'Lestvice trenutno ni mogoče doseči. Poskusi znova.';
+    if (finalNextBtn) finalNextBtn.disabled = false;
+    console.error('Leaderboard submit error:', error);
+    return;
+  } finally {
+    if (finalNextBtn) finalNextBtn.textContent = 'NAPREJ';
+  }
+}
+
+finalNextBtn?.addEventListener('click', submitLeaderboardResult);
+
+document.getElementById('newMissionBtn')?.addEventListener('click', resetWholeMission);
 
 function continueStoryPath() {
   if (completed >= 8) {
