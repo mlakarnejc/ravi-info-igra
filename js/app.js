@@ -537,8 +537,10 @@ async function submitLeaderboardResult() {
     renderLeaderboardRows(data.top || []);
     showScreen('screenLeaderboard');
   } catch (error) {
-    if (finalNextHint) finalNextHint.textContent =
-      'Lestvice trenutno ni mogoče doseči. Poskusi znova.';
+    if (finalNextHint) {
+      finalNextHint.textContent =
+        error?.message || 'Lestvice trenutno ni mogoče doseči. Poskusi znova.';
+    }
     if (finalNextBtn) finalNextBtn.disabled = false;
     console.error('Leaderboard submit error:', error);
     return;
