@@ -9334,3 +9334,21 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     right:112px !important;
   }
 }
+
+
+/* Align timer with the right edge of the main game frame. */
+@media (min-width: 621px) {
+  #screenTask1 .task-card > .task-timer-panel,
+  #screenTask2 .task-card > .task-timer-panel,
+  #screenTask3 .task-card > .task-timer-panel,
+  #screenTask4 .task-card > .task-timer-panel,
+  #screenTask5 .task-card > .task-timer-panel,
+  #screenTask6 .task-card > .task-timer-panel,
+  #screenTask7 .task-card > .task-timer-panel {
+    right:32px !important;
+  }
+
+  #screenTask8 .ml-lab-shell > .task-timer-panel {
+    right:32px !important;
+  }
+}
