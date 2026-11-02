@@ -462,8 +462,8 @@ function updateFinalNextState() {
   if (finalNextBtn) finalNextBtn.disabled = !ready;
   if (finalNextHint) {
     finalNextHint.textContent = ready
-      ? 'Rezultat je pripravljen za lestvico.'
-      : 'Vnesi vzdevek za nadaljevanje.';
+      ? 'Vzdevek je vpisan. Klikni NAPREJ za uvrstitev na lestvico.'
+      : 'Vpiši vzdevek, da svoj rezultat shraniš na lestvico.';
   }
 }
 
