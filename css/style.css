@@ -9782,3 +9782,37 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     grid-template-rows:auto auto auto auto auto auto auto !important;
   }
 }
+
+
+/* Leaderboard: clearly mark the current player's row */
+.leaderboard-row.current {
+  border-color:#ef3340 !important;
+  background:rgba(239,51,64,.13) !important;
+  box-shadow:0 0 0 1px rgba(239,51,64,.22),0 0 20px rgba(239,51,64,.08);
+}
+
+.leaderboard-row.current .leaderboard-rank,
+.leaderboard-row.current .leaderboard-time {
+  color:#fff;
+}
+
+.leaderboard-name {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.leaderboard-you {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:28px;
+  height:18px;
+  padding:0 6px;
+  border:1px solid #ef3340;
+  border-radius:999px;
+  background:rgba(239,51,64,.16);
+  color:#ff9aa1;
+  font:900 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.12em;
+}
