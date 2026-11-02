@@ -498,6 +498,27 @@ function renderLeaderboardRows(entries = []) {
   `).join('');
 }
 
+
+async function openLeaderboardPreview() {
+  const list = document.getElementById('leaderboardList');
+  if (list) list.innerHTML = '<div class="leaderboard-empty">NALAGAM LESTVICO ...</div>';
+
+  document.getElementById('leaderboardOwnTime').textContent = '--:--.-';
+  document.getElementById('leaderboardOwnRank').textContent = 'TESTNI PREDOGLED';
+  showScreen('screenLeaderboard');
+
+  try {
+    const response = await fetch('/inforavi/api/leaderboard');
+    if (!response.ok) throw new Error('Lestvice trenutno ni mogoče doseči.');
+    const data = await response.json();
+    renderLeaderboardRows(data.top || []);
+  } catch (error) {
+    if (list) {
+      list.innerHTML = `<div class="leaderboard-empty">${escapeLeaderboardText(error?.message || 'Napaka pri nalaganju lestvice.')}</div>`;
+    }
+  }
+}
+
 function escapeLeaderboardText(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -552,6 +573,11 @@ async function submitLeaderboardResult() {
 finalNextBtn?.addEventListener('click', submitLeaderboardResult);
 
 document.getElementById('newMissionBtn')?.addEventListener('click', resetWholeMission);
+
+document.getElementById('testLeaderboardBtn')?.addEventListener('click', () => {
+  if (!TEST_MODE) return;
+  openLeaderboardPreview();
+});
 
 function continueStoryPath() {
   if (completed >= 8) {
