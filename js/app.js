@@ -974,7 +974,7 @@ function checkTask1() {
 
     feedback.textContent = 'MODUL 1 AKTIVIRAN ✓ Procesor: OK. Pomnilnik: OK. Disk: OK.';
     feedback.className = 'feedback success';
-    raviTaskText.textContent = '»Koda še ni, ampak strojna oprema živi. Brez dima. To štejem kot uspeh.«';
+    raviTaskText.textContent = '»Super. Strojna oprema je spet pod nadzorom.«';
     document.getElementById('hubMessage').textContent = 'Prvi sistem je aktiven. Naslednji modul je odklenjen.';
 
     updateProgress();
@@ -985,13 +985,13 @@ function checkTask1() {
 
   if (attempts === 1) {
     feedback.textContent = 'Nekaj ni v redu. Poskusi še enkrat.';
-    raviTaskText.textContent = '»Tole bi sicer lahko pogrelo malico ali okrasilo mizo, mene pa ne bo zagnalo.«';
+    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
   } else if (attempts === 2) {
     feedback.textContent = 'Namig: išči dele, ki jih najdeš znotraj računalnika.';
-    raviTaskText.textContent = '»Namig: išči tri dele, ki jih najdeš znotraj računalnika.«';
+    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
   } else {
     feedback.textContent = 'Močan namig: procesor, RAM in SSD so zelo dobra smer.';
-    raviTaskText.textContent = '»V redu, skoraj ti povem: procesor, RAM in SSD. Zdaj pa hitro, preden kdo vidi.«';
+    raviTaskText.textContent = '»Ne, tega res ne potrebujem za zagon.«';
   }
 
   feedback.className = 'feedback error';
@@ -1228,7 +1228,7 @@ function finishCatchGame() {
 
   document.getElementById('taskFeedback').textContent = 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.';
   document.getElementById('taskFeedback').className = 'feedback success';
-  document.getElementById('raviTaskText').textContent = '»Odlično. Računalnik ima vse, kar potrebuje. Akvarij pa je ostal tam, kjer mora biti.«';
+  document.getElementById('raviTaskText').textContent = '»Super. Strojna oprema je spet pod nadzorom.«';
   document.getElementById('hubMessage').textContent = 'Napajanje in strojna oprema sta aktivna. Programiranje je odklenjeno.';
 
   if (game) {
@@ -1245,7 +1245,7 @@ function finishCatchGame() {
     victory.classList.add('show');
   }
 
-  setRaviMessage('raviTaskText', '»Odlično. Prvi sistem je spet pripravljen.«', 'success');
+  setRaviMessage('raviTaskText', '»Super. Strojna oprema je spet pod nadzorom.«', 'success');
 
   completeTaskFlow(0, 'taskFeedback', 'NALOGA KONČANA ✓ Zbral si vseh 10 točk.', 1800);
 }
@@ -1460,7 +1460,7 @@ async function runProgramGame() {
 
     feedback2.textContent = 'NALOGA KONČANA ✓ Program je RAVI-ja uspešno pripeljal do cilja.';
     feedback2.className = 'feedback success';
-    ravi2.textContent = '»Program izveden. Prišel sem do cilja in niti enkrat nisem improviziral. Skoraj.«';
+    ravi2.textContent = '»Program deluje. Prišel sem do cilja brez improvizacije.«';
     document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
 
     programRunning = false;
@@ -1479,18 +1479,18 @@ async function runProgramGame() {
 
   if (crashed && programAttempts === 1) {
     feedback2.textContent = 'RAVI je trčil v oviro. Obrat spremeni smer, ukaz ↑ pa ga premakne naprej.';
-    ravi2.textContent = '»Stena potrjena. Zelo trdna. Poskusi me obrniti malo prej.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (programAttempts === 1) {
     feedback2.textContent = 'Program se je izvedel, vendar RAVI ni prišel do cilja. Popravi zaporedje.';
-    ravi2.textContent = '»Program sem ubogal do zadnjega ukaza. Cilj pa je očitno imel druge načrte.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (programAttempts === 2) {
     feedback2.textContent = 'Namig: RAVI je na začetku obrnjen NAVZGOR. Začni z NAPREJ, nato boš moral precej hitro narediti DESNI OBRAT.';
-    ravi2.textContent = '»Na začetku gledam navzgor. OBRAT spremeni samo smer, NAPREJ pa me premakne. Tokrat bo treba malo cik-cak.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
     programCommands = [...programSolution];
     renderProgramSequence();
     feedback2.textContent = 'RAVI pomoč: pravilen program sem pripravil. Pritisni ENTER in ga zaženi.';
-    ravi2.textContent = '»Program je pripravljen. Zdaj samo še pritisni ENTER, da preveriva, ali sem ga prav prebral.«';
+    ravi2.textContent = '»Tokrat me boš premikal s programom. Jaz bom samo ubogal ukaze.«';
   }
 }
 
@@ -1576,7 +1576,7 @@ function checkTask2() {
 
     feedback2.textContent = 'MODUL 2 AKTIVIRAN ✓ Program se izvede v pravilnem vrstnem redu.';
     feedback2.className = 'feedback success';
-    ravi2.textContent = '»Koda teče. Brez dima. To štejem kot uspeh.«';
+    ravi2.textContent = '»Program deluje. Prišel sem do cilja brez improvizacije.«';
     document.getElementById('hubMessage').textContent = 'Programski modul je aktiven. Spletne aplikacije so odklenjene.';
 
     updateProgress();
@@ -1589,13 +1589,13 @@ function checkTask2() {
 
   if (task2Attempts === 1) {
     feedback2.textContent = 'Vrstni red še ni pravilen. Pomisli, kaj se mora zgoditi najprej.';
-    ravi2.textContent = '»To je približno tako, kot da bi hotel odpreti igro, preden prižgeš računalnik.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else if (task2Attempts === 2) {
     feedback2.textContent = 'Namig: najprej preveri napajanje, nato vključi sistem.';
-    ravi2.textContent = '»Najprej preveriva, ali sploh imam energijo. Šele potem me lahko vključiš.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
     feedback2.textContent = 'Močan namig: PREVERI NAPAJANJE → VKLOPI SISTEM → NALOŽI PROGRAM → PRIKAŽI SPOROČILO.';
-    ravi2.textContent = '»V redu, skoraj ti povem celo rešitev. Samo pravilno jo razporedi.«';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
 
     document.querySelectorAll('#codeOrder .code-step').forEach((row, index) => {
       if (currentProgramOrder[index] === correctProgramOrder[index]) row.classList.add('hint');
@@ -1639,7 +1639,7 @@ function checkTask3() {
 
     feedback3.textContent = 'MODUL 3 AKTIVIRAN ✓ Spletna stran je spet pravilno sestavljena.';
     feedback3.className = 'feedback success';
-    ravi3.textContent = '»Stran spet deluje. Internet je lahko miren.«';
+    ravi3.textContent = '»Stran je spet sestavljena. Zdaj je videti precej bolj spletno.«';
     document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
 
     updateProgress();
@@ -1652,13 +1652,13 @@ function checkTask3() {
 
   if (task3Attempts === 1) {
     feedback3.textContent = `Pravilno: ${correctCount}/4. Poglej elemente še enkrat.`;
-    ravi3.textContent = '»Skoraj. Če tole pustiva tako, bo moja slika postala naslov. Kar je samozavestno, ampak napačno.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   } else if (task3Attempts === 2) {
     feedback3.textContent = 'Namig: <img> je slika, <h1> pa glavni naslov.';
-    ravi3.textContent = '»Začni pri očitnem: slika potrebuje <img>, velik naslov pa <h1>.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   } else {
     feedback3.textContent = 'Močan namig: naslov = <h1>, slika = <img>, besedilo = <p>, gumb = <button>.';
-    ravi3.textContent = '»V redu, HTML rešitev je praktično pred tabo. Samo še poveži.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   }
 }
 
@@ -1723,7 +1723,7 @@ function resetHtmlRepairGame() {
 
   const ravi3 = document.getElementById('raviTask3Text');
   if (ravi3) {
-    ravi3.textContent = '»Moja spletna stran je razpadla na šest delov. Povleci prave HTML oznake na pravo mesto in jo sestavi nazaj.«';
+    ravi3.textContent = '»Moja spletna stran je razpadla. Sestavi jo nazaj iz pravih HTML elementov.«';
   }
 }
 
@@ -1793,14 +1793,14 @@ function tryHtmlRepair(tag, zone) {
 
   if (htmlRepairAttempts === 1) {
     feedback3.textContent = `<${tag}> ne sodi sem. Poskusi drug element.`;
-    ravi3.textContent = '»HTML je precej dobeseden. Če oznaka ne ustreza elementu, stran hitro postane čudna.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   } else if (htmlRepairAttempts === 2) {
     feedback3.textContent = 'Namig: <h1> je naslov, <img> slika, <p> odstavek, <button> gumb, <nav> navigacija, <footer> pa noga strani.';
-    ravi3.textContent = '»Šest različnih nalog, šest različnih oznak. Nekaj oznak v orodjarni je samo vaba.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   } else {
     const answer = zone.dataset.answer;
     feedback3.textContent = `Močan namig: ta del potrebuje <${answer}>.`;
-    ravi3.textContent = '»Zdaj ti že skoraj rišem zemljevid. Uporabi oznako, ki ti jo namig pokaže.«';
+    ravi3.textContent = '»Ta oznaka tukaj ne opravlja prave naloge.«';
   }
 
   setTimeout(() => zone.classList.remove('wrong'), 350);
@@ -1840,7 +1840,7 @@ function finishHtmlRepairGame() {
 
   feedback3.textContent = 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.';
   feedback3.className = 'feedback success';
-  ravi3.textContent = '»Odlično. Šest elementov, ena prava stran. Tako je videti, ko se HTML končno ne prepira sam s sabo.«';
+  ravi3.textContent = '»Stran je spet sestavljena. Zdaj je videti precej bolj spletno.«';
   document.getElementById('hubMessage').textContent = 'Spletni modul je aktiven. Upravljanje s podatki je odklenjeno.';
 
   completeTaskFlow(2, 'task3Feedback', 'NALOGA KONČANA ✓ Spletna stran je pravilno sestavljena.', 1800);
@@ -2041,7 +2041,7 @@ function resetTask4() {
 
   const ravi4 = document.getElementById('raviTask4Text');
   if (ravi4) {
-    ravi4.textContent = '»Najdi dijaka 3. letnika računalništva, ki ima največ točk. Najprej ga izlušči s filtri, potem pa razvrsti rezultate.«';
+    ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
   }
 
   renderDataRows();
@@ -2059,7 +2059,7 @@ function sortDataByPoints() {
   if (!(spol === 'M' && program === 'Računalništvo' && letnik === '3.')) {
     feedback4.textContent = 'CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
     feedback4.className = 'feedback error';
-    ravi4.textContent = '»Najprej nastavi prave tri filtre, potem pa poišči najvišje število točk.«';
+    ravi4.textContent = '»V tej množici podatkov poišči pravi zapis in ga izlušči s filtri.«';
     return;
   }
 
@@ -2100,7 +2100,7 @@ function checkTask4() {
 
     feedback4.textContent = 'NALOGA KONČANA ✓ Našel si pravilen zapis.';
     feedback4.className = 'feedback success';
-    ravi4.textContent = '»Filtriranje in razvrščanje. Dvanajst zapisov je postalo en uporaben podatek.«';
+    ravi4.textContent = '»Odlično. Iz velike tabele si prišel do pravega podatka.«';
     document.getElementById('hubMessage').textContent = 'Podatkovni modul je aktiven. Računalniška omrežja so odklenjena.';
 
     completeTaskFlow(3, 'task4Feedback', 'NALOGA KONČANA ✓ Našel si pravilen zapis.', 1800);
@@ -2112,10 +2112,10 @@ function checkTask4() {
   if (!filtersCorrect) {
     if (task4Attempts === 1) {
       feedback4.textContent = 'Napačen rezultat. CILJ: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato razvrsti po TOČKAH in potrdi prvega.';
-      ravi4.textContent = '»Hmm ... med temi podatki se še skriva nekaj odvečnega.«';
+      ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     } else if (task4Attempts === 2) {
       feedback4.textContent = 'Še enkrat: SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Nato klikni TOČKE in potrdi zapis na vrhu.';
-      ravi4.textContent = '»Skoraj. Zdaj je tabela že precej bolj podobna nečemu uporabnemu.«';
+      ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     } else {
       document.getElementById('filterSpol').value = 'M';
       document.getElementById('filterProgram').value = 'Računalništvo';
@@ -2123,7 +2123,7 @@ function checkTask4() {
       dataSortedByPoints = false;
       renderDataRows();
       feedback4.textContent = 'RAVI pomoč: nastavil sem SPOL = M • PROGRAM = Računalništvo • LETNIK = 3. Zdaj klikni TOČKE in potrdi prvega.';
-      ravi4.textContent = '»Zdaj pa je v tabeli ravno prav podatkov. Ostane še finiš.«';
+      ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     }
     return;
   }
@@ -2131,13 +2131,13 @@ function checkTask4() {
   if (!dataSortedByPoints) {
     feedback4.textContent = 'Filtri so pravilni, vendar naloga zahteva še največ točk. Klikni glavo stolpca TOČKE.';
     feedback4.className = 'feedback success';
-    ravi4.textContent = '»Trije ustrezajo. Potrebujem najboljšega — razvrsti jih po točkah.«';
+    ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
     return;
   }
 
   feedback4.textContent = 'Podatki so že razvrščeni. Najvišji rezultat je prvi zapis v tabeli.';
   feedback4.className = 'feedback success';
-  ravi4.textContent = '»Po razvrščanju je odgovor na vrhu. Zdaj ga samo še potrdi.«';
+  ravi4.textContent = '»Hmm ... med temi podatki se še vedno skriva nekaj odvečnega.«';
 }
 
 function initDataFilterGame() {
@@ -2225,7 +2225,7 @@ function resetNetworkGame() {
     feedback5.className = 'feedback';
   }
   if (ravi5) {
-    ravi5.textContent = '»Pošlji paket od računalnika do mene. Omrežje ima več naprav in niso vse prava pot. Izbiraj pametno.«';
+    ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
   }
 }
 
@@ -2306,7 +2306,7 @@ function chooseTopologyNode(targetId) {
     }
 
     if (topologyWrongAttempts === 1) {
-      ravi5.textContent = '»Povezava obstaja, ampak ni vsaka povezava prava pot do cilja.«';
+      ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
     }
 
     applyTopologyHint();
@@ -2340,11 +2340,11 @@ function chooseTopologyNode(targetId) {
     feedback5.className = 'feedback success';
 
     if (targetId === 'router') {
-      ravi5.textContent = '»Dobro. Usmerjevalnik je prava smer, ampak pot še ni končana.«';
+      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
     } else if (targetId === 'server') {
-      ravi5.textContent = '»Pravilno. Paket je prišel do vmesnega strežnika. Kam naprej?«';
+      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
     } else if (targetId === 'internet') {
-      ravi5.textContent = '»Zdaj je paket v internetu. Do mene manjka še zadnji korak.«';
+      ravi5.textContent = '»Pošlji podatkovni paket od računalnika do mene. Pot ne bo povsem ravna.«';
     }
   }, 590);
 }
@@ -2356,13 +2356,13 @@ function applyTopologyHint() {
 
   if (topologyWrongAttempts === 2) {
     if (topologyStage === 0) {
-      ravi5.textContent = '»Katera naprava odloča, kam naj omrežni promet potuje naprej?«';
+      ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
     } else if (topologyStage === 1) {
-      ravi5.textContent = '»Ni še čas za internet. Poglej, katera vmesna naprava je povezana naprej.«';
+      ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
     } else if (topologyStage === 2) {
-      ravi5.textContent = '»Zdaj poišči izhod iz lokalnega omrežja.«';
+      ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
     } else {
-      ravi5.textContent = '»Paket je že v internetu. Cilj je precej očiten.«';
+      ravi5.textContent = '»Ta povezava obstaja, ampak paket po njej ne pride do mene.«';
     }
   }
 
@@ -2383,7 +2383,7 @@ function finishNetworkGame() {
 
   feedback5.textContent = 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.';
   feedback5.className = 'feedback success';
-  ravi5.textContent = '»Paket dostavljen. Pot si odkril sam — tako omrežje dobi smisel.«';
+  ravi5.textContent = '»Paket dostavljen. Omrežje spet deluje.«';
   document.getElementById('hubMessage').textContent = 'Omrežni modul je aktiven. Varnostni sistem je odklenjen.';
 
   completeTaskFlow(4, 'task5Feedback', 'NALOGA KONČANA ✓ Paket je uspešno prišel do RAVI-ja.', 1800);
@@ -2498,7 +2498,7 @@ function resetTask6() {
   const ravi6 = document.getElementById('raviTask6Text');
   feedback6.textContent = '';
   feedback6.className = 'feedback hidden';
-  ravi6.textContent = '»Varnostni skener je poln sporočil. Ti odločaš: levo v karanteno, desno med varna.«';
+  ravi6.textContent = '»To sporočilo je imelo znak, ki ga ne smemo spregledati.«';
 
   renderSecurityMessage();
   setTimeout(() => document.getElementById('securityScanner')?.focus(), 30);
@@ -2571,7 +2571,7 @@ function finishSecurityGame() {
   feedback6.className = 'feedback success';
   const reason = document.getElementById('securityReason');
   reason.classList.add('hidden');
-  ravi6.textContent = '»Dobro. Pri varnosti ni dovolj biti hiter — pomembno je opaziti prave znake.«';
+  ravi6.textContent = '»To sporočilo je imelo znak, ki ga ne smemo spregledati.«';
   document.getElementById('hubMessage').textContent = 'Varnostni modul je aktiven. Programiranje aplikacij je odklenjeno.';
 
   completeTaskFlow(5, 'task6Feedback', 'NALOGA KONČANA ✓ Pravilno si pregledal vseh 6 sporočil.', 1800);
@@ -2683,7 +2683,7 @@ function resetRunnerGame() {
   }
 
   const ravi7 = document.getElementById('raviTask7Text');
-  if (ravi7) ravi7.textContent = '»Tokrat ne bo dovolj samo teči naravnost. Nekatere ovire zahtevajo malo višine.«';
+  if (ravi7) ravi7.textContent = '»Zberi vse koščke kode in me pripelji do terminala.«';
 
   updateRunnerHud();
   requestAnimationFrame(renderRunnerPosition);
@@ -2741,6 +2741,7 @@ function runnerHit(respawnX = null) {
   setTimeout(() => player?.classList.remove('hit'), 500);
 
   document.getElementById('task7Feedback').textContent = 'BUG! RAVI se je vrnil na zadnjo varno točko.';
+  document.getElementById('raviTask7Text').textContent = '»Ups. Ta pot se ni končala najbolje.«';
   document.getElementById('task7Feedback').className = 'feedback error';
   updateRunnerHud();
 }
@@ -2759,7 +2760,7 @@ function collectRunnerCode(index) {
 
   if (runnerState.collected.size === 3) {
     document.getElementById('runnerGoal')?.classList.add('unlocked');
-    document.getElementById('raviTask7Text').textContent = '»Vsa koda zbrana. Zdaj samo še do terminala — brez dramatičnega padca tik pred ciljem.«';
+    document.getElementById('raviTask7Text').textContent = '»Zberi vse koščke kode in me pripelji do terminala.«';
   }
 }
 
@@ -2894,7 +2895,7 @@ function runnerLoop(now) {
     const feedback7 = document.getElementById('task7Feedback');
     feedback7.textContent = `ACCESS DENIED ✕ KODA: ${runnerState.collected.size} / 3`;
     feedback7.className = 'feedback error';
-    document.getElementById('raviTask7Text').textContent = '»Terminal potrebuje vse tri koščke kode. Firewall je odprt — lahko greš nazaj po manjkajočega.«';
+    document.getElementById('raviTask7Text').textContent = '»Ups. Ta pot se ni končala najbolje.«';
   }
 
   renderRunnerPosition();
@@ -2946,7 +2947,7 @@ function finishRunnerGame() {
   const feedback7 = document.getElementById('task7Feedback');
   feedback7.textContent = 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.';
   feedback7.className = 'feedback success';
-  document.getElementById('raviTask7Text').textContent = '»To je že bolj podobno pravi aplikaciji: gibanje, dogodki, kolizije in cilj. In nič opekačev.«';
+  document.getElementById('raviTask7Text').textContent = '»To je že prava aplikacija: gibanje, dogodki, ovire in cilj.«';
   document.getElementById('hubMessage').textContent = 'Programiranje aplikacij je aktivno. Zadnji modul – Umetna inteligenca – je odklenjen.';
 
   completeTaskFlow(6, 'task7Feedback', 'NALOGA KONČANA ✓ Zbral si vso kodo in odklenil terminal.', 1800);
@@ -3047,7 +3048,7 @@ function placeMLItem(itemId, targetClass) {
 
   analysis.classList.remove('hidden','correct','wrong');
   analysisText.textContent = `${item.icon}  ${item.label.toUpperCase()} // ANALIZA`;
-  setRaviMessage('raviTask8Text', '»Analiziram izbrani primer ...«', 'instruction');
+  setRaviMessage('raviTask8Text', '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«', 'instruction');
 
   setTimeout(() => {
     const correct = item.type === targetClass;
@@ -3058,9 +3059,7 @@ function placeMLItem(itemId, targetClass) {
       card.classList.add('wrong');
       setRaviMessage(
         'raviTask8Text',
-        item.type === 'cat'
-          ? '»To je mačka. Premakni jo v skupino MAČKA.«'
-          : '»To je pes. Premakni ga v skupino PES.«',
+        '»Ta primer je končal v napačni skupini.«',
         'error'
       );
 
@@ -3091,8 +3090,8 @@ function placeMLItem(itemId, targetClass) {
     setRaviMessage(
       'raviTask8Text',
       total < 8
-        ? `»Pravilno. Primer ${total}/8 je dodan v trening podatke.«`
-        : '»Vseh 8 primerov je pripravljenih. Začenjam trening modela.«',
+        ? '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«'
+        : '»Model je pripravljen. Zdaj bom poskusil sam.«',
       'success'
     );
 
@@ -3101,7 +3100,7 @@ function placeMLItem(itemId, targetClass) {
       analysis.classList.remove('correct');
 
       if (total === 8) {
-        document.getElementById('raviTask8Text').textContent = '»Dataset pripravljen. Začenjam trening modela.«';
+        document.getElementById('raviTask8Text').textContent = '»Model je pripravljen. Zdaj bom poskusil sam.«';
         startMLTraining();
       } else {
         mlBusy = false;
@@ -3130,7 +3129,7 @@ function initMLDropzones() {
 function startMLTraining() {
   updateMLStage(1);
   setMLPhase('mlTrainingAnimation');
-  setRaviMessage('raviTask8Text', '»Trening je avtomatski. Opazuj, kako model išče vzorce v podatkih.«', 'instruction');
+  setRaviMessage('raviTask8Text', '»Model je pripravljen. Zdaj bom poskusil sam.«', 'instruction');
   document.getElementById('mlModelStatus').textContent = 'TRAINING';
   document.getElementById('mlAccuracyStatus').textContent = '--';
 
@@ -3162,7 +3161,7 @@ function startMLTraining() {
     document.getElementById('raviTask8Text').textContent = '»Model je pripravljen. Zdaj bom poskusil sam.«';
     updateMLStage(2);
     setMLPhase('mlTestPhase');
-    setRaviMessage('raviTask8Text', '»Nov primer: črna mačka. Poglej, kaj bom napovedal.«', 'instruction');
+    setRaviMessage('raviTask8Text', '»Model je pripravljen. Zdaj bom poskusil sam.«', 'instruction');
     mlBusy = false;
     setTimeout(runMLBadPrediction, 420);
   }, 3900);
@@ -3193,7 +3192,7 @@ function runMLBadPrediction() {
     document.getElementById('mlPredictionText').textContent = 'PES';
     document.getElementById('mlPredictionConfidence').textContent = '92 %';
     document.getElementById('mlPredictionSub').textContent = 'Napačna napoved: prikazana je črna mačka.';
-    setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki niso bili dovolj raznoliki.«', 'error');
+    setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki očitno niso bili dovolj raznoliki.«', 'error');
 
     errorExplain?.classList.remove('hidden');
 
@@ -3208,7 +3207,7 @@ function runMLBadPrediction() {
         updateMLStage(2);
         shuffleMLPackageChoices();
         setMLPhase('mlRetrainPhase');
-        setRaviMessage('raviTask8Text', '»Izberi EN paket podatkov, ki bi moj model najbolje izboljšal.«', 'instruction');
+        setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki očitno niso bili dovolj raznoliki.«', 'instruction');
       };
     }
   }, 1450);
@@ -3247,7 +3246,7 @@ function chooseMLPackage(packageId) {
 
   feedback.className = 'ml-package-feedback correct';
   feedback.innerHTML = '<strong>DOBRA IZBIRA ✓</strong><span>Raznoliki primeri mačk in psov pomagajo modelu ločiti pomembne značilnosti in zmanjšajo možnost, da bi sklepal samo po barvi ali velikosti.</span>';
-  setRaviMessage('raviTask8Text', '»To so boljši podatki. Preberi zakaj, nato nadaljujeva z učenjem.«', 'success');
+  setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki očitno niso bili dovolj raznoliki.«', 'success');
 
   continueWrap?.classList.remove('hidden');
   if (continuePackageBtn) {
@@ -3263,7 +3262,7 @@ function chooseMLPackage(packageId) {
 function startMLRetrainingScan() {
   updateMLStage(3);
   setMLPhase('mlRetrainScanPhase');
-  setRaviMessage('raviTask8Text', '»Pregledujem nove, bolj raznolike primere.«', 'instruction');
+  setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki očitno niso bili dovolj raznoliki.«', 'instruction');
 
   const samples = [
     { icon:'🐈‍⬛', label:'ČRNA MAČKA' },
@@ -3303,7 +3302,7 @@ function startMLRetrainingScan() {
 function startMLRetraining() {
   updateMLStage(3);
   setMLPhase('mlTrainingAnimation');
-  setRaviMessage('raviTask8Text', '»Dobri podatki izbrani. Ponovno treniram isti model.«', 'success');
+  setRaviMessage('raviTask8Text', '»Zmotil sem se. Moji učni podatki očitno niso bili dovolj raznoliki.«', 'success');
 
   document.getElementById('mlTrainingPercent').textContent = '0 %';
   document.getElementById('mlTrainingBar').style.width = '0%';
@@ -3328,9 +3327,9 @@ function startMLRetraining() {
   setTimeout(() => {
     document.getElementById('mlModelStatus').textContent = 'IMPROVED';
     document.getElementById('mlAccuracyStatus').textContent = '97 %';
-    document.getElementById('raviTask8Text').textContent = '»Model posodobljen. Ponoviva isti primer.«';
+    document.getElementById('raviTask8Text').textContent = '»Tokrat sem pravilno prepoznal primer. Boljši podatki so pomagali.«';
     setMLPhase('mlFinalPhase');
-    setRaviMessage('raviTask8Text', '»Isti primer še enkrat. Ponovno ga analiziram z izboljšanim modelom.«', 'instruction');
+    setRaviMessage('raviTask8Text', '»Tokrat sem pravilno prepoznal primer. Boljši podatki so pomagali.«', 'instruction');
     runMLFinalRetest();
     mlBusy = false;
   }, 3200);
@@ -3362,7 +3361,7 @@ function runMLFinalRetest() {
         text.textContent = 'Tokrat je RAVI pravilno prepoznal črno mačko. Boljši podatki so izboljšali model.';
     confidence.textContent = '97 %';
     finalPhase?.classList.add('reveal-insight');
-    setRaviMessage('raviTask8Text', '»Tokrat sem jo pravilno prepoznal. Boljši podatki so očitno pomagali.«', 'success');
+    setRaviMessage('raviTask8Text', '»Tokrat sem pravilno prepoznal primer. Boljši podatki so pomagali.«', 'success');
 
     setTimeout(finishMLModule, 3200);
   }, 1300);
@@ -3375,7 +3374,7 @@ function finishMLModule() {
   const shell = document.querySelector('.ml-lab-shell');
   shell?.classList.add('ml-complete');
   document.getElementById('raviTask8Text').textContent =
-    '»Zdaj razumem bistvo: AI se uči iz podatkov. Boljši podatki pomenijo boljši model — človek pa mora znati preveriti rezultat.«';
+    '»Zdaj razumem bistvo: AI se uči iz podatkov, človek pa mora znati preveriti rezultat.«';
 
   modules[7].status = 'complete';
   completed = 8;
@@ -3430,7 +3429,7 @@ function resetTask8() {
 
   document.getElementById('raviTask8Text').textContent =
     '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«';
-  setRaviMessage('raviTask8Text', '»Razvrsti prvi primer. Po vsakem izboru ga bom na hitro analiziral.«', 'instruction');
+  setRaviMessage('raviTask8Text', '»Najprej potrebujem primere. Razvrsti jih pravilno, potem se bom iz njih učil.«', 'instruction');
 
   renderMLTrainingCards();
 }
