@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RAVI – Informativni dan</title>
-  <link rel="stylesheet" href="css/style.css?v=20261102-1145">
+  <link rel="stylesheet" href="css/style.css?v=20261102-1235">
 </head>
 <body>
   <main class="app-shell">
@@ -1245,8 +1245,12 @@
         <div class="leaderboard-head">
           <div>
             <p class="eyebrow">RAVI // LEADERBOARD</p>
-            <h2>TOP 10 DANES</h2>
-            <p>Najboljši časi današnje RAVI INFO MISIJE.</p>
+            <h2 id="leaderboardTitle">TOP 10 DANES</h2>
+            <p id="leaderboardSubtitle">Najboljši časi današnje RAVI INFO MISIJE.</p>
+            <div class="leaderboard-tabs" role="tablist" aria-label="Vrsta lestvice">
+              <button id="leaderboardTodayBtn" class="leaderboard-tab active" type="button">DANES</button>
+              <button id="leaderboardAllBtn" class="leaderboard-tab" type="button">VSI ČASI</button>
+            </div>
           </div>
           <div class="leaderboard-your-result">
             <span>TVOJ REZULTAT</span>
@@ -1325,6 +1329,6 @@
     <button type="button" id="testLeaderboardBtn">LESTVICA</button>
   </div>
 
-  <script src="js/app.js?v=20261102-1215"></script>
+  <script src="js/app.js?v=20261102-1235"></script>
 </body>
 </html>
