@@ -1205,6 +1205,8 @@ function catchGameLoop(now) {
         setTechHudValue('hardware', 'CPU', `${36 + catchScoreValue * 4}%`);
         document.getElementById('taskFeedback').textContent = `Pravilno ✓ ${obj.label} | Še ${Math.max(0, catchTargetScore - catchScoreValue)} do cilja.`;
         document.getElementById('taskFeedback').className = 'feedback success';
+        document.getElementById('raviTaskText').textContent =
+          '»Moja oprema je razmetana po skladišču. Ujemi vse, kar dejansko spada k računalniku.«';
 
         if (catchScoreValue >= catchTargetScore) {
           finishCatchGame();
