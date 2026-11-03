@@ -10307,3 +10307,122 @@ h2 { font-size: clamp(28px, 4vw, 44px); margin: 8px 0 12px; letter-spacing: -.02
     max-width:none;
   }
 }
+
+
+/* ===== Result identity + optional diploma email ===== */
+#screenResult .result-identity-panel {
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(180px,.75fr) minmax(240px,1fr);
+  align-items:end;
+  gap:14px;
+  margin-top:20px;
+  padding:18px 20px;
+  border:1px solid rgba(239,51,64,.48);
+  border-radius:13px;
+  background:linear-gradient(90deg,rgba(55,12,21,.48),rgba(19,20,34,.68));
+  box-shadow:inset 3px 0 0 #ef3340;
+}
+
+#screenResult .result-identity-copy > span {
+  display:block;
+  margin-bottom:5px;
+  color:#ff8f97;
+  font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.15em;
+}
+
+#screenResult .result-identity-copy > strong {
+  display:block;
+  color:#f4f7fb;
+  font-size:14px;
+  line-height:1.35;
+}
+
+#screenResult .result-identity-copy > small {
+  display:block;
+  margin-top:5px;
+  color:#8193aa;
+  font-size:10px;
+  line-height:1.45;
+}
+
+#screenResult .result-field {
+  display:block;
+  min-width:0;
+}
+
+#screenResult .result-field > span {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:7px;
+  color:#9aabc0;
+  font:900 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.11em;
+}
+
+#screenResult .result-field em {
+  color:#62758e;
+  font-style:normal;
+  font-size:7px;
+  letter-spacing:.08em;
+}
+
+#screenResult .result-field input {
+  box-sizing:border-box;
+  width:100%;
+  min-height:46px;
+  padding:0 13px;
+  border:1px solid #435873;
+  border-radius:9px;
+  outline:none;
+  background:#081421;
+  color:#fff;
+  caret-color:#ef3340;
+  font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+
+#screenResult #leaderboardNickname {
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+#screenResult .result-field input::placeholder {
+  color:#5f728a;
+}
+
+#screenResult .result-field input:focus {
+  border-color:#ef3340;
+  background:#0b1828;
+  box-shadow:0 0 0 3px rgba(239,51,64,.12),0 0 18px rgba(239,51,64,.07);
+}
+
+.leaderboard-certificate-status {
+  margin-top:7px;
+  line-height:1.35 !important;
+}
+
+.leaderboard-certificate-status[data-state="success"] { color:#7fe0b7 !important; }
+.leaderboard-certificate-status[data-state="warning"] { color:#efd27b !important; }
+.leaderboard-certificate-status[data-state="error"] { color:#ff8f97 !important; }
+.leaderboard-certificate-status[data-state="muted"] { color:#74869d !important; }
+
+@media (max-width:900px) {
+  #screenResult .result-identity-panel {
+    grid-template-columns:1fr 1fr;
+  }
+  #screenResult .result-identity-copy {
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:620px) {
+  #screenResult .result-identity-panel {
+    grid-template-columns:1fr;
+  }
+  #screenResult .result-identity-copy {
+    grid-column:auto;
+  }
+}
