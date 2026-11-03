@@ -411,6 +411,9 @@ function resetWholeMission() {
   resetMissionTimers();
   const nicknameInput = document.getElementById('leaderboardNickname');
   if (nicknameInput) nicknameInput.value = '';
+  const certificateEmail = document.getElementById('certificateEmail');
+  if (certificateEmail) certificateEmail.value = '';
+  setCertificateStatus();
   updateFinalNextState();
   if (finalResetTimer) clearTimeout(finalResetTimer);
   if (finalCountdownTimer) clearInterval(finalCountdownTimer);
@@ -450,6 +453,24 @@ shuffleMLPackageChoices();
 
 
 const leaderboardNicknameInput = document.getElementById('leaderboardNickname');
+const certificateEmailInput = document.getElementById('certificateEmail');
+const certificateEmailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function getCertificateEmailState() {
+  const email = certificateEmailInput?.value.trim() || '';
+  if (!email) return { email:'', valid:false, reason:'empty' };
+  return certificateEmailRe.test(email)
+    ? { email, valid:true, reason:'valid' }
+    : { email, valid:false, reason:'invalid' };
+}
+
+function setCertificateStatus(message = '', state = '') {
+  const el = document.getElementById('leaderboardCertificateStatus');
+  if (!el) return;
+  el.textContent = message;
+  el.dataset.state = state;
+}
+
 const finalNextBtn = document.getElementById('finalNextBtn');
 const finalNextHint = document.getElementById('finalNextHint');
 
@@ -585,6 +606,7 @@ function escapeLeaderboardText(value) {
 async function submitLeaderboardResult() {
   const payload = getLeaderboardPayload();
   if (!payload.nickname) return;
+  const emailState = getCertificateEmailState();
 
   if (finalNextBtn) {
     finalNextBtn.disabled = true;
@@ -617,6 +639,36 @@ async function submitLeaderboardResult() {
     }
 
     const data = await response.json();
+
+    if (emailState.valid) {
+      try {
+        const certificateResponse = await fetch('/inforavi/api/leaderboard/certificate', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body:JSON.stringify({
+            nickname: payload.nickname,
+            email: emailState.email,
+            room_times_ms: payload.room_times_ms,
+            total_ms: payload.total_ms
+          })
+        });
+
+        if (!certificateResponse.ok) {
+          const detail = await certificateResponse.json().catch(() => null);
+          throw new Error(typeof detail?.detail === 'string' ? detail.detail : 'Pošiljanje diplome ni uspelo.');
+        }
+
+        setCertificateStatus('DIPLOMA POSLANA ✓', 'success');
+      } catch (certificateError) {
+        setCertificateStatus('REZULTAT SHRANJEN • DIPLOME NI BILO MOGOČE POSLATI', 'error');
+        console.error('Certificate email error:', certificateError);
+      }
+    } else if (emailState.reason === 'invalid') {
+      setCertificateStatus('DIPLOMA NI POSLANA • E-POŠTA NI VELJAVNA', 'warning');
+    } else {
+      setCertificateStatus('DIPLOMA NI POSLANA • E-POŠTA NI VPISANA', 'muted');
+    }
+
     document.getElementById('leaderboardOwnTime').textContent = formatGameTime(payload.total_ms);
     document.getElementById('leaderboardOwnRank').textContent =
       data.rank ? `UVRSTITEV: ${data.rank}. MESTO` : 'UVRSTITEV: IZVEN TOP 10';
