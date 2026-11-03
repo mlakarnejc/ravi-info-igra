@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RAVI – Informativni dan</title>
-  <link rel="stylesheet" href="css/style.css?v=20261103-1115">
+  <link rel="stylesheet" href="css/style.css?v=20261103-1740">
 </head>
 <body>
   <main class="app-shell">
@@ -1244,10 +1244,23 @@
           <div><span>08 · AI</span><strong data-final-room="7">00:00.0</strong></div>
         </div>
 
-        <label class="final-nickname result-nickname">
-          <span>VPIŠI VZDEVEK ZA LESTVICO</span>
-          <input id="leaderboardNickname" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="npr. NEO">
-        </label>
+        <div class="result-identity-panel">
+          <div class="result-identity-copy">
+            <span>SHRANI REZULTAT</span>
+            <strong>Vzdevek za lestvico, e-pošta za diplomo.</strong>
+            <small>E-pošta ni obvezna in se ne shranjuje. Če je prazna ali neveljavna, se diploma ne pošlje.</small>
+          </div>
+
+          <label class="result-field">
+            <span>VZDEVEK</span>
+            <input id="leaderboardNickname" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="npr. NEO">
+          </label>
+
+          <label class="result-field">
+            <span>E-POŠTA <em>NEOBVEZNO</em></span>
+            <input id="certificateEmail" type="email" maxlength="120" autocomplete="email" spellcheck="false" placeholder="ime@primer.si">
+          </label>
+        </div>
 
         <div class="final-next-wrap result-submit-wrap">
           <button id="finalNextBtn" class="primary-btn final-next-btn" type="button" disabled>NA LESTVICO</button>
@@ -1272,6 +1285,7 @@
             <span>TVOJ REZULTAT</span>
             <strong id="leaderboardOwnTime">--:--.-</strong>
             <small id="leaderboardOwnRank">UVRSTITEV: --</small>
+            <small id="leaderboardCertificateStatus" class="leaderboard-certificate-status"></small>
           </div>
         </div>
 
@@ -1345,6 +1359,6 @@
     <button type="button" id="testLeaderboardBtn">LESTVICA</button>
   </div>
 
-  <script src="js/app.js?v=20261102-1605"></script>
+  <script src="js/app.js?v=20261103-1740"></script>
 </body>
 </html>
