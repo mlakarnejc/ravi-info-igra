@@ -577,6 +577,28 @@ async function loadLeaderboard(scope = leaderboardScope) {
   return data;
 }
 
+function openResultPreview() {
+  const demoTimes = [52300, 68400, 41700, 59200, 73100, 48600, 81200, 63700];
+
+  roomTiming.elapsed = [...demoTimes];
+  roomTiming.startedAt.fill(null);
+  roomTiming.finished.fill(true);
+  roomTiming.activeRoom = null;
+
+  const nickname = document.getElementById('leaderboardNickname');
+  const email = document.getElementById('certificateEmail');
+  if (nickname) nickname.value = '';
+  if (email) email.value = '';
+
+  setCertificateStatus();
+  renderFinalTimingSummary();
+  updateFinalNextState();
+  showScreen('screenResult');
+
+  setTimeout(() => document.getElementById('leaderboardNickname')?.focus(), 50);
+}
+
+
 async function openLeaderboardPreview() {
   const list = document.getElementById('leaderboardList');
   if (list) list.innerHTML = '<div class="leaderboard-empty">NALAGAM LESTVICO ...</div>';
@@ -699,6 +721,11 @@ document.getElementById('finalResultsBtn')?.addEventListener('click', () => {
 finalNextBtn?.addEventListener('click', submitLeaderboardResult);
 
 document.getElementById('newMissionBtn')?.addEventListener('click', resetWholeMission);
+
+document.getElementById('testResultBtn')?.addEventListener('click', () => {
+  if (!TEST_MODE) return;
+  openResultPreview();
+});
 
 document.getElementById('testLeaderboardBtn')?.addEventListener('click', () => {
   if (!TEST_MODE) return;
