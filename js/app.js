@@ -422,6 +422,10 @@ function resetWholeMission() {
 
   completed = 0;
   storyRoomIndex = 0;
+  attempts = 0;
+  selected = new Set();
+  currentProgramOrder = [...correctProgramOrder].reverse();
+  task3Attempts = 0;
   modules.forEach((module, index) => {
     module.status = index === 0 ? 'ready' : 'locked';
   });
@@ -433,6 +437,20 @@ function resetWholeMission() {
   resetNetworkGame();
   resetTask6();
   resetRunnerGame();
+  resetTask8();
+
+  // Every room must return to the exact pre-start state, not only reset its data.
+  for (let taskNumber = 1; taskNumber <= 8; taskNumber += 1) {
+    const screen = document.getElementById(`screenTask${taskNumber}`);
+    screen?.classList.remove('game-started');
+
+    const overlay = taskNumber === 1
+      ? document.getElementById('catchStartOverlay')
+      : document.getElementById(`task${taskNumber}StartOverlay`);
+
+    overlay?.classList.remove('hidden');
+    setTaskRestartVisible(taskNumber, false);
+  }
 
   mlPlaced = new Map();
   mlStage = 0;
@@ -449,6 +467,7 @@ function resetWholeMission() {
   syncRaviStageImages();
 shuffleMLPackageChoices();
   showScreen('screenIntro');
+  scheduleInactivityReset();
 }
 
 
@@ -1178,6 +1197,11 @@ function resetCatchGame() {
   const f = document.getElementById('taskFeedback');
   f.textContent = '';
   f.className = 'feedback';
+
+  const ravi1 = document.getElementById('raviTaskText');
+  if (ravi1) {
+    ravi1.textContent = '»Moja oprema je razmetana po skladišču. Ujemi vse, kar dejansko spada k računalniku.«';
+  }
 }
 
 function startCatchGame() {
@@ -1421,6 +1445,8 @@ function renderProgramSequence(activeIndex = -1) {
 
 function resetProgramGame() {
   programRunning = false;
+  programAttempts = 0;
+  task2Attempts = 0;
   programCommands = [];
   programRobot = { ...programStart };
   renderProgramBoard();
@@ -1431,6 +1457,11 @@ function resetProgramGame() {
   if (feedback2) {
     feedback2.textContent = '';
     feedback2.className = 'feedback';
+  }
+
+  const ravi2 = document.getElementById('raviTask2Text');
+  if (ravi2) {
+    ravi2.textContent = '»Tokrat me boš premikal s programom. Jaz bom samo ubogal ukaze.«';
   }
 }
 
