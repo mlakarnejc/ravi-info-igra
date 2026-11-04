@@ -2596,17 +2596,22 @@ let securityLocked = false;
 let activeSecurityMessages = [...securityMessages];
 
 function shuffleSecurityMessages() {
-  const tricky = securityMessages[activeSecurityMessages.length - 1];
-  const others = securityMessages.slice(0, -1);
+  const previousOrder = activeSecurityMessages.map((msg) => msg.sender + '|' + msg.subject).join('||');
+  let shuffled = [...securityMessages];
 
-  for (let i = others.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = others[i];
-    others[i] = others[j];
-    others[j] = tmp;
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    shuffled = [...securityMessages];
+
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const newOrder = shuffled.map((msg) => msg.sender + '|' + msg.subject).join('||');
+    if (newOrder !== previousOrder) break;
   }
 
-  activeSecurityMessages = [...others, tricky];
+  activeSecurityMessages = shuffled;
 }
 
 function renderSecurityMessage() {
