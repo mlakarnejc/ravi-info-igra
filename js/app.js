@@ -1589,10 +1589,16 @@ async function runProgramGame() {
   } else if (programAttempts === 2) {
     feedback2.textContent = 'Namig: RAVI začne obrnjen navzgor. Premisli, kdaj mora prvič spremeniti smer.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
+  } else if (programAttempts === 3) {
+    feedback2.textContent = 'Močnejši namig: po začetnem premiku mora RAVI precej hitro zaviti desno.';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
+  } else if (programAttempts === 4) {
+    feedback2.textContent = 'Še en namig: preveri predvsem prvi del programa in smer prvega zavoja.';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
     programCommands = [...programSolution];
     renderProgramSequence();
-    feedback2.textContent = 'RAVI pomoč: program je pripravljen. Pritisni ENTER.';
+    feedback2.textContent = 'RAVI pomoč: po 5 neuspešnih poskusih sem pripravil pravilen program. Pritisni ENTER.';
     ravi2.textContent = '»Tokrat me boš premikal s programom. Jaz bom samo ubogal ukaze.«';
   }
 }
@@ -1696,8 +1702,11 @@ function checkTask2() {
   } else if (task2Attempts === 2) {
     feedback2.textContent = 'Namig: preveri prvi korak zaporedja.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
+  } else if (task2Attempts === 3) {
+    feedback2.textContent = 'Močnejši namig: preveri, ali so prvi koraki v logičnem zaporedju.';
+    ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
   } else {
-    feedback2.textContent = 'Močan namig: preveri zaporedje korakov od začetka do konca.';
+    feedback2.textContent = 'Namig: pravilno postavljeni koraki so označeni.';
     ravi2.textContent = '»Nekaj v zaporedju ukazov me je poslalo v napačno smer.«';
 
     document.querySelectorAll('#codeOrder .code-step').forEach((row, index) => {
