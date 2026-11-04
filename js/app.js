@@ -2596,22 +2596,30 @@ let securityLocked = false;
 let activeSecurityMessages = [...securityMessages];
 
 function shuffleSecurityMessages() {
-  const previousOrder = activeSecurityMessages.map((msg) => msg.sender + '|' + msg.subject).join('||');
-  let shuffled = [...securityMessages];
+  const tricky = securityMessages[securityMessages.length - 1];
+  const previousFirstFive = activeSecurityMessages
+    .slice(0, -1)
+    .map((msg) => msg.sender + '|' + msg.subject)
+    .join('||');
+
+  let others = securityMessages.slice(0, -1);
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
-    shuffled = [...securityMessages];
+    others = securityMessages.slice(0, -1);
 
-    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    for (let i = others.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      [others[i], others[j]] = [others[j], others[i]];
     }
 
-    const newOrder = shuffled.map((msg) => msg.sender + '|' + msg.subject).join('||');
-    if (newOrder !== previousOrder) break;
+    const newFirstFive = others
+      .map((msg) => msg.sender + '|' + msg.subject)
+      .join('||');
+
+    if (newFirstFive !== previousFirstFive) break;
   }
 
-  activeSecurityMessages = shuffled;
+  activeSecurityMessages = [...others, tricky];
 }
 
 function renderSecurityMessage() {
