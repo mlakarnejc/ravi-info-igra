@@ -90,6 +90,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         from reportlab.lib.colors import Color, HexColor
         from reportlab.lib.pagesizes import A4, landscape
         from reportlab.lib.units import mm
+        from reportlab.lib.utils import ImageReader
         from reportlab.pdfbase import pdfmetrics
         from reportlab.pdfbase.ttfonts import TTFont
         from reportlab.pdfgen import canvas
@@ -139,6 +140,10 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     dark_screen = HexColor("#091823")
     robot_body = HexColor("#1C3144")
 
+    project_root = Path(__file__).resolve().parent.parent
+    school_logo_path = project_root / "assets" / "images" / "logo.png"
+    ravi_image_path = project_root / "assets" / "ravi" / "ravi-9.webp"
+
     pdf.setFillColor(navy)
     pdf.rect(0, 0, width, height, fill=1, stroke=0)
 
@@ -161,7 +166,26 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
 
     x0 = margin + 5 * mm
 
-    # Header.
+    # Header + official school logo.
+    if school_logo_path.exists():
+        try:
+            logo = ImageReader(str(school_logo_path))
+            logo_w, logo_h = logo.getSize()
+            target_h = 13 * mm
+            target_w = target_h * (logo_w / logo_h)
+            target_w = min(target_w, 40 * mm)
+            pdf.drawImage(
+                logo,
+                width - margin - target_w - 4 * mm,
+                height - margin - 13 * mm,
+                width=target_w,
+                height=target_h,
+                preserveAspectRatio=True,
+                mask="auto",
+            )
+        except Exception as exc:
+            print(f"Certificate logo render failed: {exc}")
+
     pdf.setFont(font_bold, 11)
     pdf.setFillColor(red)
     pdf.drawString(x0, height - margin - 12 * mm, "SREDNJA ŠOLA RAVNE  //  INFORMATIVNI DAN")
@@ -237,42 +261,41 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         pdf.setFillColor(white)
         pdf.drawCentredString(bx + chip_w / 2, 23 * mm, module)
 
-    # RAVI - drawn as vectors so the certificate has no external asset dependency.
-    rx = width - margin - 62 * mm
-    ry = 76 * mm
+    # Official RAVI artwork from the game (final stage 9).
+    rx = width - margin - 66 * mm
+    ry = 46 * mm
 
     pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.08))
-    pdf.circle(rx + 27 * mm, ry + 31 * mm, 38 * mm, fill=1, stroke=0)
+    pdf.circle(rx + 30 * mm, ry + 49 * mm, 42 * mm, fill=1, stroke=0)
 
-    pdf.setFillColor(HexColor("#17293A"))
-    pdf.setStrokeColor(HexColor("#476076"))
-    pdf.setLineWidth(2)
-    pdf.roundRect(rx + 9 * mm, ry, 36 * mm, 28 * mm, 8, fill=1, stroke=1)
+    if ravi_image_path.exists():
+        try:
+            ravi = ImageReader(str(ravi_image_path))
+            img_w, img_h = ravi.getSize()
+            target_h = 91 * mm
+            target_w = target_h * (img_w / img_h)
+            if target_w > 67 * mm:
+                target_w = 67 * mm
+                target_h = target_w * (img_h / img_w)
 
-    pdf.setFillColor(robot_body)
-    pdf.setStrokeColor(red)
-    pdf.setLineWidth(2.5)
-    pdf.roundRect(rx, ry + 27 * mm, 54 * mm, 41 * mm, 9, fill=1, stroke=1)
+            ravi_x = rx + (60 * mm - target_w) / 2
+            ravi_y = ry + 2 * mm
 
-    pdf.setFillColor(dark_screen)
-    pdf.roundRect(rx + 5 * mm, ry + 32 * mm, 44 * mm, 29 * mm, 6, fill=1, stroke=0)
-
-    pdf.setFillColor(cyan)
-    pdf.circle(rx + 18 * mm, ry + 47 * mm, 2.2 * mm, fill=1, stroke=0)
-    pdf.circle(rx + 36 * mm, ry + 47 * mm, 2.2 * mm, fill=1, stroke=0)
-
-    pdf.setStrokeColor(cyan)
-    pdf.setLineWidth(2)
-    pdf.arc(rx + 18 * mm, ry + 37 * mm, rx + 36 * mm, ry + 47 * mm, 200, 140)
-
-    pdf.setStrokeColor(HexColor("#6E8194"))
-    pdf.line(rx + 27 * mm, ry + 68 * mm, rx + 27 * mm, ry + 75 * mm)
-    pdf.setFillColor(red)
-    pdf.circle(rx + 27 * mm, ry + 78 * mm, 3 * mm, fill=1, stroke=0)
+            pdf.drawImage(
+                ravi,
+                ravi_x,
+                ravi_y,
+                width=target_w,
+                height=target_h,
+                preserveAspectRatio=True,
+                mask="auto",
+            )
+        except Exception as exc:
+            print(f"Certificate RAVI render failed: {exc}")
 
     pdf.setFont(font_bold, 8)
     pdf.setFillColor(red)
-    pdf.drawCentredString(rx + 27 * mm, ry - 8 * mm, "RAVI // ONLINE")
+    pdf.drawCentredString(rx + 30 * mm, ry - 3 * mm, "RAVI // ONLINE")
 
     # Footer.
     pdf.setStrokeColor(HexColor("#2C4053"))
