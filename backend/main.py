@@ -84,48 +84,213 @@ def format_ms(ms: int) -> str:
 
 
 def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> bytes:
-    # Minimal dependency-free one-page PDF; text is transliterated to ASCII for built-in Helvetica.
-    lines = [
-        ("RAVI INFO MISIJA", 28, 185, 700),
-        ("DIPLOMA O USpesNO OPRAVLJENI MISIJI", 16, 130, 650),
-        (pdf_ascii(nickname), 30, 210, 555),
-        ("je uspesno obnovil RAVI-ja in opravil vseh 8 racunalniskih izzivov.", 13, 75, 505),
-        (f"CAS MISIJE: {format_ms(total_ms)}", 18, 180, 425),
-        ("MODULI: 8 / 8", 14, 220, 380),
-        ("RAVI STATUS: 100 % ONLINE", 14, 180, 345),
-        (f"INFORMATIVNI DAN | {played_date}", 11, 205, 245),
-        ("SREDNJA SOLA RAVNE", 15, 205, 205),
+    """Create the RAVI INFO MISIJA certificate as a landscape A4 PDF."""
+    try:
+        from io import BytesIO
+        from reportlab.lib.colors import Color, HexColor
+        from reportlab.lib.pagesizes import A4, landscape
+        from reportlab.lib.units import mm
+        from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
+        from reportlab.pdfgen import canvas
+    except ImportError as exc:
+        raise RuntimeError("Za izdelavo diplome manjka paket reportlab.") from exc
+
+    regular_candidates = [
+        "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    ]
+    bold_candidates = [
+        "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
     ]
 
-    stream_parts = ["0.10 0.18 0.28 rg 0 0 595 842 re f", "1 1 1 rg"]
-    for text_value, size, x, y in lines:
-        stream_parts.append(f"BT /F1 {size} Tf {x} {y} Td ({pdf_escape(text_value)}) Tj ET")
-    stream = "\n".join(stream_parts).encode("ascii")
+    regular_font = next((p for p in regular_candidates if Path(p).exists()), None)
+    bold_font = next((p for p in bold_candidates if Path(p).exists()), None)
 
-    objects = []
-    objects.append(b"<< /Type /Catalog /Pages 2 0 R >>")
-    objects.append(b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>")
-    objects.append(b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>")
-    objects.append(f"<< /Length {len(stream)} >>\nstream\n".encode("ascii") + stream + b"\nendstream")
-    objects.append(b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>")
+    if regular_font and bold_font:
+        if "RaviSans" not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(TTFont("RaviSans", regular_font))
+        if "RaviSans-Bold" not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(TTFont("RaviSans-Bold", bold_font))
+        font_regular = "RaviSans"
+        font_bold = "RaviSans-Bold"
+    else:
+        font_regular = "Helvetica"
+        font_bold = "Helvetica-Bold"
 
-    pdf = bytearray(b"%PDF-1.4\n")
-    offsets = [0]
-    for i, obj in enumerate(objects, start=1):
-        offsets.append(len(pdf))
-        pdf.extend(f"{i} 0 obj\n".encode("ascii"))
-        pdf.extend(obj)
-        pdf.extend(b"\nendobj\n")
+    try:
+        date_label = datetime.fromisoformat(played_date).strftime("%d. %m. %Y")
+    except ValueError:
+        date_label = played_date
 
-    xref = len(pdf)
-    pdf.extend(f"xref\n0 {len(objects)+1}\n".encode("ascii"))
-    pdf.extend(b"0000000000 65535 f \n")
-    for offset in offsets[1:]:
-        pdf.extend(f"{offset:010d} 00000 n \n".encode("ascii"))
-    pdf.extend(
-        f"trailer\n<< /Size {len(objects)+1} /Root 1 0 R >>\nstartxref\n{xref}\n%%EOF".encode("ascii")
+    buffer = BytesIO()
+    width, height = landscape(A4)
+    pdf = canvas.Canvas(buffer, pagesize=(width, height))
+
+    navy = HexColor("#07111D")
+    panel = HexColor("#0D1B2A")
+    red = HexColor("#E53945")
+    white = HexColor("#F5F7FA")
+    muted = HexColor("#9EB0C3")
+    cyan = HexColor("#56D7E8")
+    green = HexColor("#7FE0B7")
+    line = HexColor("#334A60")
+    dark_screen = HexColor("#091823")
+    robot_body = HexColor("#1C3144")
+
+    pdf.setFillColor(navy)
+    pdf.rect(0, 0, width, height, fill=1, stroke=0)
+
+    # Subtle technical grid.
+    pdf.setStrokeColor(Color(0.22, 0.38, 0.52, alpha=0.16))
+    pdf.setLineWidth(0.35)
+    for x in range(0, int(width), 24):
+        pdf.line(x, 0, x, height)
+    for y in range(0, int(height), 24):
+        pdf.line(0, y, width, y)
+
+    margin = 15 * mm
+    pdf.setStrokeColor(line)
+    pdf.setLineWidth(1.2)
+    pdf.roundRect(margin, margin, width - 2 * margin, height - 2 * margin, 8, stroke=1, fill=0)
+
+    pdf.setStrokeColor(red)
+    pdf.setLineWidth(3)
+    pdf.line(margin, height - margin, margin + 72 * mm, height - margin)
+
+    x0 = margin + 5 * mm
+
+    # Header.
+    pdf.setFont(font_bold, 11)
+    pdf.setFillColor(red)
+    pdf.drawString(x0, height - margin - 12 * mm, "SREDNJA ŠOLA RAVNE  //  INFORMATIVNI DAN")
+
+    pdf.setFont(font_bold, 30)
+    pdf.setFillColor(white)
+    pdf.drawString(x0, height - margin - 29 * mm, "RAVI INFO MISIJA")
+
+    pdf.setFont(font_regular, 12)
+    pdf.setFillColor(muted)
+    pdf.drawString(x0, height - margin - 40 * mm, "DIPLOMA O USPEŠNO OPRAVLJENI MISIJI")
+
+    # Recipient.
+    y = height - margin - 64 * mm
+    pdf.setFont(font_regular, 11)
+    pdf.setFillColor(muted)
+    pdf.drawString(x0, y, "MISIJO JE USPEŠNO OPRAVIL/A")
+
+    display_name = nickname[:18]
+    name_size = 34 if len(display_name) <= 10 else 28 if len(display_name) <= 14 else 23
+    pdf.setFont(font_bold, name_size)
+    pdf.setFillColor(white)
+    pdf.drawString(x0, y - 16 * mm, display_name)
+
+    pdf.setStrokeColor(red)
+    pdf.setLineWidth(1.2)
+    pdf.line(x0, y - 20 * mm, x0 + 110 * mm, y - 20 * mm)
+
+    pdf.setFont(font_regular, 11.5)
+    pdf.setFillColor(white)
+    pdf.drawString(x0, y - 31 * mm, "Uspešno si obnovil/a RAVI-ja in opravil/a vseh 8")
+    pdf.drawString(x0, y - 38 * mm, "računalniških izzivov.")
+
+    # Mission result cards.
+    box_y = 44 * mm
+    box_w = 48 * mm
+    gap = 5 * mm
+    metrics = [
+        ("ČAS MISIJE", format_ms(total_ms), red),
+        ("MODULI", "8 / 8", cyan),
+        ("RAVI STATUS", "100 % ONLINE", green),
+    ]
+
+    for index, (label, value, accent) in enumerate(metrics):
+        bx = x0 + index * (box_w + gap)
+        pdf.setFillColor(panel)
+        pdf.roundRect(bx, box_y, box_w, 25 * mm, 6, fill=1, stroke=0)
+        pdf.setStrokeColor(accent)
+        pdf.setLineWidth(1.2)
+        pdf.roundRect(bx, box_y, box_w, 25 * mm, 6, fill=0, stroke=1)
+
+        pdf.setFont(font_bold, 8)
+        pdf.setFillColor(muted)
+        pdf.drawString(bx + 4 * mm, box_y + 16 * mm, label)
+
+        value_size = 15 if len(value) <= 11 else 12.5
+        pdf.setFont(font_bold, value_size)
+        pdf.setFillColor(accent)
+        pdf.drawString(bx + 4 * mm, box_y + 7 * mm, value)
+
+    # Activated modules.
+    pdf.setFont(font_bold, 8)
+    pdf.setFillColor(muted)
+    pdf.drawString(x0, 31 * mm, "AKTIVIRANI MODULI")
+
+    modules = ["OPREMA", "PYTHON", "SPLET", "PODATKI", "OMREŽJA", "VARNOST", "APLIKACIJE", "AI"]
+    chip_w = 18 * mm
+    for index, module in enumerate(modules):
+        bx = x0 + index * (chip_w + 1.6 * mm)
+        pdf.setFillColor(HexColor("#102334"))
+        pdf.roundRect(bx, 20 * mm, chip_w, 8 * mm, 3, fill=1, stroke=0)
+        pdf.setFont(font_bold, 5.4)
+        pdf.setFillColor(white)
+        pdf.drawCentredString(bx + chip_w / 2, 23 * mm, module)
+
+    # RAVI - drawn as vectors so the certificate has no external asset dependency.
+    rx = width - margin - 62 * mm
+    ry = 76 * mm
+
+    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.08))
+    pdf.circle(rx + 27 * mm, ry + 31 * mm, 38 * mm, fill=1, stroke=0)
+
+    pdf.setFillColor(HexColor("#17293A"))
+    pdf.setStrokeColor(HexColor("#476076"))
+    pdf.setLineWidth(2)
+    pdf.roundRect(rx + 9 * mm, ry, 36 * mm, 28 * mm, 8, fill=1, stroke=1)
+
+    pdf.setFillColor(robot_body)
+    pdf.setStrokeColor(red)
+    pdf.setLineWidth(2.5)
+    pdf.roundRect(rx, ry + 27 * mm, 54 * mm, 41 * mm, 9, fill=1, stroke=1)
+
+    pdf.setFillColor(dark_screen)
+    pdf.roundRect(rx + 5 * mm, ry + 32 * mm, 44 * mm, 29 * mm, 6, fill=1, stroke=0)
+
+    pdf.setFillColor(cyan)
+    pdf.circle(rx + 18 * mm, ry + 47 * mm, 2.2 * mm, fill=1, stroke=0)
+    pdf.circle(rx + 36 * mm, ry + 47 * mm, 2.2 * mm, fill=1, stroke=0)
+
+    pdf.setStrokeColor(cyan)
+    pdf.setLineWidth(2)
+    pdf.arc(rx + 18 * mm, ry + 37 * mm, rx + 36 * mm, ry + 47 * mm, 200, 140)
+
+    pdf.setStrokeColor(HexColor("#6E8194"))
+    pdf.line(rx + 27 * mm, ry + 68 * mm, rx + 27 * mm, ry + 75 * mm)
+    pdf.setFillColor(red)
+    pdf.circle(rx + 27 * mm, ry + 78 * mm, 3 * mm, fill=1, stroke=0)
+
+    pdf.setFont(font_bold, 8)
+    pdf.setFillColor(red)
+    pdf.drawCentredString(rx + 27 * mm, ry - 8 * mm, "RAVI // ONLINE")
+
+    # Footer.
+    pdf.setStrokeColor(HexColor("#2C4053"))
+    pdf.setLineWidth(0.8)
+    pdf.line(x0, 14 * mm, width - margin - 5 * mm, 14 * mm)
+
+    pdf.setFont(font_regular, 7.5)
+    pdf.setFillColor(muted)
+    pdf.drawString(x0, 8 * mm, f"{date_label}  •  Srednja šola Ravne")
+    pdf.drawRightString(
+        width - margin - 5 * mm,
+        8 * mm,
+        "RAVI INFO MISIJA  •  MISSION COMPLETE",
     )
-    return bytes(pdf)
+
+    pdf.showPage()
+    pdf.save()
+    return buffer.getvalue()
 
 
 def send_certificate_email(email: str, nickname: str, total_ms: int, played_date: str) -> None:
