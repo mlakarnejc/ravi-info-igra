@@ -268,14 +268,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     rx = width - margin - 92 * mm
     ry = 30 * mm
 
-    # Subtle halo behind RAVI. Do not leave PDF transparency active:
-    # ReportLab otherwise applies the same alpha graphics state to the image that follows.
-    pdf.saveState()
-    pdf.setFillColor(HexColor("#1A121D"))
-    pdf.circle(rx + 46 * mm, ry + 62 * mm, 48 * mm, fill=1, stroke=0)
-    pdf.restoreState()
-
-    # Explicitly restore full opacity before drawing the official RAVI artwork.
+    # Draw the official RAVI artwork directly on the certificate grid.
     if hasattr(pdf, "setFillAlpha"):
         pdf.setFillAlpha(1)
     if hasattr(pdf, "setStrokeAlpha"):
