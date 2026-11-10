@@ -161,10 +161,6 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     pdf.setLineWidth(1.2)
     pdf.roundRect(margin, margin, width - 2 * margin, height - 2 * margin, 8, stroke=1, fill=0)
 
-    pdf.setStrokeColor(red)
-    pdf.setLineWidth(3)
-    pdf.line(margin, height - margin, margin + 72 * mm, height - margin)
-
     x0 = margin + 5 * mm
 
     # Header + official school logo.
@@ -214,7 +210,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     pdf.drawString(x0, y - 16 * mm, display_name)
 
     pdf.setStrokeColor(red)
-    pdf.setLineWidth(1.2)
+    pdf.setLineWidth(2.6)
     pdf.line(x0, y - 20 * mm, x0 + 110 * mm, y - 20 * mm)
 
     pdf.setFont(font_regular, 11.5)
@@ -316,10 +312,6 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     pdf.drawCentredString(rx + 46 * mm, ry - 2 * mm, "RAVI // ONLINE")
 
     # Footer.
-    pdf.setStrokeColor(HexColor("#2C4053"))
-    pdf.setLineWidth(0.8)
-    pdf.line(x0, 14 * mm, width - margin - 5 * mm, 14 * mm)
-
     pdf.setFont(font_regular, 7.5)
     pdf.setFillColor(muted)
     pdf.drawString(x0, 8 * mm, f"{date_label}  •  Srednja šola Ravne")
