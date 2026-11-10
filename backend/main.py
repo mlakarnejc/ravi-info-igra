@@ -171,13 +171,15 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         try:
             logo = ImageReader(str(school_logo_path))
             logo_w, logo_h = logo.getSize()
-            target_h = 13 * mm
+            target_h = 22 * mm
             target_w = target_h * (logo_w / logo_h)
-            target_w = min(target_w, 40 * mm)
+            target_w = min(target_w, 62 * mm)
+            logo_x = width - margin - target_w - 10 * mm
+            logo_y = height - margin - 18 * mm
             pdf.drawImage(
                 logo,
-                width - margin - target_w - 4 * mm,
-                height - margin - 13 * mm,
+                logo_x,
+                logo_y,
                 width=target_w,
                 height=target_h,
                 preserveAspectRatio=True,
@@ -262,24 +264,25 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         pdf.drawCentredString(bx + chip_w / 2, 23 * mm, module)
 
     # Official RAVI artwork from the game (final stage 9).
-    rx = width - margin - 66 * mm
-    ry = 46 * mm
+    rx = width - margin - 92 * mm
+    ry = 30 * mm
 
-    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.08))
-    pdf.circle(rx + 30 * mm, ry + 49 * mm, 42 * mm, fill=1, stroke=0)
+    # Subtle halo behind RAVI only; the robot itself stays fully opaque.
+    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.055))
+    pdf.circle(rx + 46 * mm, ry + 62 * mm, 50 * mm, fill=1, stroke=0)
 
     if ravi_image_path.exists():
         try:
             ravi = ImageReader(str(ravi_image_path))
             img_w, img_h = ravi.getSize()
-            target_h = 91 * mm
+            target_h = 124 * mm
             target_w = target_h * (img_w / img_h)
-            if target_w > 67 * mm:
-                target_w = 67 * mm
+            if target_w > 90 * mm:
+                target_w = 90 * mm
                 target_h = target_w * (img_h / img_w)
 
-            ravi_x = rx + (60 * mm - target_w) / 2
-            ravi_y = ry + 2 * mm
+            ravi_x = rx + (92 * mm - target_w) / 2
+            ravi_y = ry + 1 * mm
 
             pdf.drawImage(
                 ravi,
@@ -295,7 +298,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
 
     pdf.setFont(font_bold, 8)
     pdf.setFillColor(red)
-    pdf.drawCentredString(rx + 30 * mm, ry - 3 * mm, "RAVI // ONLINE")
+    pdf.drawCentredString(rx + 46 * mm, ry - 2 * mm, "RAVI // ONLINE")
 
     # Footer.
     pdf.setStrokeColor(HexColor("#2C4053"))
