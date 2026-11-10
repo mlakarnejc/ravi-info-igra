@@ -92,6 +92,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         from reportlab.lib.units import mm
         from reportlab.lib.utils import ImageReader
         from reportlab.pdfbase import pdfmetrics
+        from PIL import Image, ImageEnhance
         from reportlab.pdfbase.ttfonts import TTFont
         from reportlab.pdfgen import canvas
     except ImportError as exc:
@@ -273,26 +274,41 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
 
     if ravi_image_path.exists():
         try:
-            ravi = ImageReader(str(ravi_image_path))
-            img_w, img_h = ravi.getSize()
-            target_h = 124 * mm
-            target_w = target_h * (img_w / img_h)
-            if target_w > 90 * mm:
-                target_w = 90 * mm
-                target_h = target_w * (img_h / img_w)
+            # ReportLab can render WebP alpha incorrectly on a dark PDF background.
+            # Convert the official RAVI artwork to PNG in memory first.
+            with Image.open(ravi_image_path) as source:
+                source = source.convert("RGBA")
+                rgb = Image.merge("RGB", source.split()[:3])
+                rgb = ImageEnhance.Brightness(rgb).enhance(1.08)
+                rgb = ImageEnhance.Contrast(rgb).enhance(1.05)
+                r, g, b = rgb.split()
+                source = Image.merge("RGBA", (r, g, b, source.getchannel("A")))
 
-            ravi_x = rx + (92 * mm - target_w) / 2
-            ravi_y = ry + 1 * mm
+                ravi_png = BytesIO()
+                source.save(ravi_png, format="PNG")
+                ravi_png.seek(0)
 
-            pdf.drawImage(
-                ravi,
-                ravi_x,
-                ravi_y,
-                width=target_w,
-                height=target_h,
-                preserveAspectRatio=True,
-                mask="auto",
-            )
+                ravi = ImageReader(ravi_png)
+                img_w, img_h = ravi.getSize()
+
+                target_h = 132 * mm
+                target_w = target_h * (img_w / img_h)
+                if target_w > 96 * mm:
+                    target_w = 96 * mm
+                    target_h = target_w * (img_h / img_w)
+
+                ravi_x = rx + (92 * mm - target_w) / 2
+                ravi_y = ry - 1 * mm
+
+                pdf.drawImage(
+                    ravi,
+                    ravi_x,
+                    ravi_y,
+                    width=target_w,
+                    height=target_h,
+                    preserveAspectRatio=True,
+                    mask="auto",
+                )
         except Exception as exc:
             print(f"Certificate RAVI render failed: {exc}")
 
