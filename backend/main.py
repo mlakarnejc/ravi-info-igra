@@ -268,9 +268,18 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     rx = width - margin - 92 * mm
     ry = 30 * mm
 
-    # Subtle halo behind RAVI only; the robot itself stays fully opaque.
-    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.028))
+    # Subtle halo behind RAVI. Do not leave PDF transparency active:
+    # ReportLab otherwise applies the same alpha graphics state to the image that follows.
+    pdf.saveState()
+    pdf.setFillColor(HexColor("#1A121D"))
     pdf.circle(rx + 46 * mm, ry + 62 * mm, 48 * mm, fill=1, stroke=0)
+    pdf.restoreState()
+
+    # Explicitly restore full opacity before drawing the official RAVI artwork.
+    if hasattr(pdf, "setFillAlpha"):
+        pdf.setFillAlpha(1)
+    if hasattr(pdf, "setStrokeAlpha"):
+        pdf.setStrokeAlpha(1)
 
     if ravi_image_path.exists():
         try:
@@ -279,18 +288,11 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
             with Image.open(ravi_image_path) as source:
                 source = source.convert("RGBA")
 
-                # The source WebP contains semi-transparent pixels across the robot.
-                # Keep true background transparent, but force visible robot pixels to full opacity.
-                alpha = source.getchannel("A")
-                solid_alpha = alpha.point(lambda a: 0 if a < 12 else 255)
-                source.putalpha(solid_alpha)
-
-                # Composite the now-opaque RAVI onto the certificate background.
+                # Composite the official transparent artwork onto the certificate background.
+                # The PDF graphics state has already been restored to full opacity above.
                 bg = Image.new("RGBA", source.size, (7, 17, 29, 255))
                 bg.alpha_composite(source)
                 flattened = bg.convert("RGB")
-                flattened = ImageEnhance.Brightness(flattened).enhance(1.22)
-                flattened = ImageEnhance.Contrast(flattened).enhance(1.12)
 
                 ravi_png = BytesIO()
                 flattened.save(ravi_png, format="PNG")
