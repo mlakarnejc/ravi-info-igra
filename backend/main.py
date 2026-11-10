@@ -288,14 +288,10 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
             with Image.open(ravi_image_path) as source:
                 source = source.convert("RGBA")
 
-                # Composite the official transparent artwork onto the certificate background.
-                # The PDF graphics state has already been restored to full opacity above.
-                bg = Image.new("RGBA", source.size, (7, 17, 29, 255))
-                bg.alpha_composite(source)
-                flattened = bg.convert("RGB")
-
+                # Keep the official RAVI artwork transparent so the certificate grid remains
+                # visible behind and around the robot.
                 ravi_png = BytesIO()
-                flattened.save(ravi_png, format="PNG")
+                source.save(ravi_png, format="PNG")
                 ravi_png.seek(0)
 
                 ravi = ImageReader(ravi_png)
@@ -317,6 +313,7 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
                     width=target_w,
                     height=target_h,
                     preserveAspectRatio=True,
+                    mask="auto",
                 )
         except Exception as exc:
             print(f"Certificate RAVI render failed: {exc}")
