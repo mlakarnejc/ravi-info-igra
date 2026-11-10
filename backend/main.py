@@ -172,11 +172,11 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
         try:
             logo = ImageReader(str(school_logo_path))
             logo_w, logo_h = logo.getSize()
-            target_h = 22 * mm
+            target_h = 20 * mm
             target_w = target_h * (logo_w / logo_h)
-            target_w = min(target_w, 62 * mm)
-            logo_x = width - margin - target_w - 10 * mm
-            logo_y = height - margin - 18 * mm
+            target_w = min(target_w, 58 * mm)
+            logo_x = width - margin - target_w - 7 * mm
+            logo_y = height - margin - 25 * mm
             pdf.drawImage(
                 logo,
                 logo_x,
@@ -269,8 +269,8 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
     ry = 30 * mm
 
     # Subtle halo behind RAVI only; the robot itself stays fully opaque.
-    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.055))
-    pdf.circle(rx + 46 * mm, ry + 62 * mm, 50 * mm, fill=1, stroke=0)
+    pdf.setFillColor(Color(0.9, 0.1, 0.15, alpha=0.028))
+    pdf.circle(rx + 46 * mm, ry + 62 * mm, 48 * mm, fill=1, stroke=0)
 
     if ravi_image_path.exists():
         try:
@@ -279,13 +279,18 @@ def build_certificate_pdf(nickname: str, total_ms: int, played_date: str) -> byt
             with Image.open(ravi_image_path) as source:
                 source = source.convert("RGBA")
 
-                # Flatten transparency onto the same dark background as the certificate.
-                # This avoids ReportLab/WebP alpha handling making the whole robot translucent.
+                # The source WebP contains semi-transparent pixels across the robot.
+                # Keep true background transparent, but force visible robot pixels to full opacity.
+                alpha = source.getchannel("A")
+                solid_alpha = alpha.point(lambda a: 0 if a < 12 else 255)
+                source.putalpha(solid_alpha)
+
+                # Composite the now-opaque RAVI onto the certificate background.
                 bg = Image.new("RGBA", source.size, (7, 17, 29, 255))
                 bg.alpha_composite(source)
                 flattened = bg.convert("RGB")
-                flattened = ImageEnhance.Brightness(flattened).enhance(1.12)
-                flattened = ImageEnhance.Contrast(flattened).enhance(1.08)
+                flattened = ImageEnhance.Brightness(flattened).enhance(1.22)
+                flattened = ImageEnhance.Contrast(flattened).enhance(1.12)
 
                 ravi_png = BytesIO()
                 flattened.save(ravi_png, format="PNG")
