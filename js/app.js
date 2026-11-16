@@ -3671,8 +3671,41 @@ function initTestRoomJump() {
   const testRoomJump = document.getElementById('testRoomJump');
   if (!testRoomJump) return;
 
-  testRoomJump.hidden = !TEST_MODE;
+  // Testna vrstica ostane v produkciji na voljo, vendar je privzeto skrita.
+  testRoomJump.hidden = true;
   if (!TEST_MODE) return;
+
+  // Skriti dostop: 5 hitrih klikov v zgornji levi kot zaslona.
+  let secretCornerClicks = 0;
+  let secretCornerTimer = null;
+
+  document.addEventListener('pointerdown', (event) => {
+    const inSecretCorner = event.clientX <= 42 && event.clientY <= 42;
+
+    if (!inSecretCorner) {
+      secretCornerClicks = 0;
+      if (secretCornerTimer) {
+        clearTimeout(secretCornerTimer);
+        secretCornerTimer = null;
+      }
+      return;
+    }
+
+    secretCornerClicks += 1;
+
+    if (secretCornerTimer) clearTimeout(secretCornerTimer);
+    secretCornerTimer = setTimeout(() => {
+      secretCornerClicks = 0;
+      secretCornerTimer = null;
+    }, 2500);
+
+    if (secretCornerClicks >= 5) {
+      testRoomJump.hidden = !testRoomJump.hidden;
+      secretCornerClicks = 0;
+      clearTimeout(secretCornerTimer);
+      secretCornerTimer = null;
+    }
+  }, true);
 
   testRoomJump.querySelectorAll('[data-test-room]').forEach((button) => {
     button.addEventListener('click', () => {
